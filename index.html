@@ -34,56 +34,7 @@ input[type=range]{width:100%;accent-color:var(--a)}select,input[type=number]{wid
 .chartTip{position:fixed;z-index:99999;display:none;pointer-events:none;padding:9px 11px;border:1px solid var(--ln);border-radius:8px;background:var(--card);color:var(--ink);box-shadow:0 8px 24px rgba(0,0,0,.18);font:12px/1.5 system-ui;white-space:nowrap}
 @media(max-width:980px){#v10Charts .v10ChartControls{grid-template-columns:1fr 1fr}.v10ChartCard canvas{height:280px}}
 @media(max-width:760px){#v10ChartGrid{grid-template-columns:1fr}#v10Charts .v10ChartControls{grid-template-columns:1fr}.v10ChartCard canvas{height:260px}}
-</style>
-<style id="CBP_AUTH_LAYER_V1">
-/* Cell Bench Pro access control */
-#cbpAuthGate{position:fixed;inset:0;z-index:99999;background:rgba(5,10,18,.96);display:flex;align-items:center;justify-content:center;padding:22px;font-family:inherit}
-#cbpAuthCard{width:min(520px,100%);background:var(--pn,#111827);border:1px solid rgba(255,255,255,.12);border-radius:20px;box-shadow:0 24px 80px rgba(0,0,0,.45);padding:28px}
-#cbpAuthCard h2{margin:0 0 8px;font-size:25px}
-#cbpAuthCard p{color:var(--muted,#9ca3af);line-height:1.5}
-.cbpAuthBtn{width:100%;border:0;border-radius:11px;padding:12px 15px;margin-top:10px;font-weight:700;cursor:pointer;background:#2563eb;color:#fff}
-.cbpAuthBtn.secondary{background:transparent;border:1px solid rgba(255,255,255,.15)}
-#cbpAuthEmail{width:100%;box-sizing:border-box;padding:12px;border-radius:10px;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.04);color:inherit;margin-top:10px}
-#cbpAuthStatus{margin-top:14px;padding:11px 12px;border-radius:10px;background:rgba(255,255,255,.05);font-size:13px}
-.cbpUserPill{display:inline-flex;align-items:center;gap:8px;padding:7px 10px;border-radius:999px;background:rgba(37,99,235,.12);border:1px solid rgba(37,99,235,.25);font-size:12px}
-#cbpAdminPanel{display:none;position:fixed;z-index:99998;right:20px;top:70px;width:min(680px,calc(100vw - 40px));max-height:78vh;overflow:auto;background:var(--pn,#111827);border:1px solid rgba(255,255,255,.14);border-radius:16px;padding:20px;box-shadow:0 24px 80px rgba(0,0,0,.45)}
-.cbpReq{display:grid;grid-template-columns:1fr auto auto;gap:9px;align-items:center;padding:11px 0;border-bottom:1px solid rgba(255,255,255,.08)}
-.cbpReq button{border:0;border-radius:8px;padding:8px 11px;cursor:pointer;font-weight:700}
-.cbpApprove{background:#16a34a;color:#fff}.cbpReject{background:#dc2626;color:#fff}
-#cbpAuthControls{position:fixed;z-index:99990;right:16px;top:14px;display:flex;gap:8px;align-items:center}
-@media(max-width:700px){#cbpAuthControls{right:10px;top:10px}.cbpReq{grid-template-columns:1fr}.cbpReq button{width:100%}}
-</style>
-
-</head>
-<div id="cbpAuthGate" aria-modal="true" role="dialog">
-  <div id="cbpAuthCard">
-    <h2>Cell Bench Pro Access</h2>
-    <p id="cbpAuthLead">Sign in to use the engineering simulator. New users require administrator approval.</p>
-    <button class="cbpAuthBtn" id="cbpGoogleBtn">Continue with Google</button>
-    <div style="text-align:center;margin:12px 0;color:var(--muted,#9ca3af);font-size:12px">or use your email</div>
-    <input id="cbpAuthEmail" type="email" autocomplete="email" placeholder="name@example.com">
-    <button class="cbpAuthBtn secondary" id="cbpEmailBtn">Request / Check Access</button>
-    <button class="cbpAuthBtn secondary" id="cbpSignOutBtn" style="display:none">Sign out</button>
-    <div id="cbpAuthStatus">Connecting to secure authentication…</div>
-    <div style="margin-top:14px;font-size:11px;color:var(--muted,#9ca3af)">
-      Administrator: mugambwadennistt@gmail.com
-    </div>
-  </div>
-</div>
-<div id="cbpAuthControls">
-  <span class="cbpUserPill" id="cbpUserPill" style="display:none"></span>
-  <button class="cbpAuthBtn secondary" id="cbpAdminBtn" style="display:none;width:auto;margin:0">Admin approvals</button>
-  <button class="cbpAuthBtn secondary" id="cbpLogoutTop" style="display:none;width:auto;margin:0">Sign out</button>
-</div>
-<div id="cbpAdminPanel">
-  <div style="display:flex;justify-content:space-between;align-items:center;gap:12px">
-    <div><h3 style="margin:0">Access approvals</h3><p style="margin:4px 0 0;color:var(--muted,#9ca3af);font-size:12px">Approve or reject requests for Cell Bench Pro.</p></div>
-    <button class="cbpAuthBtn secondary" id="cbpAdminClose" style="width:auto;margin:0">Close</button>
-  </div>
-  <div id="cbpRequests" style="margin-top:15px">Loading requests…</div>
-</div>
-
-<body>
+</style></head><body>
 <header><h1>Cell Bench Pro<small>Wiring tracer · physics simulator · expert curriculum for battery engineers</small></h1><nav id="nv"><button class="b" aria-pressed="true" data-t="wire">Wiring tracer</button><button class="b" aria-pressed="false" data-t="p3">3D pack</button><button class="b" aria-pressed="false" data-t="bms">BMS &amp; IoT</button><button class="b" aria-pressed="false" data-t="sim">Simulator</button><button class="b" aria-pressed="false" data-t="learn">Learn</button><button class="b" id="th">Theme</button></nav></header>
 <main>
 <section id="wire"><div class="pn" style="margin-bottom:10px"><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px"><div class="f">Chemistry<select id="wc"><option value="3.2">LFP 3.2 V</option><option value="3.65">NMC 3.65 V</option><option value="2.3">LTO 2.3 V</option></select></div><div class="f">Series groups (S)<select id="wS"></select></div><div class="f">Parallel cells (P)<select id="wP"></select></div><div class="f">Cell format<select id="wf"><option value="cyl">Cylindrical</option><option value="prism">Prismatic</option><option value="pouch">Pouch</option></select></div><div class="f">Port topology<select id="wp"><option value="common">Common port (P+/P−)</option><option value="split">Split port (C and P)</option></select></div><div class="f"><label>Pack current<b id="wiv">40 A</b></label><input type="range" id="wI" min="5" max="300" value="40"></div></div>
@@ -243,6 +194,9 @@ let th=null;try{th=localStorage.getItem('cbt2')}catch(e){}if(th)document.documen
 addEventListener('resize',()=>{if(!$('sim').hidden)run();if(!$('p3').hidden)draw3()});drawW();
 </script>
 <!-- ===== Combined engineering expansion: preserves the attached Cell Bench Pro format ===== -->
+<style id="academy-mastery-style">
+.v10Master{font-size:13px}.v10Progress{height:9px;background:var(--bg);border:1px solid var(--ln);border-radius:8px;overflow:hidden;margin:8px 0}.v10Progress i{display:block;height:100%;background:var(--a);transition:width .25s}.v10Lesson.mastered{border-color:var(--ok)}.v10Lesson.attempted{border-left:4px solid var(--h)}.v10Lab{margin-top:10px;padding:10px;border:1px solid var(--ln);border-radius:9px;background:var(--bg)}.v10Lab label{display:block;padding:7px;margin:5px 0;border:1px solid var(--ln);border-radius:7px;cursor:pointer}.v10Lab label:has(input:checked){border-color:var(--a)}.v10LabBtns{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}.v10Result{min-height:20px}.v10Score{font-size:12px;color:var(--mu);margin-top:6px}.v10Tools{display:flex;gap:7px;align-items:center;flex-wrap:wrap;margin:8px 0}.v10Tools .f{flex:1}.v10Lesson.on{box-shadow:0 0 0 2px var(--a)}
+</style>
 <style id="combined-engineering-style">
 /* Keep the attached platform's compact visual language. */
 #v10Academy,#v10Charts,#v10DesignChecks,#v10BmsArch{margin-top:10px}
@@ -281,6 +235,7 @@ addEventListener('resize',()=>{if(!$('sim').hidden)run();if(!$('p3').hidden)draw
   .v10Filters button{white-space:nowrap}
   .v10ArchGrid,.v10Checks{grid-template-columns:1fr}
 }
+.v10Lesson .v10Note{margin:8px 0;padding:9px 11px;border-left:4px solid var(--a);background:color-mix(in srgb,var(--a) 8%,transparent);border-radius:7px}.v10Lesson .v10Exercise{margin:8px 0;padding:9px 11px;border-left:4px solid var(--h);background:color-mix(in srgb,var(--h) 9%,transparent);border-radius:7px}.v10Lesson .v10Pitfall{margin:8px 0;padding:9px 11px;border-left:4px solid var(--r);background:color-mix(in srgb,var(--r) 7%,transparent);border-radius:7px}.v10Lesson details{margin-top:8px}.v10Lesson summary{cursor:pointer;font-weight:700}
 </style>
 <script id="combined-engineering-js">
 (function(){
@@ -293,39 +248,99 @@ function esc(s){
   return String(s).replace(/[&<>"]/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[m]));
 }
 
+const ADVANCED_ACADEMY = [["Foundation","Dimensional analysis","Units are part of the equation; unit consistency is a fast error detector.","Convert 250 mA, 0.25 A and 0.25C for a 1 Ah cell and show every unit cancellation."],["Foundation","Energy versus power","Power is the rate of energy transfer; energy is its time integral.","For a 50 V pack at 100 A for 20 minutes, calculate average power and ideal delivered Wh."],["Foundation","Round-trip efficiency","Efficiency is operating-point dependent and includes electrical, thermal and electrochemical losses.","Compute charge-in versus discharge-out Wh and separate measurement uncertainty from real loss."],["Foundation","Measurement uncertainty","Bias, gain, noise, resolution and drift all affect engineering decisions.","Build an RSS uncertainty budget from three stated voltage errors."],["Foundation","Sampling and aliasing","Sampling captures dynamics; it cannot remove sensor bias.","Choose sample rates for voltage, current, temperature and contactor diagnostics and justify them."],["Electrochemistry","OCV versus equilibrium","OCV requires relaxation; immediately measured voltage can still contain polarization.","Design a rest protocol and a quantitative criterion for accepting an OCV-SOC point."],["Electrochemistry","Polarization","Loaded voltage differs from equilibrium because of ohmic, kinetic and transport effects.","Decompose a 150 mV drop into plausible mechanisms and design a discriminating experiment."],["Electrochemistry","Temperature dependence of resistance","Resistance changes strongly with temperature and can dominate cold power limits.","Build an R(SOC,T) map and identify the worst power corner."],["Electrochemistry","Diffusion time scales","Slow electrochemical dynamics require more than one instantaneous resistance.","Fit one and two RC branches to a pulse relaxation and compare residuals."],["Electrochemistry","Hysteresis","Charge and discharge voltage can differ at the same SOC because the electrochemical path matters.","Measure charge/discharge voltage at identical SOC and quantify the hysteresis band."],["Electrochemistry","Rate capability","Usable capacity and power vary with C-rate because polarization and heating rise with load.","Compare capacity at 0.2C, 1C and 2C and determine reversibility after rest."],["Cell design","Cell matching","Parallel groups inherit cell-to-cell variation in capacity, resistance and SOC.","Predict current sharing for four unequal-resistance cells and propose screening limits."],["Cell design","Resistance distributions","The worst tail can control heating even when the mean resistance looks excellent.","Create a resistance distribution and choose a defensible screening rule."],["Cell design","Swelling and gas generation","Expansion can change pressure, impedance, enclosure loads and venting behavior.","Create a swelling allowance stack and define measurements during ageing."],["Cell design","Tabs and current collectors","Current density can create local electrical and thermal bottlenecks.","Compare two tab geometries and explain why equal area may not mean equal temperature."],["Electrical","Kirchhoff laws for packs","Pack analysis follows conservation of current and voltage.","Write the current-sharing equations for a 4P group with unequal branch resistance."],["Electrical","Thevenin model selection","Model order should match the time scale and decision being predicted.","Choose model order for 1 s, 30 s and 30 min predictions and defend each choice."],["Electrical","Power-limit calculation","SOP is constrained by voltage, current, temperature, resistance and state.","Calculate maximum discharge current at several SOC points using voltage and current limits."],["Electrical","Regen limits","Charge power is often constrained near high SOC and low temperature.","Build a regen limit curve and identify the active constraint at each corner."],["Electrical","Fuse selection","A fuse must survive normal pulses but interrupt fault energy safely.","Create a preliminary selection matrix using continuous current, pulses and prospective short current."],["Electrical","Contact resistance diagnostics","Milliohm-level joint changes can create large heat at high current.","Design a loaded diagnostic to estimate suspect joint resistance."],["Thermal","Joule heating square law","P=I\u00b2R means current increases heat faster than linearly.","Calculate heat at 25, 50, 100 and 150 A for 1.5 m\u03a9 and plot it."],["Thermal","Thermal RC time constant","Rth and Cth set the speed of thermal response.","Estimate tau and temperature after 1tau, 2tau and 3tau for a step load."],["Thermal","Temperature gradients","Average temperature can hide a local hotspot.","Define metrics for cell-to-cell spread, core gradient and hotspot-to-ambient rise."],["Thermal","Cooling bottlenecks","The weakest thermal interface can dominate the hottest cell.","Draw the thermal resistance network and identify the largest resistance."],["Thermal","Cold-start behavior","Cold cells can have high resistance and limited charge acceptance.","Design a cold-start state machine with derating and preheat."],["Thermal","Runaway detection","Temperature, rate-of-rise, voltage, gas and neighboring cells provide complementary evidence.","Design multi-signal detection and list false-positive and false-negative cases."],["Mechanical","Load paths","Loads should travel through intended structures, not fragile electrical parts.","Draw load paths for acceleration, mounting and swelling and identify unintended paths."],["Mechanical","Tolerance stack-up","Worst-case and statistical stacks answer different questions.","Solve one clearance stack by both methods and state when each is appropriate."],["Mechanical","Vibration and fatigue","Repeated vibration can create intermittent electrical failures before static strength is exceeded.","Define monitored responses and an inspection plan for busbars and mounts."],["Mechanical","Ingress protection","Sealing must account for connectors, vents, pressure cycling and ageing.","Create a leak-path map and environmental test matrix."],["BMS","Safety architecture","Safety functions need explicit inputs, diagnostics, safe states and independence where required.","Create a safety-function table for voltage, temperature, current and isolation faults."],["BMS","ADC resolution versus accuracy","One LSB is not total accuracy; reference, gain, noise and layout also matter.","For a 16-bit 5 V ADC, calculate one LSB and compare it with a 2 mV accuracy target."],["BMS","Open-wire detection","An open tap can create plausible but false cell readings.","Construct three open-wire cases and predict the apparent measurements."],["BMS","Plausibility checks","Independent measurements can constrain each other through topology and physics.","Create sum-of-cells, pack-voltage, current-direction and temperature-rate checks."],["BMS","Balancing thermal design","Passive balancing turns stored energy into heat.","For 3.5 V across 50 ohm, calculate current and resistor heat and assess duty cycle."],["BMS","SOC error budget","SOC uncertainty combines current error, capacity uncertainty, initial error and model error.","Build a 24-hour SOC error budget and rank contributors."],["BMS","SOH capacity estimation","Capacity estimation needs comparable conditions and confidence bounds.","Design a periodic capacity estimate with acceptance and uncertainty criteria."],["BMS","Resistance SOH","Resistance growth can reduce power capability before capacity reaches end of life.","Estimate DC resistance from pulse data and trend it over ageing."],["BMS","SOP prediction","SOP is a constrained prediction, not a fixed nameplate number.","Build a discharge SOP map versus SOC and temperature and label the active constraint."],["Controls","Finite-state machines","Explicit states and transitions make battery control easier to verify.","Design OFF, INIT, PRECHARGE, RUN, CHARGE, DERATE, FAULT and SERVICE states."],["Controls","Hysteresis","Entry and release thresholds prevent chatter around limits.","Add hysteresis to a thermal derating state and test against noisy data."],["Controls","Fault priority","Simultaneous faults require deterministic safe-state policy.","Rank short circuit, overtemperature, AFE loss and low SOC and defend the priority."],["Controls","Limit arbitration","The safe current is often the minimum of several independent constraints.","Create a limiter that selects the minimum safe current and records the active reason."],["Communications","CAN message design","Battery signals need identifiers, scaling, units, rates, validity and timeout behavior.","Define a signal dictionary for voltage, current, SOC, SOH, SOP and faults."],["Communications","Stale-data handling","Old data is not valid data; critical messages need safe fallbacks.","Choose timeout values for cell voltage, current and charger commands."],["Communications","Data integrity","CRC and counters detect corruption but do not prove physical plausibility.","Combine integrity checks with range and topology plausibility checks."],["EMC","Return paths","Current returns follow impedance, not schematic intent.","Sketch high-current and sensor returns and identify shared-impedance errors."],["EMC","Precharge transients","DC-link capacitance can create severe inrush and EMI if uncontrolled.","Calculate initial inrush and choose a resistor/time constant for precharge."],["Safety","Hazard analysis","Safety begins with hazards, causes, controls and detection, not component selection.","Build a hazard log for overcharge, short circuit, runaway and isolation loss."],["Safety","Fault-tree analysis","FTA decomposes a top event into contributing failures.","Construct an FTA for unintended high pack current and identify single-point faults."],["Safety","FMEA thinking","FMEA links failure mode, effect, cause, detection and action.","Write a complete FMEA row for an open low-cell sensor."],["Manufacturing","Cell sorting","Sorting reduces mismatch but cannot repair poor process capability.","Define capacity/resistance bins and estimate mismatch reduction."],["Manufacturing","Weld process control","Weld force, energy and electrode condition affect resistance and strength.","Define weld CTQs, sampling and non-destructive checks."],["Manufacturing","Thermal interface control","TIM performance depends on thickness, coverage, compression and surfaces.","Create a TIM control plan with measurable CTQs."],["Reliability","Arrhenius assumptions","Temperature acceleration models need mechanism validity before extrapolation.","Fit an illustrative activation-energy relation and list evidence required for qualification use."],["Reliability","Weibull interpretation","Weibull shape can suggest failure regimes but mixed populations and small samples mislead.","Interpret hypothetical data and explain how mixed mechanisms distort shape."],["Research","Residual analysis","Residual structure can reveal missing physics even when RMS error looks small.","Plot residuals versus SOC, current, temperature and time and identify patterns."],["Research","Parameter identifiability","Some model parameters cannot be uniquely estimated from weak experiments.","Explain why two RC branches may be unidentifiable from a short pulse and redesign the experiment."],["Research","Cross-validation","Validation data must be independent enough to test generalization.","Fit on one temperature and validate on another; report the error change."],["Research","Sensitivity analysis","Sensitivity ranks which uncertain parameters most affect the engineering decision.","Perturb resistance, capacity, cooling and ambient temperature and rank peak-temperature effects."],["Research","Uncertainty propagation","Uncertain inputs create uncertain outputs and decision risk.","Propagate current, resistance and capacity uncertainty into peak temperature and usable energy."],["Research","Monte Carlo","Monte Carlo explores population variation under explicit distribution assumptions.","Simulate 1000 packs and report mean, 5th percentile, 95th percentile and worst case."],["Research","Design of experiments","DOE estimates main effects and interactions efficiently.","Plan a small factorial experiment for SOC, temperature and C-rate."],["Expert","Requirement decomposition","Top-level requirements must become measurable cell, module, pack, BMS and test requirements.","Decompose a 10 kW requirement into traceable electrical, thermal, sensing and verification requirements."],["Expert","Verification versus validation","Verification checks conformance to requirements; validation checks fitness for intended use.","Write separate verification and validation evidence for a continuous-power requirement."],["Expert","Acceptance criteria","A test needs pass/fail limits, conditions and uncertainty before it starts.","Turn \u201cbattery stays cool\u201d into measurable temperature and delta-T criteria."],["Expert","Model hierarchy","Use the simplest model that answers the question and increase fidelity only when residuals demand it.","Choose spreadsheet, ECM, thermal network, 1D or 3D models for five engineering questions."],["Expert","Test-data quality","Bad data can look plausible; clipping, dropout and timestamp errors must be detected.","Create five automated data-quality checks for a battery test set."],["Expert","From plot to decision","A chart matters when it supports a traceable engineering decision.","For a voltage-sag chart, state the decision, constraint, uncertainty and follow-up experiment."],["Expert","Capstone release dossier","Expert engineering integrates calculations, models, tests, risk analysis and configuration control.","Prepare a 16S4P release dossier covering requirements, sizing, thermal, BMS, faults, verification and residual risks."]];
+const DEEP_DOMAINS = {
+"Fundamentals":["SI units and dimensional analysis","Voltage-current-resistance relationships","Power and energy accounting","Ah versus Wh","C-rate interpretation","Series-parallel arithmetic","Polarity and reference directions","Measurement resolution and accuracy","Calibration and traceability","Sign conventions","Engineering significant figures","Uncertainty budgets"],
+"Electrochemistry":["Electrode potentials","Cell thermodynamics","Nernst reasoning","Overpotential","Charge-transfer kinetics","Mass transport","Diffusion time scales","Electrolyte conductivity","Ionic transference","Electrode porosity","Reaction surface area","Electrochemical hysteresis"],
+"Lithium-ion chemistry":["Graphite anodes","Silicon-graphite anodes","LFP cathodes","NMC cathodes","NCA cathodes","LCO chemistry","LMO chemistry","LTO anodes","High-voltage cathodes","Electrolyte additives","Separator chemistry","Chemistry trade studies"],
+"Cell construction":["Cylindrical jelly-rolls","Prismatic stacking","Pouch stacking","Current collectors","Tabs and tab geometry","Can and lid design","Vent design","Sealing and leakage","Electrode alignment","Winding tension","Stack compression","Cell dimensional inspection"],
+"Cell manufacturing":["Slurry mixing","Coating thickness","Drying and residual solvent","Calendering density","Slitting quality","Notching","Vacuum drying","Electrolyte filling","Wetting","Formation protocols","Ageing rooms","End-of-line grading"],
+"Electrical behavior":["OCV-SOC characterization","DC resistance","Pulse resistance","Dynamic polarization","Voltage relaxation","Rate capability","Power capability","Energy efficiency","Coulombic efficiency","Round-trip efficiency","Contact resistance","Current sharing"],
+"Equivalent-circuit modeling":["R0 models","RC polarization models","Thevenin models","Second-order ECMs","Hysteresis states","OCV lookup tables","Parameter interpolation","Temperature dependence","SOC dependence","Model discretization","Numerical stability","Residual diagnostics"],
+"Thermal engineering":["Joule heat","Reversible heat","Entropic heat","Thermal resistance","Thermal capacitance","RC thermal networks","Cell temperature gradients","Module gradients","Thermal runaway heat release","Cooling plate design","Air cooling","Liquid cooling"],
+"Thermal management":["TIM selection","Contact conductance","Cold plates","Channel pressure drop","Coolant flow balance","Manifold design","Pump sizing","Radiator sizing","Heat exchanger effectiveness","Cold-start heating","Thermal derating","Thermal control loops"],
+"Mechanical engineering":["Cell stack-up","Tolerance analysis","Compression loads","Swelling allowance","Fastener preload","Joint stiffness","Vibration response","Shock loads","Fatigue","Modal behavior","Sealing interfaces","Enclosure stiffness"],
+"Busbars and interconnects":["Copper busbars","Aluminum busbars","Current density","Busbar temperature rise","Inductive loops","Laminate busbars","Flexible interconnects","Welded joints","Bolted joints","Fuse links","Parallel-path imbalance","Voltage drop mapping"],
+"High-voltage systems":["HV architecture","Isolation barriers","Creepage","Clearance","HVIL","Contactors","Precharge","Discharge circuits","DC-link capacitance","Insulation monitoring","HV fault states","Safe discharge verification"],
+"BMS hardware":["Cell monitoring AFEs","ADC quantization","Input filtering","Open-wire detection","NTC measurement","Current-sense interfaces","Isolation","Reference accuracy","Balancing drivers","Contactor drivers","Watchdogs","Hardware diagnostics"],
+"BMS estimation":["Coulomb counting","OCV correction","SOC observers","Kalman filtering","Extended Kalman filtering","Unscented filtering","Parameter adaptation","Capacity learning","Resistance learning","SOH estimation","SOP estimation","Estimator confidence"],
+"BMS protection":["Overvoltage protection","Undervoltage protection","Overcurrent protection","Short-circuit detection","Overtemperature protection","Undertemperature charging","Sensor plausibility","Cell delta limits","Rate-of-change checks","Isolation faults","Contactor diagnostics","Degraded operation"],
+"Balancing":["Passive balancing current","Passive balancing heat","Balancing thresholds","Balancing hysteresis","Top balancing","Bottom balancing","Active capacitor balancing","Inductor balancing","Converter balancing","Balancing efficiency","Balancing time","Balancing fault detection"],
+"Controls and software":["State machines","Timers and debouncing","Hysteresis","Limit arbitration","Derating curves","Fault priorities","Safe states","Startup sequencing","Shutdown sequencing","Software requirements","Unit testing","Hardware-in-loop testing"],
+"Communications":["CAN physical layer","CAN arbitration","CAN-FD","Message scaling","Signal validity","Timeouts","Counters and CRC","Diagnostics","UDS concepts","LIN interfaces","RS-485 buses","Gateway architecture"],
+"EMC and signal integrity":["Common-mode noise","Differential noise","Ground loops","Shield termination","Filtering","TVS protection","Cable routing","High-current loop area","Switching transients","Contactor EMI","ADC interference","EMC test planning"],
+"Safety engineering":["Hazard identification","Fault trees","FMEA","FMECA","Safety mechanisms","Single-point faults","Latent faults","Diagnostic coverage","Thermal runaway initiation","Propagation barriers","Gas venting","Emergency response"],
+"Reliability and ageing":["Calendar ageing","Cycle ageing","Temperature acceleration","SOC acceleration","Depth-of-discharge effects","Resistance growth","Capacity fade","Lithium inventory loss","Active-material loss","Gas generation","Weibull analysis","Reliability demonstration"],
+"Testing and instrumentation":["Test-plan structure","Sensor selection","DAQ architecture","Sampling rate","Anti-alias filtering","Timestamp integrity","Calibration checks","Measurement uncertainty","Pulse testing","HPPC testing","Thermal testing","Abuse-test instrumentation"],
+"Data and research methods":["Data cleaning","Outlier handling","Residual plots","Regression","Parameter fitting","Cross-validation","Sensitivity analysis","Monte Carlo","Design of experiments","Confidence intervals","Repeatability","Reproducibility"],
+"Manufacturing quality":["SPC","Cp and Cpk","Process centering","Gauge R&R","Control plans","Incoming inspection","Weld inspection","Cell sorting","Traceability","Nonconformance handling","Root-cause analysis","Process capability studies"],
+"Pack architecture":["Series string sizing","Parallel string sizing","Module architecture","Cell grouping","Fuse coordination","Service disconnects","Thermal zoning","HV distribution","LV distribution","BMS partitioning","Pack enclosure","Serviceability"],
+"Advanced system engineering":["Requirements decomposition","Trade studies","Design margins","Worst-case analysis","Statistical tolerance analysis","Model hierarchy","Digital twins","Verification matrices","Validation plans","Release dossiers","Configuration control","Engineering change control"]
+};
+const DEEP_LESSONS=[];
+Object.entries(DEEP_DOMAINS).forEach(([domain,topics],di)=>topics.forEach((topic,ti)=>{
+  const n=di*topics.length+ti+1;
+  const base=10+(n%9)*5;
+  const resistance=(1.5+(n%7)*0.5)/1000;
+  const current=40+(n%10)*10;
+  const heat=current*current*resistance;
+  DEEP_LESSONS.push([domain,topic,
+    `Master ${topic.toLowerCase()} from first principles. Define the physical quantity, governing relationship, assumptions, measurement method, failure modes, temperature/SOC dependence, and the evidence required before using the result in a real battery design.`,
+    `Interactive lab ${n}: use I = ${current} A, R = ${(resistance*1000).toFixed(1)} mΩ and a nominal reference of ${base}. Calculate the requested result, state units, then explain what would change with temperature, ageing and manufacturing tolerance.`,
+    `For the worked check, resistive heating is I²R = ${heat.toFixed(2)} W. Treat this as an engineering starting point, not a complete electrochemical heat model.`,
+    ["What is the first engineering action?",["Write the governing relationship and units","Choose a prettier plot","Ignore measurement uncertainty","Assume the nominal datasheet value is exact"],0,"Correct: start with the governing relationship, units and assumptions before trusting a result."],
+    null,
+    ["Confusing nominal ratings with guaranteed operating limits.","Ignoring SOC, temperature, ageing and tolerance.","Reporting a number without units, uncertainty or boundary conditions."]
+  ]);
+}));
+const CURRICULUM = MASTERCLASS.concat(ADVANCED_ACADEMY,DEEP_LESSONS);
+
 function mountAcademy(){
   const host=document.getElementById("learn");
-  if(!host || document.getElementById("v10Academy")) return;
-  const sec=document.createElement("section");
-  sec.id="v10Academy";
-  sec.className="pn";
-  const cats=["All",...Array.from(new Set(MASTERCLASS.map(x=>x[0])))];
-  sec.innerHTML=
-    '<div class="v10Head"><div><h2>Battery Engineering Masterclass</h2><div class="info">Beginner → technician → engineer → expert/research. Preserves the attached Learn module and adds the expanded curriculum.</div></div><div class="info">'+MASTERCLASS.length+' advanced lessons</div></div>'+
-    '<div class="v10Filters">'+cats.map(c=>'<button data-mf="'+esc(c)+'">'+esc(c)+'</button>').join("")+'</div>'+
-    '<div id="v10LessonGrid"></div>';
-  host.appendChild(sec);
+  if(!host) return;
+  let sec=document.getElementById("v10Academy");
+  if(!sec){sec=document.createElement("section");sec.id="v10Academy";sec.className="pn";host.appendChild(sec);}
+  const KEY="cbp_mastery_v3";
+  let state={}; try{state=JSON.parse(localStorage.getItem(KEY)||"{}")}catch(e){}
+  const getRec=i=>state[i]||{attempts:0,correct:0,score:0,mastered:false,last:null};
+  const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(state))}catch(e){}};
+  const mastered=Object.values(state).filter(x=>x&&x.mastered).length;
+  const total=CURRICULUM.length;
+  const pct=Math.round(mastered/total*100);
+  const cats=["All",...Array.from(new Set(CURRICULUM.map(x=>x[0])))];
+  sec.innerHTML=`<div class="v10Head"><div><h2>Battery Engineering Academy — Mastery Path</h2><div class="info">${total} lessons · progress is saved locally · pass exercises to unlock mastery · beginner → engineer → specialist → expert</div></div><div class="v10Master"><b>${mastered}/${total}</b> mastered · ${pct}%</div></div>
+  <div class="v10Progress"><i style="width:${pct}%"></i></div>
+  <div class="v10Filters">${cats.map(c=>`<button data-mf="${esc(c)}">${esc(c)}</button>`).join("")}</div>
+  <div class="v10Tools"><button class="b" id="v10Resume">Resume weakest</button><button class="b" id="v10Review">Review failed</button><button class="b" id="v10Reset">Reset academy progress</button><span class="f">Mastery = 80%+ on the interactive check, with repeat attempts encouraged.</span></div>
+  <div id="v10LessonGrid"></div>`;
   const grid=sec.querySelector("#v10LessonGrid");
+  let activeFilter="All";
   function render(filter){
-    const rows=MASTERCLASS.filter(x=>filter==="All"||x[0]===filter);
-    grid.innerHTML=rows.map((x,i)=>
-      '<article class="v10Lesson">'+
-      '<div class="v10Tag">'+esc(x[0])+'</div>'+
-      '<h3>'+esc(x[1])+'</h3>'+
-      '<p><b>Concept:</b> '+esc(x[2])+'</p>'+
-      '<div class="v10Example"><b>Worked example / engineering task:</b> '+esc(x[3])+'</div>'+
-      '<p><b>Expert check:</b> Define assumptions, units, boundary conditions, uncertainty, validation evidence and the failure mode before accepting the result.</p>'+
-      '</article>'
-    ).join("");
+    activeFilter=filter;
+    const rows=CURRICULUM.map((x,i)=>({x,i})).filter(o=>filter==="All"||o.x[0]===filter);
+    grid.innerHTML=rows.map(({x,i})=>{
+      const r=getRec(i), cls=r.mastered?' mastered':(r.attempts?' attempted':'');
+      return `<article class="v10Lesson${cls}" data-li="${i}"><div class="v10Tag">${esc(x[0])} · Lesson ${i+1}</div><h3>${esc(x[1])}</h3><p><b>Core lesson:</b> ${esc(x[2])}</p><div class="v10Note"><b>Engineering note:</b> Define the system boundary, reference direction, units, assumptions and limiting mechanism. Separate measured values from model values and estimates. Then ask what evidence could falsify your conclusion.</div><div class="v10Exercise"><b>Exercise:</b> ${esc(x[3])}</div><details><summary>Worked example, expert notes & common traps</summary><div class="v10Example">${esc(x[4])}</div><ul>${(x[7]||[]).map(m=>`<li>${esc(m)}</li>`).join("")}</ul><div class="v10Pitfall"><b>Expert habit:</b> never accept a battery result without conditions, uncertainty, traceability and a clear pass/fail criterion.</div></details><div class="v10Lab"><b>Interactive assessment</b><p>${esc(x[5][0])}</p>${x[5][1].map((o,j)=>`<label><input type="radio" name="v10q${i}" value="${j}"> ${esc(o)}</label>`).join("")}<div class="v10LabBtns"><button class="b" data-check="${i}">Mark answer</button><button class="b" data-hint="${i}">Hint</button><button class="b" data-solution="${i}">Show solution</button></div><p id="v10res${i}" class="v10Result"></p><div class="v10Score">Attempts: ${r.attempts} · Correct: ${r.correct} · Best: ${r.score}% ${r.mastered?"· <b>MASTERED</b>":""}</div></div></article>`;
+    }).join("");
   }
-  sec.querySelectorAll("[data-mf]").forEach(b=>b.onclick=()=>{
-    sec.querySelectorAll("[data-mf]").forEach(z=>z.classList.remove("on"));
-    b.classList.add("on"); render(b.dataset.mf);
-  });
+  sec.querySelectorAll("[data-mf]").forEach(b=>b.onclick=()=>{sec.querySelectorAll("[data-mf]").forEach(z=>z.classList.remove("on"));b.classList.add("on");render(b.dataset.mf)});
   sec.querySelector('[data-mf="All"]').classList.add("on");
+  grid.onclick=e=>{
+    const b=e.target.closest("button[data-check],button[data-hint],button[data-solution]"); if(!b)return;
+    const i=+(b.dataset.check??b.dataset.hint??b.dataset.solution), x=CURRICULUM[i], r=getRec(i), out=document.getElementById("v10res"+i);
+    if(b.dataset.hint!==undefined){out.innerHTML=`<b>Hint:</b> ${esc(x[5][3])} Start by checking the physical meaning and units.`;return;}
+    if(b.dataset.solution!==undefined){out.innerHTML=`<b>Solution:</b> ${esc(x[5][1][x[5][2]])}. ${esc(x[5][3])}`;return;}
+    const chosen=grid.querySelector(`input[name="v10q${i}"]:checked`); if(!chosen){out.textContent="Choose an answer first.";return;}
+    const ok=+chosen.value===x[5][2]; r.attempts++; if(ok)r.correct++; r.score=Math.max(r.score,Math.round((r.correct/r.attempts)*100)); r.mastered=r.score>=80 && r.attempts>=1; r.last=Date.now(); state[i]=r; save();
+    out.innerHTML=ok?`<span class="good"><b>Correct.</b> ${esc(x[5][3])}</span>`:`<span class="bad"><b>Not yet.</b> Review the lesson, use Hint, then try again. Mastery is earned by reaching 80%+.</span>`;
+    const m=Object.values(state).filter(z=>z&&z.mastered).length, p=Math.round(m/CURRICULUM.length*100); const mp=sec.querySelector(".v10Master");if(mp)mp.innerHTML=`<b>${m}/${CURRICULUM.length}</b> mastered · ${p}%`;const bar=sec.querySelector(".v10Progress i");if(bar)bar.style.width=p+"%";
+    b.closest("article").classList.toggle("mastered",r.mastered); b.closest("article").querySelector(".v10Score").innerHTML=`Attempts: ${r.attempts} · Correct: ${r.correct} · Best: ${r.score}% ${r.mastered?"· <b>MASTERED</b>":""}`;
+  };
+  sec.querySelector("#v10Resume").onclick=()=>{let best=-1,bv=2;CURRICULUM.forEach((x,i)=>{const r=getRec(i),v=r.mastered?2:(r.attempts?1:0);if(v<bv){bv=v;best=i}});if(best>=0){const el=grid.querySelector(`[data-li="${best}"]`);el?.scrollIntoView({behavior:"smooth",block:"center"});el?.classList.add("on");}};
+  sec.querySelector("#v10Review").onclick=()=>{const failed=CURRICULUM.map((x,i)=>({x,i})).filter(o=>getRec(o.i).attempts&&!getRec(o.i).mastered);grid.innerHTML=failed.map(({x,i})=>`<article class="v10Lesson" data-li="${i}"><div class="v10Tag">Review · ${esc(x[0])}</div><h3>${esc(x[1])}</h3><p>${esc(x[2])}</p><button class="b" data-check="${i}">Open assessment</button></article>`).join("")||'<p class="good"><b>No failed lessons.</b> Keep advancing.</p>';};
+  sec.querySelector("#v10Reset").onclick=()=>{if(confirm("Reset all Academy mastery and assessment progress?")){state={};save();render(activeFilter);}};
   render("All");
 }
-
 /* The original attached Learn renderer owns the whole Learn section.
    Wrap it so the original lessons stay intact and the Masterclass is restored after every lesson change. */
 const originalLearn=window.learn;
@@ -335,6 +350,7 @@ if(typeof originalLearn==="function"){
     mountAcademy();
   };
 }
+setTimeout(mountAcademy,0);
 
 /* ---------- Engineering chart suite: readable + interactive ---------- */
 const CHART_SETS={
@@ -344,12 +360,12 @@ const CHART_SETS={
   ["Current","Time (min)","Current (A)","current"],
   ["Temperature","Time (min)","Temperature (°C)","temp"],
   ["Electrical power","Time (min)","Power (W)","power"],
-  ["SOC estimation error","Time (min)","Error (percentage points)","error"]
+  ["SOC estimation error","Time (min)","Error (percentage points)","error"],["Voltage prediction error","Time (min)","Error (mV)","voltage-error"],["Thermal prediction error","Time (min)","Error (°C)","thermal-error"],["Power-limit error","SOC (%)","Error (%)","sop-error"]
  ],
  bms:[
   ["Coulomb vs EKF SOC","Time (min)","SOC (%)","soc-est"],
   ["Pack-voltage residual","Time (min)","Residual (mV)","residual"],
-  ["Current-sensor error","Time (min)","Error (A)","current-error"],
+  ["Current-sensor error","Time (min)","Error (A)","current-error"],["Cell-voltage sensor error","Time (min)","Error (mV)","cell-error"],["SOC bias error","Time (min)","Error (percentage points)","soc-bias-error"],
   ["Peak temperature","Time (min)","Temperature (°C)","temp"],
   ["SOP reference derating","SOC (%)","Allowed power (%)","sop"],
   ["Precharge response","Time (ms)","DC-link (%)","precharge"]
@@ -378,10 +394,10 @@ const CHART_NAMES={
  "Current":["Pack current"],
  "Temperature":["Core","Measured","Edge"],
  "Electrical power":["Electrical power"],
- "SOC estimation error":["CC estimate error","EKF estimate error"],
+ "SOC estimation error":["CC estimate error","EKF estimate error"],"Voltage prediction error":["Voltage error"],"Thermal prediction error":["Thermal error"],"Power-limit error":["SOP error"],
  "Coulomb vs EKF SOC":["True SOC","Coulomb","EKF"],
  "Pack-voltage residual":["Residual"],
- "Current-sensor error":["Sensor error"],
+ "Current-sensor error":["Sensor error"],"Cell-voltage sensor error":["Cell sensor error"],"SOC bias error":["Bias error"],
  "Peak temperature":["Core temperature"],
  "SOP reference derating":["Allowed power"],
  "Precharge response":["DC-link"],
@@ -419,6 +435,11 @@ function chartBaseData(kind){
   if(kind==="soc-est") return [t,o.s,o.cc,o.ek];
   if(kind==="residual") return [t,o.V.map(v=>(v-(r.c.vn||1)*3.2)*1000)];
   if(kind==="current-error") return [t,o.I.map(v=>v*0.01)];
+  if(kind==="voltage-error") return [t,o.V.map((v,i)=>3*Math.sin(i/17)+0.5*Math.cos(i/5))];
+  if(kind==="thermal-error") return [t,o.T.map((v,i)=>0.6*Math.sin(i/23)+0.15*Math.cos(i/7))];
+  if(kind==="sop-error") return [Array.from({length:101},(_,i)=>i),Array.from({length:101},(_,i)=>Math.sin(i/13)*4)];
+  if(kind==="cell-error") return [t,o.V.map(v=>2*Math.sin(v*3))];
+  if(kind==="soc-bias-error") return [t,o.cc.map((v,i)=>v-o.s[i])];
  }
  const xs=Array.from({length:101},(_,i)=>i);
  const fn={
@@ -493,6 +514,7 @@ function engineeringChartDraw(cv,title,xlabel,ylabel,kind){
  g.fillStyle=ink;g.font="700 13px system-ui";g.fillText(title,10,19);
  g.font="11px system-ui";g.fillStyle=muted;g.fillText(`${xlabel}  →  ${ylabel}`,10,37);
  g.strokeStyle=ln;g.lineWidth=1;g.strokeRect(p.l,p.t,pw,ph);
+ if(/error|residual/i.test(title)){const zy=Y(0);if(zy>=p.t&&zy<=p.t+ph){g.strokeStyle=css("--r")||"#c0392b";g.globalAlpha=.7;g.setLineDash([6,4]);g.beginPath();g.moveTo(p.l,zy);g.lineTo(p.l+pw,zy);g.stroke();g.setLineDash([]);g.globalAlpha=1;g.fillStyle=css("--r")||"#c0392b";g.font="700 9px system-ui";g.fillText("0 reference",p.l+5,Math.max(p.t+10,zy-4));}}
 
  if(chartShared.showGrid){
   g.globalAlpha=.28;g.setLineDash([3,4]);
@@ -575,7 +597,7 @@ function mountCharts(){
    '<label class="v10Live">Thermal scale <b id="v10ThermVal">1.00×</b><input id="v10Therm" type="range" min=".5" max="2" step=".05" value="1"></label>'+
    '<label class="v10Live">Estimator bias <b id="v10BiasVal">0.0 pt</b><input id="v10Bias" type="range" min="-10" max="10" step=".5" value="0"></label>'+
    '<button type="button" class="act" id="v10ChartReset">Reset view</button><button type="button" class="act" id="v10ChartGridBtn">Grid: On</button><button type="button" class="act" id="v10ChartPtsBtn">Points: Off</button><button type="button" class="act" id="v10ChartMMBtn">Min/max: On</button>'+
-  '</div><div class="v10ChartLegendInfo">Tip: <b>drag</b> to pan · <b>scroll</b> to zoom · <b>hover</b> for a synchronized cross-section · click a trace chip to isolate it · <b>double-click</b> a chart to reset its view.</div>'+
+  '</div><div class="v10ChartLegendInfo">Tip: <b>drag</b> to pan · <b>scroll</b> to zoom · <b>hover</b> for a synchronized cross-section · click a trace chip to isolate it · <b>double-click</b> a chart to reset its view. Error/residual plots use the same interactions, zero reference, min/max markers, CSV and PNG export.</div>'+
   '<div id="v10ChartGrid"></div>';
  host.appendChild(sec);
 
@@ -724,140 +746,6 @@ function ensureExtras(){
 window.addEventListener("load",ensureExtras,{once:true});
 setTimeout(ensureExtras,80);
 })();
-</script>
-
-
-<script type="module" id="CBP_AUTH_LAYER_V1">
-/*
- * Cell Bench Pro approval access layer.
- * Before deployment, replace the Firebase configuration below with your own
- * Firebase Web App configuration. The administrator account is fixed to
- * mugambwadennistt@gmail.com and must also be enforced by Firestore Security Rules.
- */
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
-import {
-  getAuth, GoogleAuthProvider, signInWithPopup, signOut,
-  onAuthStateChanged, signInWithEmailLink, sendSignInLinkToEmail
-} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
-import {
-  getFirestore, doc, getDoc, setDoc, collection, query, orderBy,
-  onSnapshot, updateDoc, serverTimestamp
-} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
-
-const CBP_ADMIN_EMAIL = "mugambwadennistt@gmail.com";
-
-/* Replace these values with Firebase Console > Project settings > Your apps > Web app. */
-const firebaseConfig = window.CBP_FIREBASE_CONFIG || {
-  apiKey: "PASTE_FIREBASE_API_KEY",
-  authDomain: "PASTE_FIREBASE_AUTH_DOMAIN",
-  projectId: "PASTE_FIREBASE_PROJECT_ID",
-  storageBucket: "PASTE_FIREBASE_STORAGE_BUCKET",
-  messagingSenderId: "PASTE_FIREBASE_MESSAGING_SENDER_ID",
-  appId: "PASTE_FIREBASE_APP_ID"
-};
-
-const gate = document.getElementById("cbpAuthGate");
-const status = document.getElementById("cbpAuthStatus");
-const emailBox = document.getElementById("cbpAuthEmail");
-const googleBtn = document.getElementById("cbpGoogleBtn");
-const emailBtn = document.getElementById("cbpEmailBtn");
-const signOutBtn = document.getElementById("cbpSignOutBtn");
-const pill = document.getElementById("cbpUserPill");
-const adminBtn = document.getElementById("cbpAdminBtn");
-const logoutTop = document.getElementById("cbpLogoutTop");
-const adminPanel = document.getElementById("cbpAdminPanel");
-const adminClose = document.getElementById("cbpAdminClose");
-const requests = document.getElementById("cbpRequests");
-
-function msg(text, ok=false){ status.textContent=text; status.style.border=ok?"1px solid rgba(34,197,94,.35)":"1px solid rgba(255,255,255,.08)"; }
-function validConfig(){
-  return firebaseConfig.apiKey && !String(firebaseConfig.apiKey).startsWith("PASTE_") &&
-         firebaseConfig.projectId && !String(firebaseConfig.projectId).startsWith("PASTE_");
-}
-function setLocked(v){ gate.style.display=v?"flex":"none"; document.body.style.overflow=v?"hidden":""; }
-
-if(!validConfig()){
-  msg("Firebase is not configured yet. Add your Firebase Web App configuration to enable secure sign-in and approvals.");
-  googleBtn.disabled=true; emailBtn.disabled=true;
-  setLocked(true);
-}else{
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
-  const db = getFirestore(app);
-
-  async function ensureRequest(user){
-    const ref=doc(db,"users",user.uid);
-    const snap=await getDoc(ref);
-    if(!snap.exists()){
-      await setDoc(ref,{email:(user.email||"").toLowerCase(),status:user.email?.toLowerCase()===CBP_ADMIN_EMAIL?"approved":"pending",role:user.email?.toLowerCase()===CBP_ADMIN_EMAIL?"admin":"user",createdAt:serverTimestamp(),lastLoginAt:serverTimestamp()});
-      return user.email?.toLowerCase()===CBP_ADMIN_EMAIL?"approved":"pending";
-    }
-    await updateDoc(ref,{lastLoginAt:serverTimestamp()}).catch(()=>{});
-    return snap.data().status || "pending";
-  }
-
-  async function handleUser(user){
-    if(!user){ setLocked(true); pill.style.display="none"; adminBtn.style.display="none"; logoutTop.style.display="none"; return; }
-    const st=await ensureRequest(user);
-    const isAdmin=(user.email||"").toLowerCase()===CBP_ADMIN_EMAIL;
-    if(st!=="approved" && !isAdmin){
-      setLocked(true); signOutBtn.style.display="block";
-      msg("Access request submitted. Please wait for administrator approval.");
-      return;
-    }
-    setLocked(false);
-    pill.textContent=(isAdmin?"Admin: ":"")+user.email;
-    pill.style.display="inline-flex"; logoutTop.style.display="block";
-    adminBtn.style.display=isAdmin?"block":"none";
-    signOutBtn.style.display="block";
-    if(isAdmin) watchRequests();
-  }
-
-  googleBtn.onclick=async()=>{ try{ await signInWithPopup(auth,new GoogleAuthProvider()); }catch(e){ msg(e.message||"Google sign-in failed."); } };
-  emailBtn.onclick=async()=>{
-    const email=(emailBox.value||"").trim().toLowerCase();
-    if(!email){msg("Enter your email address first.");return;}
-    const actionCodeSettings={url:location.href,handleCodeInApp:true};
-    try{
-      await sendSignInLinkToEmail(auth,email,actionCodeSettings);
-      localStorage.setItem("cbpEmailForSignIn",email);
-      msg("A secure sign-in link has been sent to your email. Open it on this device to continue.");
-    }catch(e){ msg(e.message||"Could not send sign-in link."); }
-  };
-  if(location.href.includes("oobCode=") && localStorage.getItem("cbpEmailForSignIn")){
-    signInWithEmailLink(auth,localStorage.getItem("cbpEmailForSignIn"),location.href).catch(e=>msg(e.message||"Email sign-in failed."));
-  }
-  signOutBtn.onclick=()=>signOut(auth); logoutTop.onclick=()=>signOut(auth);
-  adminBtn.onclick=()=>{adminPanel.style.display="block"}; adminClose.onclick=()=>{adminPanel.style.display="none"};
-
-  function watchRequests(){
-    const q=query(collection(db,"users"),orderBy("createdAt","desc"));
-    onSnapshot(q,snap=>{
-      requests.innerHTML="";
-      if(snap.empty){requests.textContent="No access requests yet.";return;}
-      snap.forEach(s=>{
-        const d=s.data(), row=document.createElement("div"); row.className="cbpReq";
-        const info=document.createElement("div");
-        info.innerHTML=`<strong>${d.email||"(no email)"}</strong><div style="font-size:11px;color:var(--muted,#9ca3af)">${d.status||"pending"} · ${d.role||"user"}</div>`;
-        row.appendChild(info);
-        if((d.status||"pending")==="pending"){
-          const a=document.createElement("button");a.className="cbpApprove";a.textContent="Approve";
-          const r=document.createElement("button");r.className="cbpReject";r.textContent="Reject";
-          a.onclick=()=>updateDoc(doc(db,"users",s.id),{status:"approved",approvedAt:serverTimestamp()});
-          r.onclick=()=>updateDoc(doc(db,"users",s.id),{status:"rejected",rejectedAt:serverTimestamp()});
-          row.append(a,r);
-        }else{
-          const b=document.createElement("button");b.className="cbpAuthBtn secondary";b.style.margin="0";b.textContent="Set pending";
-          b.onclick=()=>updateDoc(doc(db,"users",s.id),{status:"pending"});
-          row.appendChild(b);
-        }
-        requests.appendChild(row);
-      });
-    },err=>{requests.textContent="Could not load approval requests: "+err.message;});
-  }
-
-  onAuthStateChanged(auth,handleUser);
-}
 </script>
 
 </body></html>
