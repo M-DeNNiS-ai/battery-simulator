@@ -336,6 +336,34 @@ svg{max-width:100%}
 .glossItem{border:1px solid var(--cb-border);border-radius:9px;padding:9px;background:var(--cb-panel2)}
 .glossItem b{display:block;color:var(--cb-cyan);margin-bottom:2px}
 @media(max-width:700px){.heroHead{flex-direction:column}.heroTools{width:100%}.themeBtn{flex:1}}
+
+/* Realistic pack construction view */
+.pack3dWrap{margin:12px 0;border:1px solid var(--ln);border-radius:10px;background:var(--pn);overflow:hidden}
+.pack3dHead{display:flex;justify-content:space-between;gap:10px;align-items:center;padding:10px 12px;border-bottom:1px solid var(--ln);flex-wrap:wrap}
+.pack3dHead h3{margin:0!important}
+.pack3dStage{position:relative;min-height:420px;overflow:auto;background:linear-gradient(180deg,rgba(50,90,120,.08),transparent);perspective:1100px;padding:30px}
+.pack3dScene{position:relative;transform-style:preserve-3d;transform:rotateX(55deg) rotateZ(-8deg);transform-origin:center center;margin:35px auto;width:max-content;min-width:280px;min-height:250px;transition:transform .25s ease}
+.pack3dScene:hover{transform:rotateX(50deg) rotateZ(-5deg) scale(1.025)}
+.cell3d{position:absolute;transform-style:preserve-3d;border:1px solid rgba(0,0,0,.35);box-shadow:0 5px 10px rgba(0,0,0,.25);background:linear-gradient(135deg,#b8bec5,#727983);display:flex;align-items:center;justify-content:center;font-size:8px;color:#17202a;font-weight:700}
+.cell3d.cyl{border-radius:50%;}
+.cell3d.prism{border-radius:5px}.cell3d.pouch{border-radius:7px}
+.cellTop{position:absolute;inset:4px;border-radius:inherit;background:linear-gradient(135deg,#dfe4e8,#8e969f);transform:translateZ(8px);border:1px solid rgba(0,0,0,.22)}
+.cellSide{position:absolute;left:0;right:0;bottom:-8px;height:8px;background:#555c65;transform-origin:top;transform:rotateX(-90deg);border-radius:0 0 3px 3px}
+.weld{position:absolute;z-index:8;border-radius:50%;background:#ffd34e;border:1px solid #7d6200;box-shadow:0 1px 3px #0008}
+.weld.weak{background:#ff704d;box-shadow:0 0 0 2px #ff704d55}
+.weld.laser{border-radius:2px;background:#c7f5ff}.weld.ultra{border-radius:2px;background:#a7b7ff}
+.nickel3d{position:absolute;background:linear-gradient(180deg,#d6dbe0,#8d969e);border:1px solid #59616a;transform-style:preserve-3d;box-shadow:0 2px 3px #0005}
+.busbar3d{position:absolute;background:linear-gradient(180deg,#e4a62a,#9d6310);border:1px solid #714500;transform-style:preserve-3d;box-shadow:0 3px 5px #0007}
+.busbar3d:after,.nickel3d:after{content:"";position:absolute;inset:0;transform:translateZ(3px);background:inherit;border-radius:inherit;opacity:.65}
+.barrier3d{position:absolute;background:repeating-linear-gradient(90deg,#bde7ff55 0 8px,#ffffff18 8px 16px);border:1px dashed #75bde055;transform:translateZ(2px);pointer-events:none}
+.pack3dAxis{position:absolute;left:12px;bottom:10px;font-size:11px;color:var(--mu);z-index:20}
+.pack3dLegend{display:flex;gap:8px;flex-wrap:wrap;padding:9px 12px;border-top:1px solid var(--ln);font-size:11px;color:var(--mu)}
+.pack3dLegend span{padding:4px 7px;border:1px solid var(--ln);border-radius:999px}
+.pack3dNote{padding:8px 12px;color:var(--mu);font-size:12px;border-top:1px solid var(--ln)}
+.controlHelp{display:block;margin:2px 0 5px;color:var(--mu);font-size:11px;line-height:1.3;font-weight:400}
+.controlBlock{margin-bottom:9px}.controlBlock>label{margin-bottom:0}
+.controlHelp strong{color:var(--ink)}
+@media(max-width:700px){.pack3dStage{min-height:330px;padding:15px}.pack3dScene{transform:rotateX(52deg) rotateZ(-5deg) scale(.82);margin:15px auto}.pack3dScene:hover{transform:rotateX(52deg) rotateZ(-5deg) scale(.86)}}
 </style></head><body><main>
 <div id="chartTip" class="chartTip"></div>
 <div id="glossaryOverlay" class="glossaryOverlay" role="dialog" aria-modal="true" aria-label="Battery engineering glossary">
@@ -352,7 +380,13 @@ svg{max-width:100%}
 <div>
 <p class="info" id="pack"></p>
 <div class="cards" id="cards"></div><p class="info" id="ev"></p>
-<div class="ch" style="margin-bottom:12px"><h3>Pack view <select id="vm" style="width:auto;margin:0"><option value="T">Temperature</option><option value="s">SOC</option><option value="V">Cell voltage</option></select><span id="ft" style="font-weight:400;color:var(--mu);font-size:12px"></span></h3><canvas id="pk" style="height:250px"></canvas><input type="range" id="fs" min="0" max="0" value="0" aria-label="Time"></div>
+<div class="pack3dWrap">
+ <div class="pack3dHead"><div><h3>3D cell arrangement &amp; interconnect</h3><div class="info">This view is tied to Series, Parallel, cell format, spacing, nickel thickness, weld process, weld count, weak-weld rate and copper busbar area. Change a parameter and the construction changes with it.</div></div><div class="info" id="pack3dStats"></div></div>
+ <div class="pack3dStage"><div id="pack3dScene" class="pack3dScene"></div><div class="pack3dAxis">Drag the 3D model to rotate · Series direction → · Parallel direction ↑ · Copper busbars carry group-to-group current · Welds connect terminals to nickel/busbar</div></div>
+ <div class="pack3dLegend"><span>● weld</span><span>▰ nickel collector</span><span>▬ copper busbar</span><span>▤ barrier / spacing</span><span>red weld = weak-weld population</span></div>
+ <div class="pack3dNote" id="pack3dNote"></div>
+</div>
+<div class="ch" style="margin-bottom:12px"><h3>Electrical state map <select id="vm" style="width:auto;margin:0"><option value="T">Temperature</option><option value="s">SOC</option><option value="V">Cell voltage</option></select><span id="ft" style="font-weight:400;color:var(--mu);font-size:12px"></span></h3><canvas id="pk" style="height:250px"></canvas><input type="range" id="fs" min="0" max="0" value="0" aria-label="Time"></div>
 <div class="charts">
 <div class="ch"><h3>State of charge <i style="--k:var(--c1)">true</i><i style="--k:var(--c2)">coulomb count</i><i style="--k:var(--c3)">Kalman (EKF)</i></h3><canvas id="c1"></canvas></div>
 <div class="ch"><h3>SOC error vs true <i style="--k:var(--c2)">coulomb count</i><i style="--k:var(--c3)">Kalman (EKF)</i></h3><canvas id="c2"></canvas></div>
@@ -396,11 +430,14 @@ const F=[['chem','Chemistry','sel',Object.fromEntries(Object.entries(CH).map(([k
 const $=id=>document.getElementById(id);
 const ctl=$('ctl');let html='';
 const sec={chem:'Cell',S:'Pack',cool:'Thermal',load:'Load',err:'Sensing and estimation',arr:'Arrangement and cell behaviour',cyc:'Ageing',ns:'Nickel strip, welds and busbar',bms:'BMS, AFE and MOSFETs',trig:'Fault and thermal runaway'};
+const HELP={
+chem:'Cell chemistry sets nominal voltage, OCV shape, resistance, energy density and thermal/runaway behaviour.',ff:'Cell form factor changes physical dimensions, surface area, mass and thermal path; it also changes how the cells can be packed.',S:'Series count adds cell voltages. Every series group needs voltage monitoring and the same string current flows through the series path.',P:'Parallel count adds capacity and shares current. More parallel cells reduce current per cell and change the physical width/height of each parallel group.',cool:'Cooling changes heat removal. Higher heat-transfer coefficient reduces cell and MOSFET temperature for the same losses.',Tamb:'Ambient/coolant temperature shifts the starting thermal condition and the temperature headroom available before protection.',load:'Load profile determines whether the pack sees steady current, pulses, regenerative current or CC-CV charging.',C:'C-rate scales current relative to cell/pack capacity; higher C-rate increases voltage sag, I²R heating and stress.',dur:'Simulation duration determines how long ageing, heating, SOC movement and protection events have time to develop.',soc:'Initial true SOC is the physical starting charge state used by the simulated cells.',err:'Initial estimator error is the difference between the BMS estimate and the actual starting SOC.',gain:'Current-sensor gain error makes measured current proportionally too high or low and accumulates into SOC error.',bias:'Current-sensor offset adds a false current even when real current is zero; its SOC error grows with time.',arr:'Arrangement changes the physical topology. Brick mode builds parallel cells inside each series group; string mode builds series strings in parallel.',sp:'Cell spacing/barriers change thermal coupling and therefore how heat can propagate from one cell to its neighbours.',vc:'Capacity mismatch gives cells different usable charge, so series groups reach limits at different times.',vr:'Resistance mismatch makes some cells heat and sag more than others under the same pack current.',vs:'Initial SOC mismatch creates unequal starting voltages and can activate balancing or early cutoff.',cyc:'Completed cycles represent electrochemical ageing: capacity fades and resistance grows.',yrs:'Calendar age adds time-dependent capacity loss and resistance growth even without full cycling.',ns:'Nickel strip thickness changes collector resistance and the physical cross-section available to carry current.',nw:'Nickel strip width changes its conductive cross-section and therefore its resistance and heat.',nl:'Longer nickel current paths increase resistance and I²R loss.',wt:'Weld process changes the assumed joint resistance and the visual joint geometry.',wn:'More welds per terminal reduce effective joint resistance and improve current sharing, while adding manufacturing complexity.',wf:'Weak-weld percentage injects higher-resistance joints, producing local voltage drop and heating.',bb:'Busbar copper area is the current-carrying cross-section; larger area lowers copper resistance and heat.',bl:'Longer busbars increase copper resistance and therefore interconnect voltage drop and heat.',bms:'BMS state controls whether protection and derating logic is active.',afe:'AFE accuracy determines cell-voltage measurement uncertainty and balancing capability.',bal:'Passive balancing bleeds selected high cells so series groups can remain within a usable voltage window.',ocl:'Over-current threshold sets the pack current at which the protection logic trips.',fet:'MOSFET RDS(on) controls conduction loss. Lower resistance means less I²R heating.',nf:'Parallel MOSFET count shares current and reduces equivalent conduction resistance.',trig:'Fault trigger selects a controlled abnormal condition for studying BMS response and thermal propagation.',tt:'Trigger time delays a forced runaway event so you can compare normal operation before the fault.'};
 for(const [id,l,t,o,d] of F){
  if(sec[id])html+=`<h2>${sec[id]}</h2>`;
- if(t=='sel')html+=`<label for="${id}">${l}</label><select id="${id}" class="in">${Object.entries(o).map(([k,v])=>`<option value="${k}"${k==d?' selected':''}>${v}</option>`).join('')}</select>`;
- else if(t=='num')html+=`<div style="display:inline-block;width:48%;margin-right:${id=='S'?'2':'0'}%"><label for="${id}">${l}</label><input type="number" id="${id}" class="in" min="${o[0]}" max="${o[1]}" value="${d}"></div>`;
- else html+=`<label for="${id}">${l}<output id="o_${id}">${d}</output></label><input type="range" id="${id}" class="in" min="${o[0]}" max="${o[1]}" step="${o[2]}" value="${d}">`}
+ const help=`<span class="controlHelp">${HELP[id]||'Changes this simulation parameter and affects the coupled electrical, thermal or mechanical response.'}</span>`;
+ if(t=='sel')html+=`<div class="controlBlock"><label for="${id}">${l}</label>${help}<select id="${id}" class="in">${Object.entries(o).map(([k,v])=>`<option value="${k}"${k==d?' selected':''}>${v}</option>`).join('')}</select></div>`;
+ else if(t=='num')html+=`<div class="controlBlock" style="display:inline-block;width:48%;margin-right:${id=='S'?'2':'0'}%"><label for="${id}">${l}</label>${help}<input type="number" id="${id}" class="in" min="${o[0]}" max="${o[1]}" value="${d}"></div>`;
+ else html+=`<div class="controlBlock"><label for="${id}">${l}<output id="o_${id}">${d}</output></label>${help}<input type="range" id="${id}" class="in" min="${o[0]}" max="${o[1]}" step="${o[2]}" value="${d}"></div>`}
 ctl.innerHTML=html;
 const ocv=(c,s)=>{s=Math.min(1,Math.max(0,s))*10;const i=Math.min(9,Math.floor(s)),f=s-i;return c.v[i]*(1-f)+c.v[i+1]*f};
 const docv=(c,s)=>(ocv(c,s+.005)-ocv(c,s-.005))/.01;
@@ -489,6 +526,62 @@ function plot(id,xs,ser,fmt,xf=x=>x.toFixed(0)+' min'){
  cv.onmouseleave=()=>{render();const tip=$('chartTip');if(tip)tip.style.display='none'};
 }
 let R_;
+function render3D(p,R){
+ const scene=$('pack3dScene'),stats=$('pack3dStats'),note=$('pack3dNote'); if(!scene||!R)return;
+ const maxCells=96, S=R.S, P=R.P, total=S*P, show=Math.min(total,maxCells);
+ const cols=Math.min(S,12), gap=20+Math.min(35,Math.max(0,p.bb/12)), cellW=p.ff.includes('prism')?54:p.ff.includes('pouch')?62:p.ff.includes('c32140')?46:38, cellD=p.ff.includes('prism')?72:p.ff.includes('pouch')?46:38;
+ const scale=Math.max(.35,Math.min(1.35,p.ns/.15));
+ const weldH=Math.max(4,Math.min(12,p.wn*1.2));
+ const busH=Math.max(5,Math.min(22,p.bb/18));
+ scene.innerHTML=''; scene.style.width=(cols*(cellW+gap)+100)+'px'; scene.style.height=(Math.ceil(show/cols)*(cellD+gap)+100)+'px';
+ const add=(cls,style,text='')=>{const e=document.createElement('div');e.className=cls;e.style.cssText=style;if(text)e.textContent=text;scene.appendChild(e);return e};
+ const isCyl=!p.ff.includes('prism')&&!p.ff.includes('pouch');
+ for(let k=0;k<show;k++){
+   const sg=p.arr==='brick'?Math.floor(k/P):k%S;
+   const pi=p.arr==='brick'?k%P:Math.floor(k/S);
+   const x=50+sg*(cellW+gap), y=40+pi*(cellD+gap);
+   const cell=add('cell3d '+(isCyl?'cyl':p.ff.includes('pouch')?'pouch':'prism'),`left:${x}px;top:${y}px;width:${cellW}px;height:${cellD}px;`,'');
+   const top=document.createElement('div');top.className='cellTop';cell.appendChild(top);const side=document.createElement('div');side.className='cellSide';cell.appendChild(side);
+   cell.title=`Cell ${k+1}: series group ${sg+1}, parallel position ${pi+1}`;
+   const weak=((k*37+11)%100)<p.wf;
+   const wc=p.wt==='laser'?'laser':p.wt==='ultra'?'ultra':'';
+   for(let w=0;w<p.wn;w++){const wx=x+6+w*(Math.max(8,(cellW-12)/Math.max(1,p.wn-1)));const wy=y+cellD/2-3;add('weld '+wc+(weak?' weak':''),`left:${wx}px;top:${wy}px;width:${Math.max(5,4+scale*2)}px;height:${Math.max(5,4+scale*2)}px;transform:translateZ(${weldH}px)`)}
+   if(p.wn>0){
+     const stripW=Math.max(5,4+p.ns*22), stripY=y+cellD/2-stripW/2;
+     add('nickel3d',`left:${x-5}px;top:${stripY}px;width:${cellW+10}px;height:${stripW}px;transform:translateZ(${Math.max(2,p.ns*18)}px)`);
+   }
+ }
+ // parallel-group nickel collectors and series busbars
+ const rows=p.arr==='brick'?Math.min(P,show):Math.min(S,Math.ceil(show/Math.max(1,S)));
+ for(let g=0;g<Math.min(S,cols);g++){
+   if(p.arr==='brick'){
+     const bx=50+g*(cellW+gap)-8; const by=40+rows*(cellD+gap)-8;
+     add('busbar3d',`left:${bx}px;top:${by}px;width:${cellW+16}px;height:${Math.max(6,busH)}px;transform:translateZ(10px)`);
+     if(g<S-1) add('busbar3d',`left:${bx+cellW+gap/2-4}px;top:${by-8}px;width:${Math.max(8,busH)}px;height:${gap+18}px;transform:translateZ(11px)`);
+   } else {
+     const bx=50+g*(cellW+gap)-8;
+     // Vertical series links connect cell terminals within each string.
+     for(let r=0;r<rows-1;r++){
+       const ly=40+(r+1)*(cellD+gap)-gap/2-4;
+       add('busbar3d',`left:${bx+cellW/2-4}px;top:${ly}px;width:${Math.max(8,busH)}px;height:${gap+8}px;transform:translateZ(11px)`);
+     }
+     add('busbar3d',`left:${bx}px;top:${40+rows*(cellD+gap)-8}px;width:${cellW+16}px;height:${Math.max(6,busH)}px;transform:translateZ(10px)`);
+   }
+ }
+ // terminal rails
+ const railY=40+rows*(cellD+gap)+18; add('busbar3d',`left:35px;top:${railY}px;width:${Math.max(60,cols*(cellW+gap))}px;height:${Math.max(6,busH+2)}px;transform:translateZ(12px)`);
+ // barriers / spacing indicators
+ if(p.sp!=='touch') for(let g=0;g<Math.min(S-1,cols-1);g++) add('barrier3d',`left:${50+g*(cellW+gap)+cellW+2}px;top:28px;width:${Math.max(3,gap*.35)}px;height:${rows*(cellD+gap)+20}px;transform:translateZ(3px)`);
+ stats.textContent=`${S}S${P}P · ${total} cells · ${p.ns.toFixed(2)} mm Ni · ${p.bb} mm² Cu busbar · ${p.wt} weld · ${p.wn} welds/terminal`;
+ note.textContent=`Construction model: ${p.arr==='brick'?'each series group contains '+P+' parallel cells, then copper busbars connect groups in series.':'series strings are built first and those strings are paralleled.'} Nickel thickness scales the collector depth; weld process changes joint representation and resistance; weak-weld percentage creates higher-resistance joints. ${total>show?`Only ${show} of ${total} cells are rendered for phone/browser performance; the electrical model still uses all ${total}.`:''}`;
+}
+(function enable3DInteraction(){
+ let down=false,sx=0,sy=0,rx=55,rz=-8;
+ document.addEventListener('pointerdown',e=>{if(!e.target.closest('#pack3dScene'))return;down=true;sx=e.clientX;sy=e.clientY;e.target.setPointerCapture?.(e.pointerId)});
+ document.addEventListener('pointermove',e=>{if(!down)return;rx=Math.max(25,Math.min(75,rx+(e.clientY-sy)*.25));rz=Math.max(-45,Math.min(35,rz+(e.clientX-sx)*.25));sx=e.clientX;sy=e.clientY;const sc=$('pack3dScene');if(sc)sc.style.transform=`rotateX(${rx}deg) rotateZ(${rz}deg)`});
+ document.addEventListener('pointerup',()=>down=false);
+ document.addEventListener('wheel',e=>{if(!e.target.closest('#pack3dScene'))return;const sc=$('pack3dScene');if(!sc)return;const m=e.deltaY>0?.96:1.04;const current=parseFloat(sc.dataset.zoom||'1')*m;sc.dataset.zoom=String(Math.max(.55,Math.min(1.6,current)));sc.style.scale=current});
+})();
 function draw(){const R=R_;if(!R||!R.fr.length)return;const F0=R.fr[+$('fs').value]||R.fr[R.fr.length-1],m=$('vm').value,cv=$('pk'),d=devicePixelRatio||1,w=cv.clientWidth,h=cv.clientHeight;cv.width=w*d;cv.height=h*d;const g=cv.getContext('2d');g.scale(d,d);
  const nr=Math.ceil(R.n/R.nc),cs=Math.min((w-8)/R.nc,(h-22)/nr),ox=(w-cs*R.nc)/2,rg={T:[25,Math.max(60,...F0.T)],s:[0,1],V:[R.c.lo,R.c.hi]}[m],cyl=R.f.n.includes('cyl');
  for(let k=0;k<R.n;k++){const x=ox+(k%R.nc)*cs,y=4+Math.floor(k/R.nc)*cs,u=Math.min(1,Math.max(0,(F0[m][k]-rg[0])/(rg[1]-rg[0])));
@@ -501,6 +594,7 @@ function run(){
  const p={};for(const [id,,t] of F){const e=$(id);p[id]=t=='sel'?e.value:+e.value;if(t=='rng')$('o_'+id).textContent=e.value}
  p.S=Math.max(1,Math.min(200,p.S||1));p.P=Math.max(1,Math.min(20,p.P||1));
  const R=R_=sim(p),o=R.o;
+ render3D(p,R);
  if(!o.t.length){$('cards').innerHTML=`<div class="card"><span>Stopped at start</span><b style="font-size:14px">${R.why}</b></div>`;return}
  $('pack').textContent=`${R.S}S${R.P}P ${R.c.n} · ${R.Vn.toFixed(1)} V · ${R.Ah.toFixed(1)} Ah · ${R.E.toFixed(2)} kWh · ${R.M.toFixed(1)} kg cells · ${R.n} cells${R.capped?' (parallel count capped at 480 cells)':''} · busbar ${(R.Rbus*1e3).toFixed(2)} mΩ · nickel strip ${(R.Rn*1e3).toFixed(2)} mΩ per cell · capacity fade ${(R.fade*100).toFixed(1)} %`;
  const l=o.s.length-1,cd=[['Stopped',R.why],['Net energy',R.Wh.toFixed(0)+' Wh'],['Peak cell temp',R.pk.toFixed(0)+' °C'],['Coulomb count error',R.ecc.toFixed(1)+' pp'],['Kalman error',R.eek.toFixed(1)+' pp'],['Final mean SOC',o.s[l].toFixed(1)+' %'],['Interconnect loss',R.Li.toFixed(1)+' Wh'],['MOSFET loss / peak temp',R.Lf.toFixed(1)+' Wh / '+R.Tfx.toFixed(0)+' °C'],['Cells in runaway',R.ntr+' of '+R.n]];
