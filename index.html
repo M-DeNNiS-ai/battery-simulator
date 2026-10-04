@@ -347,6 +347,37 @@ svg{max-width:100%}
 .cell3d{position:absolute;transform-style:preserve-3d;border:1px solid rgba(0,0,0,.35);box-shadow:0 5px 10px rgba(0,0,0,.25);background:linear-gradient(135deg,#b8bec5,#727983);display:flex;align-items:center;justify-content:center;font-size:8px;color:#17202a;font-weight:700}
 .cell3d.cyl{border-radius:50%;}
 .cell3d.prism{border-radius:5px}.cell3d.pouch{border-radius:7px}
+.pack3d-toolbar{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}
+.busbar3d{position:absolute;border-radius:3px;background:#b87333;box-shadow:0 0 0 1px rgba(0,0,0,.25);pointer-events:none}
+.busbar3d.positive{background:#b87333}.busbar3d.negative{background:#b87333}.busbar3d.series{background:#b87333}
+.cable3d{position:absolute;border-radius:4px;pointer-events:none}
+.cable3d.positive,.cable3d.packPositive,.cable3d.chargerPositive{background:#c44}
+.cable3d.negative,.cable3d.packNegative,.cable3d.chargerNegative{background:#555}
+.cable3d.protected{background:#e6b84a}
+.terminalDot{background:#b87333;position:absolute}
+.terminalBox,.contactor3d,.fuse3d{position:absolute;border:2px solid var(--ln);background:var(--bg2);border-radius:4px;box-sizing:border-box}
+.senseCable{position:absolute;background:#58a6ff;pointer-events:none}
+.senseDot{position:absolute;background:#58a6ff}
+.connLabel{font-size:10px;font-weight:700;color:var(--tx);text-shadow:0 1px 2px var(--bg);white-space:nowrap}
+.cylCap{background:radial-gradient(circle at 35% 35%,#aaa,#555 65%,#222);position:absolute}
+.cylTerm{background:#b87333;position:absolute}
+
+.pack3d-toolbar button{font:inherit;border:1px solid var(--ln);background:var(--bg2);color:var(--tx);padding:6px 9px;border-radius:7px;cursor:pointer}
+.pack3d-toolbar button:hover{border-color:var(--c1)}
+.pack3d-toolbar .active{border-color:var(--c1);box-shadow:0 0 0 1px var(--c1) inset}
+.pack3d-wrap{overflow:auto;border:1px solid var(--ln);border-radius:10px;background:linear-gradient(180deg,var(--bg2),var(--bg))}
+.pack3d-scene{transform-origin:center center;transition:transform .25s ease,scale .2s ease;cursor:grab}
+.pack3d-scene:active{cursor:grabbing}
+.formfactor-compare{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:10px 0}
+.ff-card{border:1px solid var(--ln);border-radius:9px;padding:9px;background:var(--bg2)}
+.ff-card h4{margin:0 0 5px}.ff-card .shape{height:76px;display:flex;align-items:center;justify-content:center}
+.ff-pouch{width:42px;height:62px;border:3px solid var(--c2);border-radius:7px;position:relative}
+.ff-pouch:after{content:"";position:absolute;right:-13px;top:11px;width:13px;height:6px;background:var(--c2);box-shadow:0 40px 0 var(--c3)}
+.ff-prism{width:50px;height:66px;border:3px solid var(--c3);border-radius:6px;position:relative}
+.ff-prism:after{content:"";position:absolute;top:-10px;left:11px;width:7px;height:10px;background:var(--c2);box-shadow:21px 0 0 var(--c3)}
+.ff-card small{display:block;color:var(--mu);line-height:1.35}
+.interconnect-note{border-left:3px solid var(--c1);padding:8px 10px;background:var(--bg2);margin:8px 0;line-height:1.45}
+
 .cellTop{position:absolute;inset:4px;border-radius:inherit;background:linear-gradient(135deg,#dfe4e8,#8e969f);transform:translateZ(8px);border:1px solid rgba(0,0,0,.22)}
 .cellSide{position:absolute;left:0;right:0;bottom:-8px;height:8px;background:#555c65;transform-origin:top;transform:rotateX(-90deg);border-radius:0 0 3px 3px}
 .weld{position:absolute;z-index:8;border-radius:50%;background:#ffd34e;border:1px solid #7d6200;box-shadow:0 1px 3px #0008}
@@ -364,7 +395,101 @@ svg{max-width:100%}
 .controlBlock{margin-bottom:9px}.controlBlock>label{margin-bottom:0}
 .controlHelp strong{color:var(--ink)}
 @media(max-width:700px){.pack3dStage{min-height:330px;padding:15px}.pack3dScene{transform:rotateX(52deg) rotateZ(-5deg) scale(.82);margin:15px auto}.pack3dScene:hover{transform:rotateX(52deg) rotateZ(-5deg) scale(.86)}}
-</style></head><body><main>
+</style>
+<style id="v5-bms-visuals">
+/* V5: readable engineering labels and BMS overlays */
+#scene3d { position:relative !important; min-height: 640px !important; overflow: hidden; }
+#scene3d .cell-label, #scene3d .cell3d-label, #scene3d .node-label {
+  z-index: 40 !important;
+  white-space: nowrap !important;
+  text-shadow: 0 1px 2px #000, 0 0 4px #000 !important;
+  font-weight: 800 !important;
+  pointer-events: none !important;
+}
+.v5-bms-panel{margin-top:12px;padding:14px;border:1px solid #334155;border-radius:14px;background:#0b1220;color:#e5e7eb}
+.v5-bms-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px}
+.v5-bms-card{padding:11px;border:1px solid #334155;border-radius:11px;background:#111827}
+.v5-bms-card h4{margin:0 0 7px;font-size:13px}
+.v5-bms-card p{margin:0;font-size:11px;line-height:1.45;color:#cbd5e1}
+.v5-select{width:100%;padding:8px;border-radius:8px;border:1px solid #475569;background:#0f172a;color:#e5e7eb}
+.v5-chip{display:inline-block;padding:3px 7px;border-radius:999px;background:#1e293b;border:1px solid #475569;font-size:10px;margin:2px}
+.v5-comm-line{stroke-width:3;stroke-dasharray:7 5}
+.v5-sensor{font-size:10px;font-weight:800;fill:#f8fafc;paint-order:stroke;stroke:#0f172a;stroke-width:4px}
+.v5-net-label{font-size:11px;font-weight:900;fill:#f8fafc;paint-order:stroke;stroke:#020617;stroke-width:4px}
+.v5-hidden{display:none!important}
+@media(max-width:900px){#scene3d{min-height:520px!important}}
+</style>
+
+
+<style id="v6-bms-3d-css">
+#scene3d{position:relative!important;min-height:720px!important}
+.v6-node{position:absolute;z-index:180;min-width:112px;max-width:170px;padding:8px 10px;border:1px solid #64748b;border-radius:10px;background:rgba(15,23,42,.96);color:#e5e7eb;font-size:10px;box-shadow:0 7px 22px rgba(0,0,0,.35);cursor:pointer;user-select:none}
+.v6-node b{font-size:11px}.v6-node small{display:block;color:#94a3b8;margin-top:2px}
+.v6-node.active{outline:2px solid #f8fafc;box-shadow:0 0 0 4px rgba(148,163,184,.18),0 7px 22px rgba(0,0,0,.45)}
+.v6-node.warn{border-color:#f59e0b}
+.v6-node.ok{border-color:#22c55e}
+.v6-node.sensor{border-style:dashed}
+.v6-node.comm{border-color:#38bdf8}
+.v6-node.iot{border-color:#a78bfa}
+.v6-wire{position:absolute;z-index:120;pointer-events:none;height:3px;transform-origin:0 50%;background:#64748b;opacity:.9}
+.v6-wire.power{height:5px;background:#f8fafc}.v6-wire.sense{height:2px;background:#22c55e}.v6-wire.temp{height:2px;background:#f59e0b}.v6-wire.comm{height:2px;background:#38bdf8}.v6-wire.iot{height:2px;background:#a78bfa}
+.v6-wire.dash{background:repeating-linear-gradient(90deg,#38bdf8 0 7px,transparent 7px 12px)}
+.v6-legend{position:absolute;right:12px;top:12px;z-index:200;padding:9px 11px;border:1px solid #334155;border-radius:10px;background:rgba(2,6,23,.94);font-size:10px;color:#cbd5e1;line-height:1.6}
+.v6-toolbar{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0}.v6-toolbar button{padding:7px 10px;border-radius:8px;border:1px solid #475569;background:#111827;color:#e5e7eb;cursor:pointer}.v6-toolbar button.active{background:#334155}
+.v6-detail{margin-top:10px;padding:10px;border-radius:10px;background:#0f172a;border:1px solid #334155;font-size:11px;line-height:1.5;color:#cbd5e1}
+.v6-metric{display:inline-block;margin:2px 4px 2px 0;padding:3px 7px;border:1px solid #334155;border-radius:999px;font-size:10px}
+.v6-sidepanel{margin-top:10px;display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:8px}
+.v6-sidepanel label{font-size:10px;color:#cbd5e1}.v6-sidepanel select,.v6-sidepanel input{width:100%;box-sizing:border-box;margin-top:3px;padding:6px;border-radius:7px;border:1px solid #475569;background:#0b1220;color:#e5e7eb}
+@media(max-width:900px){#scene3d{min-height:820px!important}.v6-node{transform:scale(.92);transform-origin:center}}
+</style>
+
+
+<style id="v7-formfactor-css">
+/* V7: highly visible physical form factors + isolated connection layers */
+.v7-formfactor{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:12px 0}
+.v7-ff-card{border:1px solid #475569;border-radius:14px;padding:12px;background:#0b1220;color:#e5e7eb}
+.v7-ff-card.selected{outline:2px solid #f8fafc}
+.v7-ff-title{font-weight:900;font-size:14px;margin-bottom:7px}
+.v7-ff-stage{height:155px;border-radius:10px;background:radial-gradient(circle at 50% 35%,#334155,#0b1220 68%);display:flex;align-items:center;justify-content:center;overflow:hidden}
+.v7-cyl{width:52px;height:112px;border-radius:50%/12%;background:linear-gradient(90deg,#475569,#cbd5e1 45%,#475569);position:relative;box-shadow:0 10px 18px #0008;transform:rotateX(8deg)}
+.v7-cyl:before{content:"";position:absolute;left:0;top:-6px;width:52px;height:16px;border-radius:50%;background:#cbd5e1;border:2px solid #64748b}
+.v7-cyl:after{content:"+";position:absolute;left:18px;top:-4px;font-weight:900;color:#0f172a}
+.v7-prism{width:74px;height:120px;border-radius:6px;background:linear-gradient(90deg,#334155,#94a3b8 45%,#334155);box-shadow:0 10px 18px #0008;position:relative}
+.v7-prism:before{content:"+";position:absolute;right:7px;top:4px;font-weight:900;color:#0f172a}
+.v7-pouch{width:112px;height:105px;border-radius:7px;background:linear-gradient(135deg,#94a3b8,#475569);box-shadow:0 10px 18px #0008;position:relative;transform:skewY(-2deg)}
+.v7-pouch:before{content:"+";position:absolute;right:7px;top:4px;font-weight:900;color:#0f172a}
+.v7-pouch:after{content:"−";position:absolute;left:7px;bottom:4px;font-weight:900;color:#f8fafc}
+.v7-ff-caption{font-size:10px;color:#94a3b8;margin-top:7px;line-height:1.4}
+.v7-connection-panel{padding:12px;border:1px solid #334155;border-radius:14px;background:#0b1220;margin:12px 0}
+.v7-connection-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(135px,1fr));gap:7px;margin-top:9px}
+.v7-connection-btn{padding:9px 8px;border-radius:9px;border:1px solid #475569;background:#111827;color:#e5e7eb;text-align:left;cursor:pointer}
+.v7-connection-btn.active{outline:2px solid #f8fafc;background:#334155}
+.v7-connection-btn .dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:5px;background:#64748b}
+.v7-connection-btn.active .dot{background:#f8fafc}
+.v7-conn-info{font-size:11px;color:#cbd5e1;margin-top:9px;line-height:1.45}
+.v7-pack-view{position:relative;margin-top:10px;border:1px solid #334155;border-radius:14px;overflow:hidden;background:#020617;min-height:640px}
+.v7-pack-toolbar{display:flex;gap:6px;flex-wrap:wrap;padding:9px;background:#0b1220;border-bottom:1px solid #334155}
+.v7-pack-toolbar button{padding:7px 9px;border-radius:8px;border:1px solid #475569;background:#111827;color:#e5e7eb;cursor:pointer}
+.v7-pack-toolbar button.active{background:#475569}
+.v7-overlay-label{position:absolute;z-index:260;padding:3px 6px;border-radius:5px;background:#020617e8;color:#fff;font-size:10px;font-weight:900;pointer-events:none;white-space:nowrap}
+.v7-conn-wire{position:absolute;z-index:230;height:4px;transform-origin:0 50%;pointer-events:none}
+.v7-conn-wire.hidden{display:none}
+.v7-cyl3d{position:absolute;width:44px;height:96px;border-radius:50%/9%;background:linear-gradient(90deg,#334155,#cbd5e1 45%,#334155);box-shadow:0 8px 14px #0008;transform-style:preserve-3d}
+.v7-cyl3d .cap{position:absolute;left:0;top:-5px;width:44px;height:12px;border-radius:50%;background:#cbd5e1;border:2px solid #64748b}
+.v7-cyl3d .plus{position:absolute;top:-3px;left:17px;color:#111827;font-weight:900}
+.v7-prism3d{position:absolute;width:58px;height:105px;border-radius:5px;background:linear-gradient(90deg,#334155,#94a3b8 45%,#334155);box-shadow:0 8px 14px #0008}
+.v7-prism3d .plus,.v7-pouch3d .plus{position:absolute;right:4px;top:2px;color:#111827;font-weight:900}
+.v7-pouch3d{position:absolute;width:88px;height:92px;border-radius:7px;background:linear-gradient(135deg,#94a3b8,#475569);box-shadow:0 8px 14px #0008}
+.v7-pouch3d .minus{position:absolute;left:4px;bottom:2px;color:#fff;font-weight:900}
+.v7-terminal{position:absolute;width:11px;height:11px;border-radius:50%;background:#f8fafc;border:2px solid #020617;z-index:250}
+.v7-terminal.neg{background:#334155}
+.v7-terminal.tap{background:#22c55e}
+.v7-terminal.temp{background:#f59e0b}
+.v7-buslabel{font-size:10px;font-weight:900;color:#fff;position:absolute;z-index:255;text-shadow:0 1px 3px #000}
+@media(max-width:900px){.v7-formfactor{grid-template-columns:1fr}.v7-pack-view{min-height:760px}}
+</style>
+
+</head><body><main>
 <div id="chartTip" class="chartTip"></div>
 <div id="glossaryOverlay" class="glossaryOverlay" role="dialog" aria-modal="true" aria-label="Battery engineering glossary">
  <div class="glossaryPanel"><div style="display:flex;justify-content:space-between;gap:12px;align-items:center"><h2 style="margin:0">Battery Engineering Glossary</h2><button class="themeBtn" id="glossClose">Close</button></div>
@@ -394,8 +519,23 @@ svg{max-width:100%}
 <div class="ch"><h3>Cell temperature <i style="--k:var(--c4)">hottest</i><i style="--k:var(--c2)">mean</i><i style="--k:var(--mu)">coolant / ambient</i></h3><canvas id="c4"></canvas></div>
 <div class="ch" style="grid-column:1/-1"><h3>Pack current <i style="--k:var(--c1)">+ discharge / − charge</i></h3><canvas id="c5"></canvas></div><div class="ch"><h3>Cell / group voltage <i style="--k:var(--c4)">max</i><i style="--k:var(--c3)">min</i></h3><canvas id="c6"></canvas></div><div class="ch"><h3>MOSFET temperature <i style="--k:var(--c2)">FET</i></h3><canvas id="c7"></canvas></div>
 </div>
-<p class="note">Model: 1-RC Thevenin cell with chemistry OCV curve, temperature-dependent resistance, lumped thermal mass with cooling, BMS derating above 45 °C. Coulomb counting runs on a biased, noisy current sensor; the EKF fuses that current with voltage. Notice how the flat LFP and LTO curves starve the EKF of information, while NMC corrects quickly. Parameters are representative, not vendor data; interconnect, weld, AFE, MOSFET and runaway figures are simplified engineering estimates.</p>
-</div></div><div id="acad" hidden></div><div id="dsg" hidden></div><div id="lab" hidden></div></main>
+<p class="note">Model: 1-RC Thevenin cell with chemistry OCV curve, temperature-dependent resistance, lumped thermal mass with cooling, explicit interconnect/contact losses, mechanical/CAD sanity constraints, and BMS derating above 45 °C. Coulomb counting runs on a biased, noisy current sensor; the EKF fuses that current with voltage. Notice how the flat LFP and LTO curves starve the EKF of information, while NMC corrects quickly. Parameters are representative, not vendor data; interconnect, weld, AFE, MOSFET and runaway figures are simplified engineering estimates.</p>
+</div></div><div id="acad" hidden></div><div id="dsg" hidden></div><div id="lab" hidden></div>
+<!-- V5 BMS / communications lessons -->
+<section class="card" style="margin-top:14px">
+<h3>Advanced BMS, sensing, communications and IoT architecture</h3>
+<p><b>BMS signal chain:</b> cell voltage taps and temperature sensors feed a cell-monitor AFE; the BMS controller evaluates limits, balancing, faults and state estimation; protection hardware controls contactors, precharge and fault isolation; communications expose diagnostics to vehicle, charger, service tools or an IoT gateway.</p>
+<ul>
+<li><b>Cell taps:</b> route each series-node measurement with defined polarity and harness order; avoid confusing a cell tap with a power connection.</li>
+<li><b>Current measurement:</b> shunt or Hall-effect sensing is used for charge/discharge current and coulomb counting; placement must match the selected BMS topology.</li>
+<li><b>Temperature:</b> NTCs are commonly distributed across thermal hot spots; pouch/prismatic packs may need additional sensing for swelling or pressure studies.</li>
+<li><b>Protection:</b> fuse, contactor, precharge, service disconnect and HVIL are separate functions; not every low-voltage BMS needs every element.</li>
+<li><b>Communications:</b> CAN/CAN-FD, LIN, RS-485/Modbus and isolated serial buses serve different system roles; select isolation and termination according to the architecture.</li>
+<li><b>IoT:</b> BLE/Wi-Fi are useful for local commissioning; cellular and GNSS are typical telematics functions; secure identity, authenticated firmware and encrypted transport belong in a production design.</li>
+</ul>
+</section>
+
+</main>
 <script>
 const CH={
 LFP:{n:'LFP (LiFePO4)',v:[2.9,3.15,3.22,3.26,3.28,3.29,3.30,3.32,3.33,3.35,3.60],lo:2.5,hi:3.65,e:330,rho:2.1,k:.07,vn:3.2},
@@ -422,6 +562,9 @@ const F=[['chem','Chemistry','sel',Object.fromEntries(Object.entries(CH).map(([k
 ['ns','Nickel strip thickness (mm)','rng',[.05,.4,.01],.15],['nw','Strip width (mm)','rng',[4,20,1],8],['nl','Strip length per cell (mm)','rng',[5,60,1],20],
 ['wt','Weld process','sel',{spot:'Resistance spot',laser:'Laser',ultra:'Ultrasonic'},'spot'],['wn','Welds per terminal','rng',[1,8,1],2],['wf','Weak-weld cells %','rng',[0,30,1],5],
 ['bb','Busbar copper area (mm²)','rng',[10,400,5],100],['bl','Busbar length (mm)','rng',[50,1000,10],300],
+['pitch','Cell pitch / mechanical clearance (mm)','rng',[0.5,12,.5],2],['wall','Enclosure wall thickness (mm)','rng',[0.5,6,.1],1.5],
+['termclr','Live-terminal clearance (mm)','rng',[1,20,.5],5],['comp','Cell compression / restraint (%)','rng',[0,12,.5],2],
+['bjd','Busbar current density limit (A/mm²)','rng',[1,10,.1],4],
 ['bms','BMS','sel',{on:'Enabled',off:'Failed / bypassed'},'on'],
 ['afe','AFE','sel',{low:'Budget: ±15 mV, 10 mA balance',mid:'Mid: ±5 mV, 60 mA balance',hi:'Precision: ±1.5 mV, 200 mA balance'},'mid'],
 ['bal','Passive balancing','sel',{on:'On',off:'Off'},'on'],['ocl','Over-current trip (C)','rng',[.5,5,.1],2],
@@ -429,7 +572,7 @@ const F=[['chem','Chemistry','sel',Object.fromEntries(Object.entries(CH).map(([k
 ['trig','Runaway trigger','sel',{none:'None (natural only)',cell:'Force centre cell into runaway',oc:'Overcharge with BMS failed'},'none'],['tt','Trigger time (min)','rng',[1,200,1],20]];
 const $=id=>document.getElementById(id);
 const ctl=$('ctl');let html='';
-const sec={chem:'Cell',S:'Pack',cool:'Thermal',load:'Load',err:'Sensing and estimation',arr:'Arrangement and cell behaviour',cyc:'Ageing',ns:'Nickel strip, welds and busbar',bms:'BMS, AFE and MOSFETs',trig:'Fault and thermal runaway'};
+const sec={chem:'Cell',S:'Pack',cool:'Thermal',load:'Load',err:'Sensing and estimation',arr:'Arrangement and cell behaviour',cyc:'Ageing',ns:'Nickel strip, welds and busbar',pitch:'Mechanical / CAD design rules',bms:'BMS, AFE and MOSFETs',trig:'Fault and thermal runaway'};
 const HELP={
 chem:'Cell chemistry sets nominal voltage, OCV shape, resistance, energy density and thermal/runaway behaviour.',ff:'Cell form factor changes physical dimensions, surface area, mass and thermal path; it also changes how the cells can be packed.',S:'Series count adds cell voltages. Every series group needs voltage monitoring and the same string current flows through the series path.',P:'Parallel count adds capacity and shares current. More parallel cells reduce current per cell and change the physical width/height of each parallel group.',cool:'Cooling changes heat removal. Higher heat-transfer coefficient reduces cell and MOSFET temperature for the same losses.',Tamb:'Ambient/coolant temperature shifts the starting thermal condition and the temperature headroom available before protection.',load:'Load profile determines whether the pack sees steady current, pulses, regenerative current or CC-CV charging.',C:'C-rate scales current relative to cell/pack capacity; higher C-rate increases voltage sag, I²R heating and stress.',dur:'Simulation duration determines how long ageing, heating, SOC movement and protection events have time to develop.',soc:'Initial true SOC is the physical starting charge state used by the simulated cells.',err:'Initial estimator error is the difference between the BMS estimate and the actual starting SOC.',gain:'Current-sensor gain error makes measured current proportionally too high or low and accumulates into SOC error.',bias:'Current-sensor offset adds a false current even when real current is zero; its SOC error grows with time.',arr:'Arrangement changes the physical topology. Brick mode builds parallel cells inside each series group; string mode builds series strings in parallel.',sp:'Cell spacing/barriers change thermal coupling and therefore how heat can propagate from one cell to its neighbours.',vc:'Capacity mismatch gives cells different usable charge, so series groups reach limits at different times.',vr:'Resistance mismatch makes some cells heat and sag more than others under the same pack current.',vs:'Initial SOC mismatch creates unequal starting voltages and can activate balancing or early cutoff.',cyc:'Completed cycles represent electrochemical ageing: capacity fades and resistance grows.',yrs:'Calendar age adds time-dependent capacity loss and resistance growth even without full cycling.',ns:'Nickel strip thickness changes collector resistance and the physical cross-section available to carry current.',nw:'Nickel strip width changes its conductive cross-section and therefore its resistance and heat.',nl:'Longer nickel current paths increase resistance and I²R loss.',wt:'Weld process changes the assumed joint resistance and the visual joint geometry.',wn:'More welds per terminal reduce effective joint resistance and improve current sharing, while adding manufacturing complexity.',wf:'Weak-weld percentage injects higher-resistance joints, producing local voltage drop and heating.',bb:'Busbar copper area is the current-carrying cross-section; larger area lowers copper resistance and heat.',bl:'Longer busbars increase copper resistance and therefore interconnect voltage drop and heat.',bms:'BMS state controls whether protection and derating logic is active.',afe:'AFE accuracy determines cell-voltage measurement uncertainty and balancing capability.',bal:'Passive balancing bleeds selected high cells so series groups can remain within a usable voltage window.',ocl:'Over-current threshold sets the pack current at which the protection logic trips.',fet:'MOSFET RDS(on) controls conduction loss. Lower resistance means less I²R heating.',nf:'Parallel MOSFET count shares current and reduces equivalent conduction resistance.',trig:'Fault trigger selects a controlled abnormal condition for studying BMS response and thermal propagation.',tt:'Trigger time delays a forced runaway event so you can compare normal operation before the fault.'};
 for(const [id,l,t,o,d] of F){
@@ -446,9 +589,25 @@ const ocv2=(c,s)=>s>1?ocv(c,1)+(s-1)*4:ocv(c,s);
 function sim(p){
 const c=CH[p.chem],f=FF[p.ff];let S=p.S,P=p.P;if(S*P>480)P=Math.max(1,Math.floor(480/S));
 const n=S*P,nc=Math.max(1,Math.round(Math.sqrt(n*1.5))),rn=rng(7),g=()=>Math.sqrt(-2*Math.log(rn()+1e-9))*Math.cos(6.2832*rn()),cl=(x,a,b)=>Math.min(b,Math.max(a,x));
-const Q0=f.vol*c.e/1000/c.vn,Cth=f.vol*c.rho,hA=HC[p.cool]*f.A/1e4*.4,kn=({air:.4,aerogel:.03,touch:1.5})[p.sp]*Math.sqrt(f.A/43);
+const clearanceRequired=S*c.hi>60?3.0:1.5;
+const mechFlags=[];
+if(p.pitch<0.8) mechFlags.push(`CAD interference risk: ${p.pitch.toFixed(1)} mm cell gap is below the 0.8 mm teaching minimum.`);
+if(p.termclr<clearanceRequired) mechFlags.push(`Electrical clearance warning: ${p.termclr.toFixed(1)} mm is below the ${clearanceRequired.toFixed(1)} mm teaching check.`);
+if(p.wall<1.0) mechFlags.push(`Enclosure wall warning: ${p.wall.toFixed(1)} mm is very thin for a generic enclosure.`);
+if(p.comp>8 && !f.n.includes('Pouch')) mechFlags.push(`Compression warning: ${p.comp.toFixed(1)}% is high for this non-pouch teaching model.`);
+
+const Q0=f.vol*c.e/1000/c.vn,
+Cth=f.vol*c.rho,
+contactFactor=1+Math.max(0,p.comp-4)/20,
+hA=HC[p.cool]*f.A/1e4*.4/contactFactor,
+kn=({air:.4,aerogel:.03,touch:1.5})[p.sp]*Math.sqrt(f.A/43);
 const fade=.2*p.cyc/c.life+.015*p.yrs,rg=1+p.cyc/c.life+.03*p.yrs;
-const Rn=6.99e-8*(p.nl/1e3)/((p.nw/1e3)*(p.ns/1e3)),Rc=({spot:1.5e-4,laser:6e-5,ultra:9e-5})[p.wt]*2/p.wn,Rbus=1.72e-8*(p.bl/1e3)/(p.bb*1e-6),Rf=2*p.fet/1e3/p.nf,Rx=Rbus+Rf;
+const Rn=6.99e-8*(p.nl/1e3)/((p.nw/1e3)*(p.ns/1e3)),
+Rc=({spot:1.5e-4,laser:6e-5,ultra:9e-5})[p.wt]*2/p.wn,
+Rbus=1.72e-8*(p.bl/1e3)/(p.bb*1e-6),
+Rf=2*p.fet/1e3/p.nf,
+Rcontact=0.15e-3,
+Rx=Rbus+Rf+Rcontact;
 const [acc,ibl]=({low:[.015,.01],mid:[.005,.06],hi:[.0015,.2]})[p.afe],bs=ocv(c,.85);
 const Qc=[],R0b=[],Rs=[],s=[],off=[];
 for(let k=0;k<n;k++){Qc[k]=Q0*(1-fade)*cl(1+p.vc/100*g(),.6,1.4);R0b[k]=c.k/Q0*rg*cl(1+p.vr/100*g(),.4,3);Rs[k]=Rn+Rc*(rn()<p.wf/100?5:1);s[k]=cl(p.soc/100+p.vs/100*g(),0,1);off[k]=acc/2.5*g()}
@@ -509,7 +668,13 @@ L:for(let t=0;t<N;t++){
  if(t%fs==0)snap(t);
 }
 snap(tl);const l=o.s.length-1;
-return{o,fr,n,nc,S,P,c,f,why,ev,Wh,Li,Lf,Tfx,pk,ntr,ecc:o.cc[l]-o.s[l],eek:o.ek[l]-o.s[l],Vn:c.vn*S,Ah:Q0*P,E:c.vn*S*Q0*P/1000,M:f.vol*c.rho/1000*n,capped:S*p.P>480,Rbus,Rn,fade}}
+const peakI=Math.max(...o.I.map(Math.abs),0);
+const busbarJ=peakI/Math.max(1,p.bb);
+const nickelAreaMm2=(p.nw*p.ns)/1e0;
+const nickelJ=peakI/Math.max(0.001,nickelAreaMm2);
+if(busbarJ>p.bjd) mechFlags.push(`Busbar current-density warning: ${busbarJ.toFixed(1)} A/mm² exceeds ${p.bjd.toFixed(1)} A/mm².`);
+if(nickelJ>8) mechFlags.push(`Nickel strip current-density warning: ${nickelJ.toFixed(1)} A/mm² exceeds the conservative 8 A/mm² teaching limit.`);
+return{o,fr,n,nc,S,P,c,f,why,ev,Wh,Li,Lf,Tfx,pk,ntr,ecc:o.cc[l]-o.s[l],eek:o.ek[l]-o.s[l],Vn:c.vn*S,Ah:Q0*P,E:c.vn*S*Q0*P/1000,M:f.vol*c.rho/1000*n,capped:S*p.P>480,Rbus,Rn,fade,mechFlags,peakI,busbarJ,nickelJ}}
 function plot(id,xs,ser,fmt,xf=x=>x.toFixed(0)+' min'){
  const cv=$(id),d=devicePixelRatio||1,w=cv.clientWidth,h=cv.clientHeight;cv.width=w*d;cv.height=h*d;
  const g=cv.getContext('2d');g.scale(d,d);const st=getComputedStyle(document.documentElement),col=k=>st.getPropertyValue(k).trim();
@@ -528,59 +693,140 @@ function plot(id,xs,ser,fmt,xf=x=>x.toFixed(0)+' min'){
 let R_;
 function render3D(p,R){
  const scene=$('pack3dScene'),stats=$('pack3dStats'),note=$('pack3dNote'); if(!scene||!R)return;
- const maxCells=96, S=R.S, P=R.P, total=S*P, show=Math.min(total,maxCells);
- const cols=Math.min(S,12), gap=20+Math.min(35,Math.max(0,p.bb/12)), cellW=p.ff.includes('prism')?54:p.ff.includes('pouch')?62:p.ff.includes('c32140')?46:38, cellD=p.ff.includes('prism')?72:p.ff.includes('pouch')?46:38;
- const scale=Math.max(.35,Math.min(1.35,p.ns/.15));
- const weldH=Math.max(4,Math.min(12,p.wn*1.2));
+ const maxCells=96,S=R.S,P=R.P,total=S*P,show=Math.min(total,maxCells);
+ const isPouch=p.ff.includes('pouch'), isPrism=p.ff.includes('prism'), isCyl=!isPouch&&!isPrism;
+ const cols=Math.min(S,12), rows=Math.ceil(show/Math.max(1,cols));
+ const gap=22+Math.min(35,Math.max(0,p.bb/14));
+ const cellW=isPrism?56:isPouch?66:isCyl?42:48, cellD=isPrism?74:isPouch?48:isCyl?42:48;
  const busH=Math.max(5,Math.min(22,p.bb/18));
- scene.innerHTML=''; scene.style.width=(cols*(cellW+gap)+100)+'px'; scene.style.height=(Math.ceil(show/cols)*(cellD+gap)+100)+'px';
+ scene.innerHTML=''; scene.style.width=(cols*(cellW+gap)+260)+'px'; scene.style.height=(rows*(cellD+gap)+190)+'px';
+
  const add=(cls,style,text='')=>{const e=document.createElement('div');e.className=cls;e.style.cssText=style;if(text)e.textContent=text;scene.appendChild(e);return e};
- const isCyl=!p.ff.includes('prism')&&!p.ff.includes('pouch');
+ const label=(x,y,t,cls='connLabel')=>add(cls,`left:${x}px;top:${y}px;position:absolute;z-index:50;pointer-events:none`,t);
+
+ // Helper for true cylindrical cells.
+ const cylinder=(x,y,k)=>{
+   const body=add('cell3d cyl',`left:${x}px;top:${y}px;width:${cellW}px;height:${cellD}px;border-radius:50%;transform-style:preserve-3d`);
+   body.style.boxSizing='border-box';
+   const cap=add('cylCap',`left:${x+3}px;top:${y+3}px;width:${cellW-6}px;height:${cellW-6}px;border-radius:50%;transform:translateZ(5px);position:absolute`);
+   const term=add('cylTerm',`left:${x+cellW/2-5}px;top:${y-7}px;width:10px;height:10px;border-radius:50%;transform:translateZ(16px);position:absolute`);
+   const neg=add('cylTerm',`left:${x+cellW/2-5}px;top:${y+cellD-3}px;width:10px;height:10px;border-radius:50%;transform:translateZ(10px);position:absolute`);
+   body.title=`Cylindrical cell ${k+1}`;
+ };
+
+ // Draw cells.
  for(let k=0;k<show;k++){
-   const sg=p.arr==='brick'?Math.floor(k/P):k%S;
-   const pi=p.arr==='brick'?k%P:Math.floor(k/S);
-   const x=50+sg*(cellW+gap), y=40+pi*(cellD+gap);
-   const cell=add('cell3d '+(isCyl?'cyl':p.ff.includes('pouch')?'pouch':'prism'),`left:${x}px;top:${y}px;width:${cellW}px;height:${cellD}px;`,'');
-   const top=document.createElement('div');top.className='cellTop';cell.appendChild(top);const side=document.createElement('div');side.className='cellSide';cell.appendChild(side);
-   cell.title=`Cell ${k+1}: series group ${sg+1}, parallel position ${pi+1}`;
-   const weak=((k*37+11)%100)<p.wf;
-   const wc=p.wt==='laser'?'laser':p.wt==='ultra'?'ultra':'';
-   for(let w=0;w<p.wn;w++){const wx=x+6+w*(Math.max(8,(cellW-12)/Math.max(1,p.wn-1)));const wy=y+cellD/2-3;add('weld '+wc+(weak?' weak':''),`left:${wx}px;top:${wy}px;width:${Math.max(5,4+scale*2)}px;height:${Math.max(5,4+scale*2)}px;transform:translateZ(${weldH}px)`)}
-   if(p.wn>0){
-     const stripW=Math.max(5,4+p.ns*22), stripY=y+cellD/2-stripW/2;
-     add('nickel3d',`left:${x-5}px;top:${stripY}px;width:${cellW+10}px;height:${stripW}px;transform:translateZ(${Math.max(2,p.ns*18)}px)`);
-   }
- }
- // parallel-group nickel collectors and series busbars
- const rows=p.arr==='brick'?Math.min(P,show):Math.min(S,Math.ceil(show/Math.max(1,S)));
- for(let g=0;g<Math.min(S,cols);g++){
-   if(p.arr==='brick'){
-     const bx=50+g*(cellW+gap)-8; const by=40+rows*(cellD+gap)-8;
-     add('busbar3d',`left:${bx}px;top:${by}px;width:${cellW+16}px;height:${Math.max(6,busH)}px;transform:translateZ(10px)`);
-     if(g<S-1) add('busbar3d',`left:${bx+cellW+gap/2-4}px;top:${by-8}px;width:${Math.max(8,busH)}px;height:${gap+18}px;transform:translateZ(11px)`);
-   } else {
-     const bx=50+g*(cellW+gap)-8;
-     // Vertical series links connect cell terminals within each string.
-     for(let r=0;r<rows-1;r++){
-       const ly=40+(r+1)*(cellD+gap)-gap/2-4;
-       add('busbar3d',`left:${bx+cellW/2-4}px;top:${ly}px;width:${Math.max(8,busH)}px;height:${gap+8}px;transform:translateZ(11px)`);
+   const col=k%cols, row=Math.floor(k/cols), x=55+col*(cellW+gap), y=45+row*(cellD+gap);
+   if(isCyl){ cylinder(x,y,k); }
+   else{
+     const cell=add('cell3d '+(isPouch?'pouch':'prism'),
+       `left:${x}px;top:${y}px;width:${cellW}px;height:${cellD}px;`);
+     cell.title=`Cell ${k+1}`;
+     if(isPouch||isPrism){
+       add('nickel3d',`left:${x+cellW*.18}px;top:${y-8}px;width:${Math.max(8,cellW*.16)}px;height:13px;transform:translateZ(12px)`);
+       add('nickel3d',`left:${x+cellW*.66}px;top:${y-8}px;width:${Math.max(8,cellW*.16)}px;height:13px;transform:translateZ(12px)`);
      }
-     add('busbar3d',`left:${bx}px;top:${40+rows*(cellD+gap)-8}px;width:${cellW+16}px;height:${Math.max(6,busH)}px;transform:translateZ(10px)`);
+     for(let w=0;w<p.wn;w++){
+       const wx=x+6+w*(Math.max(8,(cellW-12)/Math.max(1,p.wn-1)));
+       add('weld',`left:${wx}px;top:${y+(isPouch||isPrism?cellD*.15:cellD/2)}px;width:6px;height:6px;transform:translateZ(14px)`);
+     }
    }
  }
- // terminal rails
- const railY=40+rows*(cellD+gap)+18; add('busbar3d',`left:35px;top:${railY}px;width:${Math.max(60,cols*(cellW+gap))}px;height:${Math.max(6,busH+2)}px;transform:translateZ(12px)`);
- // barriers / spacing indicators
- if(p.sp!=='touch') for(let g=0;g<Math.min(S-1,cols-1);g++) add('barrier3d',`left:${50+g*(cellW+gap)+cellW+2}px;top:28px;width:${Math.max(3,gap*.35)}px;height:${rows*(cellD+gap)+20}px;transform:translateZ(3px)`);
- stats.textContent=`${S}S${P}P · ${total} cells · ${p.ns.toFixed(2)} mm Ni · ${p.bb} mm² Cu busbar · ${p.wt} weld · ${p.wn} welds/terminal`;
- note.textContent=`Construction model: ${p.arr==='brick'?'each series group contains '+P+' parallel cells, then copper busbars connect groups in series.':'series strings are built first and those strings are paralleled.'} Nickel thickness scales the collector depth; weld process changes joint representation and resistance; weak-weld percentage creates higher-resistance joints. ${total>show?`Only ${show} of ${total} cells are rendered for phone/browser performance; the electrical model still uses all ${total}.`:''}`;
+
+ // Electrical topology.
+ // For S series groups with P cells each: every cell in a parallel group reaches a common + and - collector.
+ const groupCount=Math.min(S,cols);
+ const groupX=g=>55+g*(cellW+gap);
+ const topY=22, bottomY=45+Math.max(0,rows-1)*(cellD+gap)+cellD+10;
+
+ for(let g=0;g<groupCount;g++){
+   const x=groupX(g);
+
+   // Parallel group collectors.
+   add('busbar3d positive',`left:${x-8}px;top:${topY}px;width:${cellW+16}px;height:${Math.max(6,busH*.65)}px;transform:translateZ(18px)`);
+   add('busbar3d negative',`left:${x-8}px;top:${bottomY}px;width:${cellW+16}px;height:${Math.max(6,busH*.65)}px;transform:translateZ(18px)`);
+
+   for(let r=0;r<rows;r++){
+     const y=45+r*(cellD+gap);
+     // Positive and negative branch from every cell to the group collector.
+     add('cable3d branch positive',`left:${x+cellW*.34}px;top:${topY+busH*.55}px;width:4px;height:${Math.max(6,y-topY-busH*.25)}px;transform:translateZ(16px)`);
+     add('cable3d branch negative',`left:${x+cellW*.66}px;top:${y+cellD-2}px;width:4px;height:${Math.max(6,bottomY-y-cellD+4)}px;transform:translateZ(16px)`);
+     if(isCyl){
+       // Explicitly land on the circular terminal centers.
+       add('terminalDot positive',`left:${x+cellW/2-4}px;top:${y-5}px;width:8px;height:8px;border-radius:50%;transform:translateZ(22px)`);
+       add('terminalDot negative',`left:${x+cellW/2-4}px;top:${y+cellD-1}px;width:8px;height:8px;border-radius:50%;transform:translateZ(22px)`);
+     }
+   }
+
+   // Series jumper between adjacent groups.
+   if(g<groupCount-1){
+     add('busbar3d series',`left:${x+cellW+gap*.42}px;top:${topY+busH*.55}px;width:${Math.max(9,busH)}px;height:${Math.max(8,bottomY-topY+busH)}px;transform:translateZ(20px)`);
+     label(x+cellW+gap*.25, (topY+bottomY)/2, 'S'+(g+1)+'→S'+(g+2));
+   }
+ }
+
+ // Pack-level conductors and service/BMS harness.
+ const left=20, right=55+groupCount*(cellW+gap)+70, mid=45+Math.floor(rows/2)*(cellD+gap);
+ add('cable3d packPositive',`left:${left}px;top:${topY-3}px;width:${Math.max(18,groupX(0)-left)}px;height:7px;transform:translateZ(25px)`);
+ add('cable3d packNegative',`left:${left}px;top:${bottomY+1}px;width:${Math.max(18,groupX(0)-left)}px;height:7px;transform:translateZ(25px)`);
+
+ // C+/C- and B+/B- are distinct labeled external routes.
+ add('terminalBox',`left:${left-6}px;top:${topY-12}px;width:20px;height:24px;transform:translateZ(27px)`);
+ label(2,topY-20,'B+');
+ label(2,bottomY+10,'B−');
+
+ const cpx=right-10, cpy=topY+12;
+ add('cable3d chargerPositive',`left:${groupX(groupCount-1)+cellW}px;top:${cpy}px;width:${Math.max(20,cpx-groupX(groupCount-1)-cellW)}px;height:6px;transform:translateZ(26px)`);
+ add('cable3d chargerNegative',`left:${groupX(groupCount-1)+cellW}px;top:${bottomY-12}px;width:${Math.max(20,cpx-groupX(groupCount-1)-cellW)}px;height:6px;transform:translateZ(26px)`);
+ label(cpx-18,cpy-15,'C+');
+ label(cpx-18,bottomY-2,'C−');
+
+ // Protected/load path, contactor/FET block, fuse, and sense harness.
+ const blockX=Math.max(35,Math.floor((left+right)/2)-35);
+ add('contactor3d',`left:${blockX}px;top:${mid-16}px;width:70px;height:32px;transform:translateZ(30px)`);
+ label(blockX+10,mid-6,'CONTACTOR / FET');
+ add('fuse3d',`left:${blockX+76}px;top:${mid-10}px;width:38px;height:12px;transform:translateZ(30px)`);
+ label(blockX+78,mid+8,'FUSE');
+ add('cable3d protected',`left:${blockX+114}px;top:${mid-7}px;width:${Math.max(35,right-(blockX+114))}px;height:7px;transform:translateZ(29px)`);
+ label(right-25,mid-22,'P+ / P−');
+
+ // BMS harness: one tap per series junction, plus temperature sense.
+ for(let g=0;g<groupCount;g++){
+   const x=groupX(g)+cellW/2;
+   const y=bottomY+25;
+   add('senseCable',`left:${x}px;top:${topY+8}px;width:2px;height:${Math.max(20,y-topY)}px;transform:translateZ(31px)`);
+   add('senseDot',`left:${x-3}px;top:${y-3}px;width:7px;height:7px;border-radius:50%;transform:translateZ(33px)`);
+   if(g<groupCount-1) label(x+3,y+7,'BM'+(g+1));
+ }
+ label(groupX(0)+cellW/2-12,bottomY+38,'BT / TEMP');
+
+ stats.textContent=`${S}S${P}P · ${total} cells · ${isCyl?'CYLINDRICAL (true circular geometry)':isPouch?'POUCH':'PRISMATIC'} · all cell +/− branches shown · B+/B− · C+/C− · P+/P− · BMS taps`;
+ note.textContent=`Every cell terminal is explicitly routed: cell +/− → parallel collector → series interconnect → pack B+/B−. External C+/C− charging conductors, protected P+/P− conductors, fuse/contactor path and BM/BT sense wiring are also shown. ${total>show?`Only ${show} of ${total} cells are rendered for browser performance; the electrical model still uses all ${total}.`:''}`;
 }
 (function enable3DInteraction(){
- let down=false,sx=0,sy=0,rx=55,rz=-8;
+ let down=false,sx=0,sy=0,rx=55,rz=-8,spinTimer=null;
+ const apply=()=>{const sc=$('pack3dScene');if(sc)sc.style.transform=`rotateX(${rx}deg) rotateZ(${rz}deg)`};
+ const setView=v=>{
+   if(v==='iso'){rx=55;rz=-8}
+   if(v==='top'){rx=0;rz=0}
+   if(v==='front'){rx=55;rz=0}
+   if(v==='side'){rx=55;rz=90}
+   if(v==='reset'){rx=55;rz=-8;const sc=$('pack3dScene');if(sc){sc.dataset.zoom='1';sc.style.scale='1'}}
+   apply();
+   document.querySelectorAll('[data-view]').forEach(b=>b.classList.toggle('active',b.dataset.view===v));
+ };
  document.addEventListener('pointerdown',e=>{if(!e.target.closest('#pack3dScene'))return;down=true;sx=e.clientX;sy=e.clientY;e.target.setPointerCapture?.(e.pointerId)});
- document.addEventListener('pointermove',e=>{if(!down)return;rx=Math.max(25,Math.min(75,rx+(e.clientY-sy)*.25));rz=Math.max(-45,Math.min(35,rz+(e.clientX-sx)*.25));sx=e.clientX;sy=e.clientY;const sc=$('pack3dScene');if(sc)sc.style.transform=`rotateX(${rx}deg) rotateZ(${rz}deg)`});
+ document.addEventListener('pointermove',e=>{if(!down)return;rx=Math.max(0,Math.min(85,rx+(e.clientY-sy)*.25));rz=(rz+(e.clientX-sx)*.25)%360;sx=e.clientX;sy=e.clientY;apply()});
  document.addEventListener('pointerup',()=>down=false);
- document.addEventListener('wheel',e=>{if(!e.target.closest('#pack3dScene'))return;const sc=$('pack3dScene');if(!sc)return;const m=e.deltaY>0?.96:1.04;const current=parseFloat(sc.dataset.zoom||'1')*m;sc.dataset.zoom=String(Math.max(.55,Math.min(1.6,current)));sc.style.scale=current});
+ document.addEventListener('wheel',e=>{if(!e.target.closest('#pack3dScene'))return;const sc=$('pack3dScene');if(!sc)return;e.preventDefault();const m=e.deltaY>0?.96:1.04;const current=parseFloat(sc.dataset.zoom||'1')*m;sc.dataset.zoom=String(Math.max(.55,Math.min(1.8,current)));sc.style.scale=current},{passive:false});
+ document.addEventListener('click',e=>{
+   const b=e.target.closest('[data-view]'); if(!b)return;
+   if(b.dataset.view==='spin'){
+     if(spinTimer){clearInterval(spinTimer);spinTimer=null;b.textContent='↻ 360° Auto-rotate';return}
+     b.textContent='■ Stop rotation';
+     spinTimer=setInterval(()=>{rz=(rz+1.5)%360;apply()},30);
+   }else setView(b.dataset.view);
+ });
 })();
 function draw(){const R=R_;if(!R||!R.fr.length)return;const F0=R.fr[+$('fs').value]||R.fr[R.fr.length-1],m=$('vm').value,cv=$('pk'),d=devicePixelRatio||1,w=cv.clientWidth,h=cv.clientHeight;cv.width=w*d;cv.height=h*d;const g=cv.getContext('2d');g.scale(d,d);
  const nr=Math.ceil(R.n/R.nc),cs=Math.min((w-8)/R.nc,(h-22)/nr),ox=(w-cs*R.nc)/2,rg={T:[25,Math.max(60,...F0.T)],s:[0,1],V:[R.c.lo,R.c.hi]}[m],cyl=R.f.n.includes('cyl');
@@ -630,225 +876,22 @@ const CURRICULUM=[["L1","Battery Fundamentals","Build the physical and electrica
 let acadLevel='ALL',acadFilter='';
 
 /* ==================== ADVANCED ENGINEERING CURRICULUM ==================== */
-CURRICULUM.push(
-["L9","Expert Simulation & Electrochemical Engineering",
-"Move from engineering equations to parameter identification, coupled electrochemical-thermal simulation and model credibility.",
+CURRICULUM.push([
+"L10","Senior Systems Engineer — Mechanical CAD & Electrical Integrity",
+"Design battery hardware as a coupled mechanical, electrical, thermal and manufacturing system rather than as isolated blocks.",
 [
-["Energy balance and heat-generation decomposition",
-"Separate irreversible Joule heat, polarization heat, reversible entropic heat and external heat transfer. The learner must know which terms scale with current, temperature, SOC and chemistry.",
-"Use qdot = I²R + I·(OCV−V) − I·T·dU/dT as a practical decomposition. The first term is purely resistive; the polarization term captures electrochemical overpotential; the entropic term can heat or cool depending on dU/dT. The thermal state then follows Cth·dT/dt = qdot − hA(T−Tamb).",
-"Run the Engineering Lab at 0.5C, 1C and 3C. Predict which term dominates before changing the current. Then lower hA and explain why peak temperature and time-to-steady-state change differently.",
-["If current doubles and resistance stays constant, what happens to I²R heat?","It becomes four times larger because heat is proportional to I²."]],
-["Arrhenius temperature dependence and activation energy",
-"Temperature does not merely shift a chart; it changes reaction kinetics and degradation rates. Learn how an activation-energy model converts temperature into a rate multiplier.",
-"Many processes can be approximated by k(T)=kref·exp[-Ea/R·(1/T−1/Tref)]. Use Kelvin, not Celsius. A larger Ea makes the process more temperature-sensitive. This is useful for ageing, SEI growth and some kinetic parameters, but it is not a universal law for every battery mechanism.",
-"Compare a process at 0, 25, 45 and 60 °C. Calculate the multiplier by hand, then compare it with the lab output and identify where the Arrhenius approximation becomes questionable.",
-["Why must Arrhenius calculations use absolute temperature?","Because the exponential relationship is derived from thermodynamic temperature in kelvin; Celsius cannot be substituted directly."]],
-["Temperature-dependent resistance and power capability",
-"Internal resistance is not constant. Cold cells generally show higher impedance, while ageing and SOC also modify the effective resistance.",
-"Use R(T)=Rref·exp[EaR/Rg·(1/T−1/Tref)] as a teaching approximation. Terminal voltage under load is V=OCV−IR−Vdynamic. Maximum useful power therefore changes with temperature even if nominal capacity is unchanged.",
-"Set the same current at −10, 0, 25 and 50 °C. Compare voltage sag, I²R heat and power. Then repeat with 20% higher resistance to simulate ageing.",
-["Why can a cold battery show a large voltage sag even when SOC is high?","Higher impedance increases I·R drop and polarization, reducing loaded terminal voltage."]],
-["Thermal time constant identification",
-"Estimate thermal capacitance and heat-transfer coefficient from measured temperature transients rather than guessing them.",
-"For a first-order model, T(t)=Tamb+ΔTss(1−exp(−t/τth)), where τth=Cth/hA and ΔTss=Qdot/hA. A step-current experiment lets you estimate both steady rise and time constant.",
-"Use the simulator to create a current step. Fit the initial transient and steady temperature by eye, then calculate hA≈Qdot/ΔTss and Cth≈τth·hA.",
-["If τth doubles while steady-state temperature rise stays unchanged, what changed?","Cth increased while hA remained approximately constant, because τth=Cth/hA."]],
-["Biot number and when lumped thermal models fail",
-"Know when a single cell temperature is too crude. Internal gradients matter when heat cannot conduct through the solid quickly enough.",
-"The Biot number Bi=h·Lc/k compares external convection to internal conduction. Bi much below 0.1 supports a lumped approximation; larger values indicate meaningful internal gradients. Battery cells are anisotropic, so the relevant conductivity depends on direction and construction.",
-"Change the characteristic length and effective conductivity in a hand calculation. Decide whether a lumped model is defensible before trusting a peak-temperature prediction.",
-["What does a high Biot number warn you about?","The interior may not remain close to one uniform temperature, so a distributed thermal model may be required."]],
-["Butler–Volmer kinetics and exchange current",
-"Connect current density to electrochemical overpotential rather than treating voltage loss as a mysterious resistance.",
-"The Butler–Volmer relation is i=i0[exp(αaFη/RT)−exp(−αcFη/RT)]. Near equilibrium, linearization produces a charge-transfer resistance. Exchange current i0 depends strongly on concentration and temperature, so kinetic limitation grows in cold or depleted conditions.",
-"Compare the symmetric α=0.5 case with different i0 values. Explain why reducing i0 increases overpotential for the same current density.",
-["What happens to overpotential when i0 becomes smaller at fixed current?","The required overpotential increases because the reaction must move farther from equilibrium to carry the same current."]],
-["Solid-state diffusion and diffusion timescale",
-"Understand why particle radius and diffusion coefficient determine how quickly lithium can redistribute inside active material.",
-"A characteristic diffusion time is τD≈Rp²/Ds. Doubling particle radius makes the diffusion timescale four times longer. This is one reason particle size, temperature and ageing strongly affect rate capability.",
-"Calculate τD for several particle radii. Then halve Ds to represent cold or degraded transport and predict the change before simulating.",
-["If particle radius doubles, how does diffusion time change?","It increases by a factor of four because τD scales with Rp²."]],
-["SPM versus SPMe versus DFN model selection",
-"Choose model fidelity based on the engineering question. More physics is useful only when the additional states are observable, parameterized and computationally justified.",
-"SPM captures solid diffusion with simplified electrolyte behavior. SPMe adds electrolyte concentration and potential dynamics. DFN resolves coupled solid and electrolyte transport plus electrode kinetics. Model order, computation, parameter identifiability and validation burden all increase with fidelity.",
-"Given three use cases—BMS real-time SOC, fast-charge safety analysis, and cell-design research—select a model level and defend the choice.",
-["Why is the most detailed model not automatically the best production model?","Because computation, parameter identification, robustness and validation burden can outweigh the extra fidelity for the intended application."]],
-["Parameter identification from pulse tests",
-"Learn how current-pulse data can identify resistance and dynamic time constants instead of selecting arbitrary RC parameters.",
-"A current step gives an immediate voltage jump related to R0 and slower relaxation governed by RC branches. Multiple pulses at different SOC and temperatures are required because parameters vary with operating point.",
-"Estimate R0=ΔV/ΔI from the first instant of a pulse. Estimate τ from the time needed to reach about 63% of the first-order response, then compare with a fitted value.",
-["What feature of a pulse test is most useful for estimating R0?","The near-instantaneous voltage change divided by the current step, after accounting for measurement dynamics."]],
-["Residual analysis and model credibility",
-"An accurate-looking plot is not proof of a valid model. Learn to inspect residual structure, bias, heteroscedasticity and operating-point dependence.",
-"A good residual should be small relative to the decision requirement and should not show systematic patterns versus SOC, current or temperature. Random residuals around zero are preferable to curved or temperature-correlated residuals.",
-"Plot residuals against temperature and current. If error grows only below 0 °C, identify which model parameter or missing physics is the likely cause.",
-["What does a systematic residual trend usually indicate?","A model-form error, biased parameter, missing state or missing physical mechanism rather than random measurement noise."]],
-["Sensitivity analysis and uncertainty propagation",
-"Quantify which uncertain parameters actually matter. This prevents spending engineering effort measuring variables that have little influence on the decision.",
-"For an output y=f(x), local sensitivity is ∂y/∂x. For independent small uncertainties, σy²≈Σ(∂f/∂xi)²σxi². Relative sensitivity can be more useful when parameters have different units.",
-"Perturb resistance, capacity, ambient temperature and heat-transfer coefficient by ±5%. Rank their effect on peak temperature, voltage sag and usable energy.",
-["Why is sensitivity analysis useful before expensive testing?","It identifies the parameters that most influence the result, helping prioritize measurement accuracy and experiments."]],
-["Monte Carlo pack mismatch and worst-case analysis",
-"Move from one ideal cell to a statistical population. Real packs contain distributions of capacity, resistance, SOC and self-discharge.",
-"Random mismatch can be represented with distributions around nominal values. Monte Carlo propagation shows the distribution of pack-level voltage, temperature, imbalance and usable capacity. Worst-case analysis is different: it deliberately combines adverse tolerances rather than sampling randomly.",
-"Run repeated mismatch cases. Compare the mean, standard deviation and worst observed cell temperature. Explain why a pack can fail a safety requirement even when every individual cell is within specification.",
-["Why can a pack be unsafe even if every cell passes incoming inspection?","System-level combinations of small variations can concentrate current or heat and create a worst-case interaction not visible in single-cell testing."]]
-]],
-["L10","Expert Validation, Controls & Battery Product Mastery",
-"Demonstrate that you can design experiments, diagnose failures, validate algorithms and defend engineering decisions with quantitative evidence.",
-[
-["Charge-control state machines",
-"Charging is a sequence of states, not just a current command. Learn to define entry conditions, limits, timers, derating and fault exits.",
-"A robust state machine may include idle, pre-check, pre-charge, constant-current, constant-voltage, taper, complete, fault and cooldown states. Each state needs explicit voltage, current and temperature limits plus hysteresis and timeout logic.",
-"Draw the state transition table for a 16S pack. Add cold-temperature charge lockout and a timeout for a stuck CV phase.",
-["Why are hysteresis and time delays used in BMS state machines?","They prevent chatter around thresholds and avoid reacting to short-lived noise as if it were a persistent fault."]],
-["SOP and SOTIF-style reasoning for battery controls",
-"Separate what the controller intends to do from what the system can safely do when sensors, actuators or assumptions fail.",
-"Define safe states, degraded states, diagnostic coverage and independence of protection paths. A current sensor failure should not silently become a high-power permission. Hardware comparators, redundant sensing and plausibility checks reduce single-point risk.",
-"Create a fault tree for a false low-cell reading. Include sensor open/short, AFE error, harness fault, ADC fault, communication corruption and software interpretation.",
-["What is a plausibility check?","An independent consistency test such as comparing pack voltage with the sum of cell voltages or comparing redundant temperature measurements."]],
-["Coulomb-counter error budgeting",
-"Turn SOC uncertainty into an engineering error budget. Include initial SOC, capacity uncertainty, current offset, gain error and integration time.",
-"For a current offset δI, SOC drift after time t is approximately δSOC=δI·t/Q. A gain error g contributes error proportional to integrated current throughput. Capacity error scales the conversion from ampere-hours to SOC.",
-"Set Q=5 Ah, current offset=20 mA and elapsed time=50 h. Calculate the theoretical drift before comparing with the simulator.",
-["What is the drift from a 20 mA offset over 50 h on a 5 Ah cell?","1 Ah of accumulated error divided by 5 Ah = 20% SOC, ignoring resets and other effects."]],
-["EKF observability and tuning",
-"Do not tune an EKF by trial and error alone. Understand how the measurement Jacobian determines how much voltage can correct SOC.",
-"H=[dOCV/dSOC, −1]. When dOCV/dSOC is small, voltage provides little direct SOC information. Q represents process uncertainty; R represents measurement uncertainty. Over-trusting either produces slow correction or noisy estimates.",
-"Compare an LFP-like flat OCV curve with an NMC-like sloped curve. Change voltage-noise R and process-noise Q and record how the correction gain changes.",
-["What happens to direct SOC observability when dOCV/dSOC approaches zero?","Voltage contains very little information about SOC, so the estimator must rely more heavily on the process model and current integration."]],
-["SOH ageing experiment design",
-"Design an experiment that separates capacity fade, resistance growth, calendar ageing and cycle ageing.",
-"Use controlled temperature, SOC windows, C-rate, rest periods and reference-performance tests. Record capacity, DCIR, temperature and cycle count. Avoid changing multiple uncontrolled factors at once.",
-"Design a 3×3 experiment varying temperature and average SOC. Define the response variables and acceptance criteria before collecting data.",
-["Why should reference-performance tests be standardized?","Otherwise measurement conditions can masquerade as ageing and make comparisons between time points invalid."]],
-["Fast-charge plating risk reasoning",
-"Fast charging becomes dangerous when lithium-ion insertion into graphite cannot keep pace with the applied current, especially at low temperature and high SOC.",
-"The anode potential can approach 0 V versus Li/Li+. When local overpotential drives lithium deposition, plated lithium can become electrically isolated or form dendritic structures. Risk depends on temperature, SOC, current density, electrode design and ageing.",
-"Compare 0 °C and 25 °C charging at the same C-rate. Identify which observable signals would warn of increasing plating risk and which require direct reference-electrode or post-test evidence.",
-["Why is the same charge current not equally safe at 0 °C and 25 °C?","Cold conditions reduce reaction kinetics and transport, increasing polarization and reducing the electrochemical margin against lithium plating."]],
-["Thermal propagation energy balance",
-"Treat cell-to-cell propagation as an energy-transfer problem with heat generation, conduction, convection, barriers and triggering thresholds.",
-"A simplified propagation criterion compares heat transferred to a neighbor with the energy required to raise it to an exothermic onset. Barrier thickness, conductivity, contact area, spacing and heat capacity all matter.",
-"Change the cell spacing/barrier parameter in the simulator. Predict whether propagation time increases or decreases, then explain why a barrier can delay but not necessarily eliminate propagation.",
-["Why can a thermal barrier delay propagation without guaranteeing prevention?","A finite barrier has finite thermal resistance and storage capacity; sustained heat flux can eventually raise the neighbor above its onset temperature."]],
-["Manufacturing traceability and root-cause analysis",
-"Connect field failures to lot, station, material, operator, weld program, formation recipe and test history.",
-"A useful traceability chain lets engineers compare failure populations with normal populations. Pareto analysis identifies dominant defect classes; 5-Why and fishbone methods structure causal investigation, while controlled experiments confirm causality.",
-"Create a hypothetical hot-weld failure and trace it through weld energy, electrode force, strip thickness, resistance measurement and thermal inspection.",
-["Why is correlation alone insufficient for root cause?","A correlated variable may be a consequence or a proxy; controlled intervention is needed to demonstrate that changing the suspected cause changes the failure."]],
-["Reliability, Weibull and field failure",
-"Translate field returns into reliability metrics rather than isolated anecdotes.",
-"The Weibull distribution uses shape β and characteristic life η. β<1 often indicates early-life failures, β≈1 random failures, and β>1 wear-out behavior. Confidence intervals and censoring matter when fitting real field data.",
-"Given failure times, rank them, estimate cumulative failure probability and decide whether the population looks like infant mortality or wear-out. Do not treat a small sample as proof of a mechanism.",
-["What does β>1 suggest in a Weibull model?","An increasing hazard rate, often consistent with wear-out or ageing-related failures."]],
-["EIS interpretation",
-"Use impedance spectra as a diagnostic fingerprint rather than memorizing semicircles.",
-"High-frequency intercept is associated with ohmic contributions; mid-frequency arcs can reflect charge-transfer and interfacial processes; low-frequency behavior can indicate diffusion. Equivalent-circuit mapping is model-dependent, so the physical interpretation must be validated.",
-"Compare a fresh and aged-cell impedance spectrum. Identify which features might indicate increased resistance or slower transport and list alternative explanations.",
-["Why should EIS features not be assigned to one physical mechanism automatically?","Different physical processes can overlap in frequency and the equivalent circuit is not unique, so independent evidence is required."]],
-["Data quality, units and sensor plausibility",
-"Many battery-model failures are data failures. Learn to detect impossible values, timestamp errors, sign mistakes, saturation, drift and unit mismatches.",
-"Pack voltage should approximately equal the sum of series-cell voltages. Current sign must be defined consistently for charge/discharge. Temperature sensors should move continuously enough to be physically plausible. Sampling jitter can corrupt integration and frequency-domain analysis.",
-"Inject one error at a time: mV interpreted as V, seconds interpreted as milliseconds, inverted current sign, one missing cell tap and a frozen temperature sensor. Predict the diagnostic symptom.",
-["What simple check can detect a missing cell-tap measurement?","Compare the sum of measured cell voltages with the independent pack-voltage measurement and inspect the suspicious channel for implausible behavior."]],
-["Battery product release gate",
-"Expert engineering ends with a release decision supported by requirements, verification evidence, risk analysis and known residual limitations.",
-"A release package should connect requirements to tests, test results, calibration versions, software/firmware versions, cell lots, safety cases and unresolved deviations. Passing one test does not prove the entire system is safe.",
-"Build a release checklist for a 16S4P lithium pack: electrical limits, thermal limits, BMS protections, balancing, insulation, communications, fault injection, abuse tests, ageing and documentation.",
-["What makes a verification result credible?","A defined requirement, controlled test method, calibrated instrumentation, traceable configuration, objective pass/fail criteria and reproducible evidence."]]
-]]
-);
-
-
-/* ==================== SECOND-ACADEMY CORE TRACK ====================
-   This track preserves the second posted Academy's learn → calculate →
-   check → apply rhythm and terminology, while adding simulator links.
-*/
-const CORE_TRACK=[
-{level:"A0",levelName:"Beginner: the basics",title:"Voltage, current, power and energy",
-intro:"Explain and calculate the four quantities every battery number is built from.",
-detail:"Voltage (V) is the electrical potential difference: the push that can drive charge through a load. Current (A) is charge flow per second. Resistance (Ω) opposes current. Power (W) is the rate of energy transfer, while energy (Wh) is power sustained over time. A battery label such as 51.2 V, 100 Ah becomes meaningful as 5.12 kWh only after voltage and capacity are combined. These quantities form the base of every pack, thermal and BMS calculation.",
-practice:"Start with units. Calculate voltage, current, power and energy before opening the simulator. Then change current while holding voltage constant and observe how electrical power and resistive heating change.",
-eq:["V = I × R","P = V × I","E = P × t = V × Ah"],
-example:"A 51.2 V, 100 Ah pack feeding a 2.56 kW motor draws 2560/51.2 = 50 A. Its nominal energy is 51.2 × 100 = 5.12 kWh, so an ideal 2.56 kW load would run for about 2 h; real runtime is lower because usable SOC, voltage sag, efficiency and thermal limits reduce it.",
-mistakes:["Comparing batteries by Ah when their voltages differ; compare Wh or kWh.","Mixing mΩ with Ω, mA with A, or Wh with kWh."],
-qa:["A 12 V 50 Ah battery and a 48 V 15 Ah battery: which holds more energy?","The 48 V 15 Ah pack: 12×50 = 600 Wh while 48×15 = 720 Wh."],
-calc:"power"},
-{level:"A0",levelName:"Beginner: the basics",title:"Cells, series, parallel and C-rate",
-intro:"Size a pack from cells and judge whether a current is gentle or harsh.",
-detail:"Series connection adds voltage because the same current flows through each series element. Parallel connection adds capacity and shares current. A 16S4P pack has 16 series groups, each made of four parallel cells, for 64 cells. C-rate expresses current relative to capacity: 1C on a 100 Ah pack is 100 A. More parallel cells reduce current per cell at the same pack load, reducing I²R heating and electrical stress.",
-practice:"Choose a cell voltage and capacity, then calculate S, P, total cells, pack voltage, pack Ah and current per cell. In the simulator, increase P and watch the thermal and voltage response.",
-eq:["V_pack = S × V_cell","Ah_pack = P × Ah_cell","I_pack = C × Ah_pack","I_cell ≈ I_pack / P"],
-example:"16S4P of 3.2 V, 25 Ah LFP cells gives 51.2 V, 100 Ah and 5.12 kWh. At 1C the pack current is 100 A and, ideally, each cell carries 25 A.",
-mistakes:["Forgetting that cell voltage limits are per cell; a 16S pack needs 16 series-group voltage measurements.","Assuming a datasheet C-rate is valid at every temperature, SOC and ageing condition."],
-qa:["Why does adding parallel cells reduce heating per cell at the same load?","Current is shared between cells and resistive heat scales with I²R."],
-calc:"pack"},
-{level:"A0",levelName:"Beginner: the basics",title:"Chemistries: LFP, NMC and friends",
-intro:"Choose a chemistry for an application and explain the trade-offs.",
-detail:"LFP (LiFePO4) is around 3.2 V nominal, has a long cycle life and strong thermal stability, but its voltage curve is flat over much of SOC. NMC and NCA provide higher voltage and energy density but generally require tighter thermal and voltage control. LTO has a low cell voltage but excellent cycle life and fast-charge capability. Chemistry changes OCV slope, resistance, allowable voltage, heat, estimator observability and ageing behavior.",
-practice:"Compare LFP and NMC in the Simulator. Start at the same SOC and current, then inspect terminal voltage, temperature and the EKF correction. Ask why the estimator behaves differently even when the current sensor is identical.",
-eq:["Energy density = Wh / kg or Wh / L","V_terminal ≈ OCV(SOC,T) − I·R − polarization"],
-example:"Two 5 kWh packs may have very different mass because energy density differs. The higher-energy-density chemistry is attractive where weight and volume dominate; the lower-risk, long-life chemistry can be preferable where mass is less important.",
-mistakes:["Judging SOC from voltage alone on the LFP plateau.","Charging lithium-ion cells below the chemistry's approved low-temperature limit."],
-qa:["Why is voltage a poor SOC indicator for LFP in the middle of its range?","The OCV curve is relatively flat, so a small voltage change corresponds to a large uncertainty in SOC."],
-calc:"none"},
-{level:"A1",levelName:"Technician: measure and diagnose",title:"Internal resistance, heat and hot spots",
-intro:"Predict how resistance in a cell, weld, strip, connector or busbar becomes heat.",
-detail:"Every resistive element dissipates P = I²R. Doubling current quadruples heat. A tiny resistance in a weld or connector can therefore create a local hot spot while the pack still appears electrically normal. Internal resistance also changes with temperature and ageing. A cold cell can show greater voltage sag and heating, while an aged cell can simultaneously lose power capability and generate more heat.",
-practice:"Use the same instrument, current and temperature when comparing IR. Compare a cell with the lot distribution rather than treating one absolute number as universally good. Confirm suspect connections under controlled load with thermal imaging.",
-eq:["P = I² × R","ΔT_steady ≈ P / hA","V_sag ≈ I × R"],
-example:"A 1.2 mΩ strip-plus-weld path carrying 40 A dissipates 40²×0.0012 = 1.92 W. If the effective thermal conductance is 0.1 W/K, the simplified steady rise is about 19 °C.",
-mistakes:["Comparing IR measurements taken at different temperatures.","Blaming the BMS before checking connector, weld and busbar resistance."],
-qa:["If current doubles through a fixed resistance, what happens to resistive heat?","It becomes four times larger because heat is proportional to I²."],
-calc:"heat"},
-{level:"A1",levelName:"Technician: measure and diagnose",title:"Incoming quality control and Cpk",
-intro:"Decide whether a supplier lot is capable rather than accepting it from a single good sample.",
-detail:"Incoming QC should watch OCV, internal resistance, capacity samples, dimensions, visual damage and other supplier-specific characteristics. Cp describes potential process capability from spread; Cpk also considers whether the mean is centred inside the specification. A drifting mean can be dangerous even when the spread looks good. Trend supplier lots rather than treating each inspection as isolated.",
-practice:"Calculate Cp and Cpk from a lot mean, standard deviation and specification limits. Use the result to decide whether to accept, investigate or escalate the lot.",
-eq:["Cp = (USL − LSL) / 6σ","Cpk = min(USL − μ, μ − LSL) / 3σ"],
-example:"For an IR specification of 20–30 mΩ, mean 27 mΩ and σ = 1.5 mΩ: Cpk = min(3,7)/(4.5) = 0.67. The process is too close to the upper limit even though its spread may appear manageable.",
-mistakes:["Using a very small sample to estimate σ.","Trying to fix spread when the real issue is a mean shift."],
-qa:["If Cp is 2.0 but Cpk is 0.6, what is wrong?","The spread is potentially good, but the process mean is off-centre toward a specification limit."],
-calc:"cpk"},
-{level:"A2",levelName:"Engineer: systems",title:"State of charge: Coulomb counting and drift",
-intro:"Quantify how current-sensor errors become SOC errors and understand when the estimator must reset.",
-detail:"SOC is estimated rather than directly measured. Coulomb counting integrates measured current over time. It is responsive and smooth but open-loop: a current offset accumulates indefinitely. Gain error grows with throughput, wrong capacity Q distorts the conversion, and a wrong initial SOC never disappears by itself. Real BMS designs therefore use trusted anchors such as full-charge detection and, where chemistry allows, rested OCV.",
-practice:"Introduce current-sensor offset and gain error in the Simulator. Watch the Coulomb-count estimate diverge from true SOC. Then compare it with the EKF and identify what voltage information allows the EKF to correct.",
-eq:["SOC(t) = SOC₀ − (1/Q) ∫ ηI dt","ε_drift = δ × t / Q"],
-example:"With a 20 mA offset, 5 Ah capacity and 50 h elapsed time, drift is 0.02×50/5 = 0.20, or 20% SOC.",
-mistakes:["Never resetting the count.","Assuming a zero-current sensor reading is exactly zero without checking offset."],
-qa:["Which action actually removes accumulated Coulomb-count error?","A trusted SOC anchor such as a validated full-charge condition resets the accumulated error."],
-calc:"drift"},
-{level:"A2",levelName:"Engineer: systems",title:"BMS architecture and protection",
-intro:"Follow the measurement-to-action chain and understand why thresholds, delays and hysteresis exist.",
-detail:"A BMS senses cell voltages, current and temperatures; decides using protection logic, state machines and estimators; acts through MOSFETs or contactors, balancing and charge/current limits; and communicates through interfaces such as CAN. Fast events such as short circuit require hardware protection paths because firmware may be too slow or unavailable. Protection thresholds need delays to reject noise, hysteresis to prevent chatter, and defined latch/recovery behavior.",
-practice:"Draw the chain: cell → AFE → MCU → estimator/state machine → gate driver/MOSFET or contactor → load/charger. Then inject a short voltage dip and decide whether it should trip or be filtered.",
-eq:["Release = Threshold − Hysteresis","Safe action = detect → validate → isolate/derate → latch/recover"],
-example:"If a cell under-voltage threshold is 2.50 V with a 2 s delay, a 100 ms pulse below 2.50 V may be ignored while a sustained condition trips. The exact values must be chemistry-, pack- and safety-requirement-specific.",
-mistakes:["Zero delay on every protection, creating nuisance trips.","Relying only on firmware for microsecond-scale short-circuit protection."],
-qa:["Why must short-circuit protection have a hardware path?","The current can rise extremely quickly, and the protection must not depend on a healthy running MCU."],
-calc:"none"},
-{level:"A3",levelName:"Advanced: safety, life, reliability",title:"Thermal runaway and layered safety",
-intro:"Describe how a cell fault can escalate and which layers interrupt the chain.",
-detail:"Thermal runaway is a coupled electrochemical, thermal and mechanical failure process. A severe internal or external fault can generate heat faster than it can be removed; reactions accelerate, internal structures can fail, and neighbouring cells may be heated. Safety is therefore layered: prevent, detect, limit, contain and mitigate. Cooling quality, cell spacing, barriers, vent paths and fault detection all influence propagation risk.",
-practice:"Use the simulator's thermal controls and fault settings to study how ambient temperature, cooling, current and cell spacing change the thermal response. Treat every model result as an engineering approximation that must be validated.",
-eq:["C_th · dT/dt = Q̇_gen − hA(T − T_amb)","Runaway tendency increases when heat generation outpaces heat removal"],
-example:"If cooling effectiveness falls, the same internal heat source produces a higher cell temperature. A barrier can delay propagation, but it should never be treated as a guarantee that propagation is impossible.",
-mistakes:["Treating a thermal barrier as a guarantee rather than a delay/containment layer.","Testing severe faults without controlled procedures, remote operation and appropriate safety controls."],
-qa:["Why are multiple safety layers required?","Different faults occur at different speeds and through different physical paths, so no single defence can cover every failure."],
-calc:"none"},
-{level:"A3",levelName:"Advanced: safety, life, reliability",title:"Ageing, SOH and reliability",
-intro:"Separate capacity fade from resistance growth and use field data to identify failure mechanisms.",
-detail:"Ageing has at least two major electrical faces: capacity fade and resistance growth. A pack can retain substantial Ah yet lose power capability because resistance has increased. Calendar ageing depends on time, temperature and SOC; cycle ageing depends on throughput, rate and depth of discharge. Reliability statistics such as Weibull help distinguish infant mortality, random failures and wear-out when enough traceable field data exist.",
-practice:"Track capacity and resistance against cycle count, calendar age, temperature exposure and C-rate. Do not fit a reliability distribution to a tiny or mixed population without checking assumptions.",
-eq:["SOH_cap = Q_now / Q_new","R(t) = exp[−(t/η)^β]"],
-example:"A Weibull shape β below 1 suggests a decreasing hazard rate and can point toward early-life defects such as manufacturing or assembly problems; β above 1 is more consistent with wear-out.",
-mistakes:["Judging health from capacity alone.","Fitting Weibull to too few returns or mixing different failure populations."],
-qa:["What does Weibull β < 1 suggest?","A falling hazard rate, often associated with early-life or manufacturing-related failures."],
-calc:"none"}
-];
+["Battery enclosure architecture and load paths","Battery packs are structures as well as electrical sources. Loads must travel through defined members without crushing cells, overstressing tabs or relying on fragile covers.","Identify the primary load path from mounting points through the enclosure, trays, cell holders and compression members. Treat the cell as a protected component, not a structural beam unless explicitly qualified.",["Create a free-body diagram for the pack. Mark mounting reactions, enclosure panels, holder constraints and compression members."],["Why should cells normally be isolated from primary structural loads?","Uncontrolled mechanical load can deform the cell, damage internal layers or create electrical/thermal failure modes."]],
+["CAD datum strategy and parametric pack layout","Good CAD starts with stable datums. A battery layout should remain valid when cell count, cooling plate thickness or connector position changes.","Use master datums for the enclosure envelope, cell pitch, series-group boundaries, cooling interface, busbar plane and terminal reference. Drive repeated cells from parameters.",["Build a parametric 4S4P layout, change the pitch and wall thickness, and verify that dependent features update without collisions."],["What makes a CAD model robust?","Intentional master dimensions and constraints control dependent geometry without fragile references."]],
+["Tolerance stacks and worst-case clearance","Nominal CAD dimensions are not manufacturing dimensions. Clearance must survive tolerances, thermal expansion and assembly variation.","Use worst-case and statistical tolerance stacks. For clearance C = nominal gap − part variation − assembly variation − thermal growth, a positive nominal value is not enough if the worst-case stack closes the gap.",["Create a tolerance stack for cell-to-cell, busbar-to-enclosure and connector clearances. Compare nominal, worst-case and 3-sigma cases."],["Why is worst-case tolerance important?","A single extreme combination can create interference or insulation failure even when the average assembly looks correct."]],
+["Fastener joints and torque engineering","Bolted joints are controlled interfaces. Torque, preload, friction, thread engagement and joint stiffness determine whether a connection remains secure.","Specify fastener size, grade, thread engagement and torque. For high-current busbars, control contact pressure and surface preparation; torque alone does not guarantee low resistance.",["Estimate bolt preload from torque using a stated friction factor, then define torque audit, joint-resistance and vibration checks."],["Why can the same torque produce different preload?","Friction varies with surface finish, lubrication, coating and thread condition."]],
+["Busbar geometry, bending and current paths","Busbars must satisfy both electrical and mechanical constraints. A short, wide conductor can be electrically excellent but impossible to assemble or unable to absorb differential movement.","Respect bend radii, hole-edge distances, fastener access, insulation spacing and thermal expansion. Keep parallel current paths symmetric so impedance determines current sharing.",["Redesign a busbar that is electrically adequate but violates bend radius, hole clearance or service access. Compare resistance before and after."],["Why does symmetric routing matter?","Unequal path impedance causes unequal current sharing and local heating."]],
+["Creepage, clearance and insulation coordination","Electrical CAD must distinguish clearance through air from creepage along an insulating surface. Required distances depend on voltage, pollution degree, material group, altitude and insulation class.","Never use a universal number as a certification rule. Use the applicable standard and environment. The simulator's clearance check is deliberately conservative and is only a teaching rule.",["Create a preliminary insulation map for the maximum pack voltage and mark every live-to-live and live-to-enclosure interface."],["Why are creepage and clearance different?","Clearance is through air; creepage follows an insulating surface and is affected by contamination and material properties."]],
+["Thermal expansion and differential movement","Cells, busbars, cold plates, holders and enclosures have different coefficients of thermal expansion. A pack can be electrically correct at room temperature yet build stress when hot.","Estimate ΔL = αLΔT and identify constrained interfaces. Flexible conductors, compliant pads and controlled mounting points can absorb movement without loading cells or seals.",["Calculate the growth of a 300 mm aluminium busbar from 20 °C to 70 °C and compare it with a steel span."],["What happens if differential expansion is fully constrained?","Thermal stress can deform parts, loosen joints, fatigue conductors or load cells and seals."]],
+["DFMEA and design verification planning","Design verification needs measurable acceptance criteria and a defined method.","Create a requirement-to-verification matrix covering insulation, resistance, temperature rise, vibration, ingress, fastener retention, weld integrity, current interruption, sensor plausibility and fault response.",["Write five measurable module requirements and assign analysis, inspection or test as the verification method."],["Why should every requirement have an objective verification method?","Without a measurable method, the requirement cannot be shown to be satisfied or traced to evidence."]],
+["Manufacturing-aware CAD and DFM","A design that cannot be assembled consistently is not an engineered design. DFM connects CAD geometry to welding, fastening, insulation, harness routing, inspection and service.","Design for tool access, weld-head access, connector insertion, inspection, torque access, poka-yoke and replacement. Avoid trapped fasteners and hidden welds unless the process and inspection method are defined.",["Review the pack from the operator's viewpoint and mark inaccessible weld, torque, probe and inspection operations."],["What is the purpose of DFM?","To make the intended design repeatable, inspectable and economically manufacturable rather than merely geometrically possible."]],
+["Electrical-mechanical sign-off capstone","Final design review must reconcile electrical limits, thermal behaviour, mechanical constraints, CAD tolerances and manufacturing reality.","Produce a design review covering architecture, maximum voltage/current, interconnect resistance, current density, thermal path, clearances, tolerance stack, mounting loads, fault response, verification plan and open risks.",["Change one electrical parameter and one mechanical parameter in the simulator. Predict which requirement becomes limiting first, then explain the result."],["What distinguishes a defensible battery design?","A traceable chain from requirement to calculation/CAD constraint to verification evidence, with assumptions and unresolved risks made explicit."]]
+]
+]);
 
 const allLessons=()=>CORE_TRACK.concat(CURRICULUM.flatMap(L=>L[3].map(m=>({level:L[0],levelName:L[1],title:m[0],intro:m[1],detail:m[2],practice:m[3],qa:m[4]}))));
 function acad(){
@@ -1207,6 +1250,13 @@ const GLOSSARY=[
 ["Cpk","Process capability index that accounts for both process spread and centring relative to specification limits."],
 ["hA","Effective thermal conductance between a cell and its cooling environment, often used in lumped thermal models."],
 ["SOP derating","Reducing allowed charge/discharge current or power when temperature, SOC, voltage or resistance makes the nominal limit unsafe."],
+["Creepage","Shortest electrical path measured along an insulating surface."],
+["Clearance","Shortest distance through air between conductive parts."],
+["DFM","Design for Manufacturability: geometry and process choices that make a design repeatable and inspectable."],
+["Tolerance stack","Combination of dimensional and positional variation used to determine worst-case or statistical fit/clearance."],
+["Current density","Current divided by conductor cross-sectional area; excessive values raise conductor temperature and voltage drop."],
+["Thermal expansion","Dimensional change with temperature, approximately ΔL = αLΔT for small temperature ranges."],
+["DFMEA","Design Failure Mode and Effects Analysis used to identify and prioritize design risks and controls."],
 ["AFE comparator","A fast hardware threshold circuit that can react independently of the MCU for certain protection functions."]
 ];
 function initTheme(){
@@ -1227,4 +1277,480 @@ function initTheme(){
 function tab(x){for(const [i,k,id] of [[1,'sim','simv'],[2,'acad','acad'],[3,'dsg','dsg'],[4,'lab','lab']]){$(id).hidden=x!=k;$('t'+i).setAttribute('aria-pressed',x==k)}if(x=='sim')run();else if(x=='acad')acad();else if(x=='dsg')dsg();else lab()}
 let q;ctl.addEventListener('input',()=>{cancelAnimationFrame(q);q=requestAnimationFrame(run)});
 addEventListener('resize',run);initTheme();run();
-</script></body></html>
+</script>
+<div class="v5-bms-panel" id="v5BmsPanel">
+  <div style="display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap">
+    <div>
+      <b style="font-size:16px">BMS / Sensing / Communications Architecture</b>
+      <div style="font-size:11px;color:#94a3b8;margin-top:3px">Selectable blocks are shown in the 3D arrangement and are tied to the pack topology.</div>
+    </div>
+    <label style="min-width:210px;font-size:11px">BMS topology
+      <select id="v5BmsTopology" class="v5-select">
+        <option value="common">Common-port BMS</option>
+        <option value="split">Split-port BMS (C/P)</option>
+        <option value="contactor">HV contactor + precharge BMS</option>
+      </select>
+    </label>
+  </div>
+  <div class="v5-bms-grid" style="margin-top:10px">
+    <div class="v5-bms-card"><h4>Core BMS</h4>
+      <label><input type="checkbox" checked data-v5="bms"> BMS controller</label><br>
+      <label><input type="checkbox" checked data-v5="afe"> Cell-monitor AFE</label><br>
+      <label><input type="checkbox" checked data-v5="bal"> Passive balancing</label><br>
+      <label><input type="checkbox" data-v5="activebal"> Active balancing</label>
+    </div>
+    <div class="v5-bms-card"><h4>Power path</h4>
+      <label><input type="checkbox" checked data-v5="fuse"> Main fuse</label><br>
+      <label><input type="checkbox" checked data-v5="contactor"> Main contactor</label><br>
+      <label><input type="checkbox" checked data-v5="precharge"> Precharge resistor/relay</label><br>
+      <label><input type="checkbox" data-v5="service"> Service disconnect</label>
+    </div>
+    <div class="v5-bms-card"><h4>Voltage / current</h4>
+      <label><input type="checkbox" checked data-v5="taps"> Cell voltage taps</label><br>
+      <label><input type="checkbox" checked data-v5="current"> Current sensor / shunt</label><br>
+      <label><input type="checkbox" checked data-v5="packv"> Pack voltage sense</label><br>
+      <label><input type="checkbox" data-v5="hv"> HVIL</label>
+    </div>
+    <div class="v5-bms-card"><h4>Temperature / safety</h4>
+      <label><input type="checkbox" checked data-v5="ntc"> NTC / thermistor sensors</label><br>
+      <label><input type="checkbox" data-v5="ambient"> Ambient sensor</label><br>
+      <label><input type="checkbox" data-v5="pressure"> Pressure / swelling sensor</label><br>
+      <label><input type="checkbox" data-v5="smoke"> Gas / smoke sensor</label>
+    </div>
+    <div class="v5-bms-card"><h4>Communications</h4>
+      <label><input type="checkbox" checked data-v5="can"> CAN / CAN-FD</label><br>
+      <label><input type="checkbox" data-v5="lin"> LIN</label><br>
+      <label><input type="checkbox" data-v5="rs485"> RS-485 / Modbus</label><br>
+      <label><input type="checkbox" data-v5="iso"> Isolated UART / SPI</label>
+    </div>
+    <div class="v5-bms-card"><h4>IoT / telematics</h4>
+      <label><input type="checkbox" data-v5="ble"> Bluetooth LE</label><br>
+      <label><input type="checkbox" data-v5="wifi"> Wi-Fi</label><br>
+      <label><input type="checkbox" data-v5="lte"> LTE / 4G / 5G</label><br>
+      <label><input type="checkbox" data-v5="gnss"> GNSS / GPS</label>
+    </div>
+  </div>
+  <div id="v5BmsStatus" style="margin-top:10px;font-size:11px;color:#cbd5e1"></div>
+</div>
+
+
+<script id="v5-bms-js">
+(function(){
+  const labels = {
+    bms:'BMS controller', afe:'cell-monitor AFE', bal:'passive balancing',
+    activebal:'active balancing', fuse:'main fuse', contactor:'main contactor',
+    precharge:'precharge', service:'service disconnect', taps:'cell taps',
+    current:'current sensor/shunt', packv:'pack voltage sense', hv:'HVIL',
+    ntc:'NTC temperature', ambient:'ambient temperature', pressure:'pressure/swelling',
+    smoke:'gas/smoke', can:'CAN/CAN-FD', lin:'LIN', rs485:'RS-485/Modbus',
+    iso:'isolated UART/SPI', ble:'Bluetooth LE', wifi:'Wi-Fi',
+    lte:'LTE/4G/5G', gnss:'GNSS/GPS'
+  };
+  function update(){
+    const panel=document.getElementById('v5BmsPanel');
+    if(!panel)return;
+    const on=[...panel.querySelectorAll('input[data-v5]:checked')].map(x=>labels[x.dataset.v5]);
+    const topo=document.getElementById('v5BmsTopology')?.value||'common';
+    const st=document.getElementById('v5BmsStatus');
+    if(st) st.innerHTML='<span class="v5-chip">'+topo.replace('common','common-port').replace('split','split-port').replace('contactor','contactor + precharge')+'</span> '+on.map(x=>'<span class="v5-chip">'+x+'</span>').join('');
+    const ov=document.getElementById('v5BmsOverlayText');
+    if(ov) ov.textContent='BMS → AFE → '+(on.includes('cell taps')?'cell taps':'cell monitoring')+' → '+(on.includes('NTC temperature')?'NTC':'temperature sensors')+' → protection → '+(on.includes('CAN/CAN-FD')?'CAN':'selected comms')+' → telematics/IoT';
+    window.__v5bms={topo,on};
+    // If the existing renderer exposes a redraw hook, use it.
+    if(typeof window.render3D==='function'){
+      try{
+        const p=window.p||window.packParams||{};
+        const R=window.R||{};
+        window.render3D(p,R);
+      }catch(e){}
+    }
+  }
+  document.addEventListener('change',e=>{
+    if(e.target.matches('#v5BmsPanel input, #v5BmsTopology')) update();
+  });
+  setTimeout(update,100);
+})();
+</script>
+
+
+
+<section class="v7-connection-panel">
+  <div style="display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap">
+    <div><b style="font-size:16px">Physical Cell Form Factors</b>
+      <div style="font-size:11px;color:#94a3b8">Choose a physical cell construction; the pack view below changes its geometry.</div>
+    </div>
+    <div>
+      <button class="v7-connection-btn active" data-v7-ff="cylindrical">Cylindrical</button>
+      <button class="v7-connection-btn" data-v7-ff="prismatic">Prismatic</button>
+      <button class="v7-connection-btn" data-v7-ff="pouch">Pouch</button>
+    </div>
+  </div>
+  <div class="v7-formfactor">
+    <div class="v7-ff-card selected" data-v7-card="cylindrical">
+      <div class="v7-ff-title">CYLINDRICAL</div>
+      <div class="v7-ff-stage"><div class="v7-cyl"></div></div>
+      <div class="v7-ff-caption">Round can, circular cap and terminal. Parallel groups normally use cell-level tabs/links into a collector; the larger busbar carries group current.</div>
+    </div>
+    <div class="v7-ff-card" data-v7-card="prismatic">
+      <div class="v7-ff-title">PRISMATIC</div>
+      <div class="v7-ff-stage"><div class="v7-prism"></div></div>
+      <div class="v7-ff-caption">Rigid rectangular can with defined positive/negative terminal positions. Busbar and end-plate geometry are visible at pack level.</div>
+    </div>
+    <div class="v7-ff-card" data-v7-card="pouch">
+      <div class="v7-ff-title">POUCH</div>
+      <div class="v7-ff-stage"><div class="v7-pouch"></div></div>
+      <div class="v7-ff-caption">Flexible laminate cell with tabs. Mechanical compression, swelling allowance and tab strain become important design variables.</div>
+    </div>
+  </div>
+
+  <div style="margin-top:10px"><b>Connection visibility — choose exactly what to see</b></div>
+  <div class="v7-connection-grid">
+    <button class="v7-connection-btn active" data-v7-conn="all"><span class="dot"></span>ALL CONNECTIONS</button>
+    <button class="v7-connection-btn" data-v7-conn="bplus"><span class="dot"></span>B+ PACK POSITIVE</button>
+    <button class="v7-connection-btn" data-v7-conn="bminus"><span class="dot"></span>B− PACK NEGATIVE</button>
+    <button class="v7-connection-btn" data-v7-conn="cplus"><span class="dot"></span>C+ CHARGER +</button>
+    <button class="v7-connection-btn" data-v7-conn="cminus"><span class="dot"></span>C− CHARGER −</button>
+    <button class="v7-connection-btn" data-v7-conn="pplus"><span class="dot"></span>P+ PROTECTED +</button>
+    <button class="v7-connection-btn" data-v7-conn="pminus"><span class="dot"></span>P− PROTECTED −</button>
+    <button class="v7-connection-btn" data-v7-conn="cellplus"><span class="dot"></span>CELL +</button>
+    <button class="v7-connection-btn" data-v7-conn="cellminus"><span class="dot"></span>CELL −</button>
+    <button class="v7-connection-btn" data-v7-conn="taps"><span class="dot"></span>BM / CELL TAPS</button>
+    <button class="v7-connection-btn" data-v7-conn="temp"><span class="dot"></span>BT / NTC</button>
+    <button class="v7-connection-btn" data-v7-conn="power"><span class="dot"></span>HIGH CURRENT</button>
+    <button class="v7-connection-btn" data-v7-conn="comms"><span class="dot"></span>CAN / LIN / RS-485</button>
+    <button class="v7-connection-btn" data-v7-conn="iot"><span class="dot"></span>IoT / WIRELESS</button>
+    <button class="v7-connection-btn" data-v7-conn="sense"><span class="dot"></span>SENSORS</button>
+  </div>
+  <div id="v7ConnInfo" class="v7-conn-info">ALL CONNECTIONS: showing pack power, every cell polarity connection, cell taps, temperature wiring, protection paths, communication and IoT links.</div>
+</section>
+
+<section class="v7-pack-view" id="v7PackView">
+  <div class="v7-pack-toolbar">
+    <button class="active" data-v7-view="iso">Isometric</button>
+    <button data-v7-view="top">Top</button>
+    <button data-v7-view="front">Front</button>
+    <button data-v7-view="side">Side</button>
+    <button data-v7-view="rotate">360° Auto Rotate</button>
+    <button data-v7-view="labels">Cell labels</button>
+  </div>
+  <div id="v7PackCanvas" style="position:relative;height:590px;overflow:hidden"></div>
+</section>
+
+<div id="v6Controls" class="v5-bms-panel">
+  <div style="display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap">
+    <div>
+      <b style="font-size:16px">3D BMS Wiring & Module Lab</b>
+      <div style="font-size:11px;color:#94a3b8">Select modules to expose their physical connections, signals and engineering role.</div>
+    </div>
+    <div class="v6-toolbar">
+      <button data-v6-mode="all" class="active">All systems</button>
+      <button data-v6-mode="power">Power</button>
+      <button data-v6-mode="sensing">Sensors</button>
+      <button data-v6-mode="comms">Communications</button>
+      <button data-v6-mode="iot">IoT</button>
+      <button id="v6Reset">Reset</button>
+    </div>
+  </div>
+  <div class="v6-sidepanel">
+    <label>Current sensor
+      <select id="v6CurrentSensor"><option>Shunt</option><option>Hall-effect</option><option>Fluxgate</option></select>
+    </label>
+    <label>Cell monitor AFE
+      <select id="v6Afe"><option>Distributed AFE</option><option>Central AFE</option><option>Isolated daisy-chain AFE</option></select>
+    </label>
+    <label>Balancing
+      <select id="v6Balance"><option>Passive resistor</option><option>Active inductor</option><option>Active capacitor</option></select>
+    </label>
+    <label>Vehicle / charger bus
+      <select id="v6CommBus"><option>CAN</option><option>CAN-FD</option><option>RS-485 / Modbus</option><option>LIN</option></select>
+    </label>
+    <label>Wireless
+      <select id="v6Wireless"><option>BLE</option><option>Wi-Fi</option><option>LTE/5G</option><option>None</option></select>
+    </label>
+    <label>Security
+      <select id="v6Security"><option>Authenticated + encrypted</option><option>Authenticated only</option><option>Development mode</option></select>
+    </label>
+  </div>
+  <div id="v6Detail" class="v6-detail">Click a 3D block to inspect its function, connections, signals and typical design considerations.</div>
+</div>
+
+
+<script id="v6-bms-3d-js">
+(function(){
+  const $=s=>document.querySelector(s);
+  const $$=s=>[...document.querySelectorAll(s)];
+  const scene=()=>$('#scene3d'), nodes=()=>$('#v6Nodes'), wires=()=>$('#v6Wires');
+  const info={
+    pack:{t:'Pack / cell matrix',c:'Power source',d:'Series/parallel cell assembly. Every series node has a defined voltage potential; parallel cells share the same electrical node.',sig:'High-current DC'},
+    taps:{t:'Cell voltage tap harness',c:'Sensing',d:'One sense connection per series node. Routes cell/node voltages to the AFE; not a power conductor.',sig:'mV/V differential sensing'},
+    ntc:{t:'NTC temperature sensors',c:'Sensor',d:'Distributed thermal sensors placed at representative hot spots, cell groups, busbars or cooling interfaces.',sig:'Resistance / temperature'},
+    pressure:{t:'Pressure / swelling sensor',c:'Sensor',d:'Optional sensor for pouch/prismatic mechanical state studies where swelling or compression is important.',sig:'Pressure / displacement'},
+    afe:{t:'Cell-monitor AFE',c:'BMS',d:'Measures series-cell/node voltages and often controls balancing. Multiple AFEs can be daisy chained.',sig:'Isolated/differential cell data'},
+    bms:{t:'BMS controller',c:'Control',d:'Runs protection logic, SOC/SOH estimation, diagnostics, balancing commands and system state management.',sig:'Digital control'},
+    bal:{t:'Balancing stage',c:'BMS',d:'Passive or active balancing redistributes charge between series groups to manage imbalance.',sig:'Controlled bleed / energy transfer'},
+    current:{t:'Current sensor',c:'Measurement',d:'Shunt, Hall-effect or fluxgate sensor measures pack current for protection and coulomb counting.',sig:'I / direction'},
+    packv:{t:'Pack voltage sense',c:'Measurement',d:'Independent pack-voltage measurement used for plausibility checks and protection.',sig:'Vpack'},
+    fuse:{t:'Main fuse',c:'Protection',d:'Limits fault energy when a severe short circuit exceeds contactor/BMS interruption capability.',sig:'High-current protection'},
+    contactor:{t:'Main contactor',c:'Protection',d:'Electrically controlled isolation of the high-voltage power path.',sig:'Coil + DC power'},
+    precharge:{t:'Precharge circuit',c:'Protection',d:'Limits inrush current into inverter/DC-link capacitance before the main contactor closes.',sig:'Relay + resistor'},
+    service:{t:'Service disconnect',c:'Safety',d:'Manual maintenance isolation point; placement depends on pack architecture and safety requirements.',sig:'Mechanical isolation'},
+    hvil:{t:'HVIL loop',c:'Safety',d:'Low-voltage interlock loop used to detect opened covers/connectors/service interfaces.',sig:'Continuity / state'},
+    can:{t:'CAN / CAN-FD gateway',c:'Communications',d:'Vehicle/charger/service communication interface. CAN-FD provides larger payloads and higher data rates.',sig:'Differential bus'},
+    lin:{t:'LIN interface',c:'Communications',d:'Low-cost single-master bus suitable for simple peripherals, not a replacement for the main high-speed BMS bus.',sig:'Single-wire bus'},
+    rs485:{t:'RS-485 / Modbus',c:'Communications',d:'Robust wired multidrop interface often used in stationary storage and industrial systems.',sig:'Differential serial'},
+    ble:{t:'Bluetooth LE',c:'IoT / service',d:'Local commissioning, diagnostics and mobile-app interface.',sig:'2.4 GHz wireless'},
+    wifi:{t:'Wi-Fi',c:'IoT',d:'Local network connectivity for gateways, commissioning or stationary storage.',sig:'IP network'},
+    lte:{t:'LTE / 4G / 5G modem',c:'Telematics',d:'Wide-area connectivity for remote monitoring and fleet/energy-service telemetry.',sig:'Cellular IP'},
+    gnss:{t:'GNSS / GPS',c:'Telematics',d:'Location/time reference for mobile packs and fleet applications.',sig:'Position / time'},
+    cloud:{t:'IoT gateway / cloud',c:'IoT',d:'Aggregates telemetry, diagnostics and events. Production systems should use device identity, authentication, encryption and secure update paths.',sig:'IP / MQTT/HTTPS'}
+  };
+
+  const modeClass=id=>{
+    if(['pack','fuse','contactor','precharge','service','current','packv'].includes(id)) return 'power';
+    if(['taps','ntc','pressure','afe','bal'].includes(id)) return 'sensing';
+    if(['can','lin','rs485','bms','hvil'].includes(id)) return 'comms';
+    return 'iot';
+  };
+
+  function makeNode(id,x,y){
+    const n=document.createElement('div');
+    n.className='v6-node '+modeClass(id);
+    n.dataset.id=id;n.style.left=x+'px';n.style.top=y+'px';n.style.pointerEvents='auto';
+    const q=info[id];
+    n.innerHTML='<b>'+q.t+'</b><small>'+q.c+'</small>';
+    n.onclick=()=>select(id);
+    nodes().appendChild(n);
+    return n;
+  }
+  function line(a,b,cls=''){
+    const r1=a.getBoundingClientRect(),r2=b.getBoundingClientRect(),sr=scene().getBoundingClientRect();
+    const x1=r1.left+r1.width/2-sr.left,y1=r1.top+r1.height/2-sr.top;
+    const x2=r2.left+r2.width/2-sr.left,y2=r2.top+r2.height/2-sr.top;
+    const dx=x2-x1,dy=y2-y1,len=Math.hypot(dx,dy),ang=Math.atan2(dy,dx)*180/Math.PI;
+    const w=document.createElement('div');w.className='v6-wire '+cls;
+    w.style.left=x1+'px';w.style.top=y1+'px';w.style.width=len+'px';w.style.transform='rotate('+ang+'deg)';
+    wires().appendChild(w);
+  }
+  function render(){
+    if(!scene()||!nodes()||!wires())return;
+    nodes().innerHTML='';wires().innerHTML='';
+    const s=scene(), W=s.clientWidth,H=s.clientHeight;
+    const pos={
+      pack:[W*.04,H*.43], taps:[W*.19,H*.16], ntc:[W*.19,H*.69], pressure:[W*.19,H*.84],
+      afe:[W*.37,H*.20], bal:[W*.37,H*.70], bms:[W*.54,H*.43],
+      current:[W*.69,H*.70], packv:[W*.69,H*.16],
+      fuse:[W*.80,H*.32], contactor:[W*.80,H*.45], precharge:[W*.80,H*.58],
+      service:[W*.80,H*.70], hvil:[W*.68,H*.87],
+      can:[W*.58,H*.10], lin:[W*.58,H*.82], rs485:[W*.42,H*.87],
+      ble:[W*.72,H*.04], wifi:[W*.82,H*.04], lte:[W*.90,H*.10], gnss:[W*.90,H*.20], cloud:[W*.88,H*.80]
+    };
+    const made={};Object.keys(pos).forEach(id=>made[id]=makeNode(id,pos[id][0],pos[id][1]));
+    const connect=(a,b,c)=>line(made[a],made[b],c);
+    connect('pack','taps','sense');connect('pack','ntc','temp');connect('pack','pressure','temp');
+    connect('taps','afe','sense');connect('ntc','afe','temp');connect('pressure','bms','temp');
+    connect('afe','bms','comm');connect('bms','bal','sense');
+    connect('pack','current','power');connect('current','fuse','power');connect('fuse','contactor','power');
+    connect('precharge','contactor','power');connect('service','contactor','power');
+    connect('packv','bms','sense');connect('current','bms','sense');connect('hvil','bms','sense');
+    connect('bms','can','comm');connect('bms','lin','comm');connect('bms','rs485','comm');
+    connect('bms','ble','iot');connect('bms','wifi','iot');connect('bms','lte','iot');
+    connect('gnss','lte','iot');connect('lte','cloud','iot');connect('wifi','cloud','iot');connect('can','cloud','iot');
+    applyMode('all');
+  }
+  function applyMode(mode){
+    $$('.v6-node').forEach(n=>n.classList.toggle('v6-hidden',mode!=='all'&&n.classList.contains(modeClass(n.dataset.id))===false));
+    $$('.v6-toolbar button').forEach(b=>b.classList.toggle('active',b.dataset.v6Mode===mode));
+  }
+  function select(id){
+    $$('.v6-node').forEach(n=>n.classList.toggle('active',n.dataset.id===id));
+    const q=info[id], d=$('#v6Detail');
+    if(d)d.innerHTML='<b>'+q.t+'</b> — '+q.c+'<br>'+q.d+'<br><span class="v6-metric">Signal: '+q.sig+'</span><span class="v6-metric">Selectable module</span>';
+  }
+  $$('.v6-toolbar button[data-v6-mode]').forEach(b=>b.onclick=()=>applyMode(b.dataset.v6Mode));
+  $('#v6Reset')?.addEventListener('click',()=>{select('pack');applyMode('all')});
+  ['v6CurrentSensor','v6Afe','v6Balance','v6CommBus','v6Wireless','v6Security'].forEach(id=>{
+    $('#'+id)?.addEventListener('change',()=>select('bms'));
+  });
+  window.addEventListener('resize',render);
+  setTimeout(render,180);
+  setTimeout(render,700);
+})();
+</script>
+
+
+<section class="card" style="margin-top:14px">
+<h3>V6 — System integration and verification</h3>
+<div class="v6-bms-grid">
+<div class="v5-bms-card"><h4>Signal integrity</h4><p>Separate high-current power conductors from low-level cell-voltage and temperature wiring. Use appropriate routing, shielding, filtering and connector/keying strategies.</p></div>
+<div class="v5-bms-card"><h4>Fault paths</h4><p>Model open-wire, short-to-adjacent-node, sensor plausibility, over-temperature, over-current, welded-contactor and HVIL faults before declaring the pack safe.</p></div>
+<div class="v5-bms-card"><h4>Precharge logic</h4><p>Precharge is a controlled transition: verify the contactor state, monitor bus voltage rise and only close the main path when the DC-link voltage is within the permitted criterion.</p></div>
+<div class="v5-bms-card"><h4>Communications</h4><p>Define message ownership, update rate, timeout behavior, diagnostic states and fail-safe behavior for every external interface.</p></div>
+<div class="v5-bms-card"><h4>IoT security</h4><p>Production telematics should use authenticated devices, encrypted transport, protected credentials and signed/verified firmware updates.</p></div>
+<div class="v5-bms-card"><h4>Design verification</h4><p>Verify electrical, thermal, mechanical, EMC, connector, harness, software and communication requirements separately, then validate the integrated pack.</p></div>
+</div>
+</section>
+
+
+<script id="v7-formfactor-connections-js">
+(function(){
+  let form='cylindrical', connection='all', view='iso', rotating=false, timer=null;
+  const info={
+    all:'ALL CONNECTIONS: showing pack power, every cell polarity connection, cell taps, temperature wiring, protection paths, communication and IoT links.',
+    bplus:'B+: pack-positive high-current route from the final series node through protection/switching to the pack positive terminal.',
+    bminus:'B−: pack-negative reference/high-current route from the first series node to the pack negative terminal.',
+    cplus:'C+: charger-positive path. Its physical relationship to B+ depends on common-port or split-port BMS architecture.',
+    cminus:'C−: charger-negative path. It is not automatically identical to B− in a split-port architecture.',
+    pplus:'P+: protected positive load/output path downstream of the switching/protection architecture.',
+    pminus:'P−: protected negative/load path; architecture-dependent and may share the common port.',
+    cellplus:'CELL +: positive terminal/tab of each individual cell. These are joined according to the selected series/parallel topology.',
+    cellminus:'CELL −: negative terminal/tab of each individual cell. Each is visible so the series path can be followed cell by cell.',
+    taps:'BM / CELL TAPS: low-current measurement wires from each series node to the cell-monitor AFE.',
+    temp:'BT / NTC: temperature-sensor wiring from NTCs placed at selected thermal locations.',
+    power:'HIGH CURRENT: fuse, contactor, precharge, current sensor and busbar/power interconnects.',
+    comms:'COMMUNICATIONS: CAN/CAN-FD, LIN and RS-485/Modbus paths between BMS and external systems.',
+    iot:'IoT/WIRELESS: BLE, Wi-Fi, cellular and gateway/cloud links.',
+    sense:'SENSORS: voltage, temperature, current, pressure/swelling and safety interlock sensing.'
+  };
+  const canvas=()=>document.getElementById('v7PackCanvas');
+  const esc=s=>s.replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+  function wire(x1,y1,x2,y2,cls,group){
+    const d=document.createElement('div');d.className='v7-conn-wire '+cls;d.dataset.group=group;
+    const dx=x2-x1,dy=y2-y1,len=Math.hypot(dx,dy),a=Math.atan2(dy,dx)*180/Math.PI;
+    d.style.left=x1+'px';d.style.top=y1+'px';d.style.width=len+'px';d.style.transform='rotate('+a+'deg)';
+    canvas().appendChild(d);
+  }
+  function label(x,y,t,group){
+    const d=document.createElement('div');d.className='v7-overlay-label';d.textContent=t;d.style.left=x+'px';d.style.top=y+'px';d.dataset.group=group;canvas().appendChild(d);
+  }
+  function cell(x,y,i){
+    const d=document.createElement('div');d.className=form==='cylindrical'?'v7-cyl3d':form==='prismatic'?'v7-prism3d':'v7-pouch3d';
+    d.style.left=x+'px';d.style.top=y+'px';d.dataset.group='cells';canvas().appendChild(d);
+    if(form==='cylindrical')d.innerHTML='<div class="cap"></div><div class="plus">+</div>';
+    else d.innerHTML='<div class="plus">+</div>'+(form==='pouch'?'<div class="minus">−</div>':'');
+    const plus=document.createElement('div');plus.className='v7-terminal';plus.style.left=(x+(form==='pouch'?82:36))+'px';plus.style.top=(y-5)+'px';plus.dataset.group='cellplus';canvas().appendChild(plus);
+    const minus=document.createElement('div');minus.className='v7-terminal neg';minus.style.left=(x+(form==='pouch'?3:36))+'px';minus.style.top=(y+91)+'px';minus.dataset.group='cellminus';canvas().appendChild(minus);
+    label(x-3,y+105,'Cell '+i+'  + / −','cells');
+    return {x:x+38,y:y+45,plus:{x:x+(form==='pouch'?87:41),y:y},minus:{x:x+(form==='pouch'?8:41),y:y+96}};
+  }
+  function render(){
+    if(!canvas())return;
+    canvas().innerHTML='';
+    const W=canvas().clientWidth,H=canvas().clientHeight;
+    const cols=6,rows=3, cells=[];
+    const sx=Math.max(35,(W-430)/cols), sy=145;
+    for(let r=0;r<rows;r++)for(let c=0;c<cols;c++){
+      let x=25+c*sx,y=55+r*sy;
+      if(view==='top'){y=70+r*115}
+      if(view==='front'){x=55+c*(W-150)/cols;y=190+r*95}
+      if(view==='side'){x=W*.18+c*62;y=80+r*145}
+      cells.push(cell(x,y,r*cols+c+1));
+    }
+    // Series/parallel connections: explicit cell-to-cell polarity links.
+    for(let i=0;i<cells.length;i++){
+      if(i%cols!==cols-1) wire(cells[i].plus.x,cells[i].plus.y,cells[i+1].minus.x,cells[i+1].minus.y,'power','cellseries');
+      else if(i+cols<cells.length) wire(cells[i].plus.x,cells[i].plus.y,cells[i+cols].minus.x,cells[i+cols].minus.y,'power','cellseries');
+    }
+    // Parallel collectors
+    const collectorX=W*.55, collectorY=90;
+    for(let r=0;r<rows;r++){
+      const first=cells[r*cols], last=cells[r*cols+cols-1];
+      wire(first.plus.x,first.plus.y,collectorX,collectorY+r*150,'power','cellplus');
+      wire(last.minus.x,last.minus.y,collectorX+80,collectorY+r*150,'power','cellminus');
+    }
+    // Pack-level labels and paths.
+    label(collectorX-12,35,'PARALLEL + COLLECTOR','bplus');
+    label(collectorX+70,35,'PARALLEL − COLLECTOR','bminus');
+    wire(collectorX,collectorY,collectorX+150,60,'power','bplus');
+    wire(collectorX+80,collectorY,collectorX+230,90,'power','bminus');
+    label(collectorX+155,45,'B+','bplus'); label(collectorX+230,75,'B−','bminus');
+    // Cell tap ladder and NTC ladder.
+    const tapX=W*.72;
+    for(let i=0;i<rows*cols;i++){
+      const c=cells[i], yy=55+(i%cols)*32;
+      wire(c.plus.x,c.plus.y,tapX,yy,'sense','taps');
+    }
+    label(tapX-8,20,'BM1…BM'+(rows*cols),'taps');
+    const tempX=W*.78;
+    for(let r=0;r<rows;r++){
+      const c=cells[r*cols+2];
+      const t=document.createElement('div');t.className='v7-terminal temp';t.style.left=(c.x+20)+'px';t.style.top=(c.y+25)+'px';t.dataset.group='temp';canvas().appendChild(t);
+      wire(c.x+25,c.y+30,tempX,150+r*90,'temp','temp');
+    }
+    label(tempX-8,120,'BT / NTC','temp');
+    // Protection / BMS modules.
+    const modules=[
+      ['AFE',W*.58,H*.68,'taps'],['BMS',W*.70,H*.68,'comms'],['FUSE',W*.83,H*.68,'power'],
+      ['CONTACTOR',W*.83,H*.76,'power'],['PRECHARGE',W*.68,H*.82,'power'],
+      ['CURRENT SENSOR',W*.48,H*.82,'power'],['CAN',W*.57,H*.90,'comms'],
+      ['IoT GATEWAY',W*.74,H*.90,'iot']
+    ];
+    modules.forEach(([t,x,y,g])=>{label(x,y,t,g)});
+    wire(tapX,20,W*.58,H*.68,'sense','taps');
+    wire(W*.58,H*.68,W*.70,H*.68,'comm','comms');
+    wire(collectorX+150,60,W*.83,H*.68,'power','bplus');
+    wire(W*.83,H*.68,W*.83,H*.76,'power','power');
+    wire(W*.83,H*.76,W*.68,H*.82,'power','power');
+    wire(W*.48,H*.82,W*.70,H*.68,'sense','sense');
+    wire(W*.70,H*.68,W*.57,H*.90,'comm','comms');
+    wire(W*.57,H*.90,W*.74,H*.90,'comm','iot');
+    apply();
+  }
+  function apply(){
+    [...canvas().querySelectorAll('[data-group]')].forEach(e=>{
+      const g=e.dataset.group;
+      let show=connection==='all';
+      if(connection==='bplus')show=['bplus','cellplus'].includes(g);
+      if(connection==='bminus')show=['bminus','cellminus'].includes(g);
+      if(connection==='cplus')show=g==='cplus';
+      if(connection==='cminus')show=g==='cminus';
+      if(connection==='pplus')show=g==='pplus';
+      if(connection==='pminus')show=g==='pminus';
+      if(connection==='cellplus')show=['cellplus','cellseries'].includes(g);
+      if(connection==='cellminus')show=['cellminus','cellseries'].includes(g);
+      if(connection==='taps')show=g==='taps';
+      if(connection==='temp')show=g==='temp';
+      if(connection==='power')show=g==='power';
+      if(connection==='comms')show=g==='comms';
+      if(connection==='iot')show=g==='iot';
+      if(connection==='sense')show=['sense','taps','temp'].includes(g);
+      e.classList.toggle('hidden',!show);
+    });
+    document.getElementById('v7ConnInfo').textContent=info[connection]||info.all;
+  }
+  document.querySelectorAll('[data-v7-ff]').forEach(b=>b.onclick=()=>{
+    form=b.dataset.v7Ff;
+    document.querySelectorAll('[data-v7-ff]').forEach(x=>x.classList.toggle('active',x===b));
+    document.querySelectorAll('[data-v7-card]').forEach(x=>x.classList.toggle('selected',x.dataset.v7Card===form));
+    render();
+  });
+  document.querySelectorAll('[data-v7-conn]').forEach(b=>b.onclick=()=>{
+    connection=b.dataset.v7Conn;
+    document.querySelectorAll('[data-v7-conn]').forEach(x=>x.classList.toggle('active',x===b));
+    apply();
+  });
+  document.querySelectorAll('[data-v7-view]').forEach(b=>b.onclick=()=>{
+    const v=b.dataset.v7View;
+    if(v==='rotate'){
+      rotating=!rotating;b.classList.toggle('active',rotating);
+      if(rotating){timer=setInterval(()=>{view=view==='iso'?'top':view==='top'?'front':view==='front'?'side':'iso';render()},1600)}
+      else clearInterval(timer);
+    }else{view=v;document.querySelectorAll('[data-v7-view]').forEach(x=>x.classList.toggle('active',x===b));render()}
+  });
+  window.addEventListener('resize',render);
+  setTimeout(render,200);setTimeout(render,800);
+})();
+</script>
+
+
+<section class="card" style="margin-top:14px">
+<h3>Form-factor and connection visibility lessons</h3>
+<ul>
+<li><b>Cylindrical:</b> the model uses an actual round can/circular cap representation rather than a rectangular placeholder. Cell-level +/− terminals remain individually visible.</li>
+<li><b>Prismatic:</b> the model uses a rigid rectangular can with visible terminal position and pack busbar path.</li>
+<li><b>Pouch:</b> the model uses a flexible flat cell with visible tabs and a larger footprint; compression/swelling considerations remain separate mechanical variables.</li>
+<li><b>Connection isolation:</b> B+, B−, C+, C−, P+, P−, cell +, cell −, BM taps, BT/NTC, high-current, communications and IoT can each be isolated from the visualization.</li>
+<li><b>Topology:</b> the exact C/P/B relationship depends on the selected BMS architecture; the visualization deliberately does not imply that every pack uses the same topology.</li>
+</ul>
+</section>
+
+</body></html>
