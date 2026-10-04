@@ -34,7 +34,56 @@ input[type=range]{width:100%;accent-color:var(--a)}select,input[type=number]{wid
 .chartTip{position:fixed;z-index:99999;display:none;pointer-events:none;padding:9px 11px;border:1px solid var(--ln);border-radius:8px;background:var(--card);color:var(--ink);box-shadow:0 8px 24px rgba(0,0,0,.18);font:12px/1.5 system-ui;white-space:nowrap}
 @media(max-width:980px){#v10Charts .v10ChartControls{grid-template-columns:1fr 1fr}.v10ChartCard canvas{height:280px}}
 @media(max-width:760px){#v10ChartGrid{grid-template-columns:1fr}#v10Charts .v10ChartControls{grid-template-columns:1fr}.v10ChartCard canvas{height:260px}}
-</style></head><body>
+</style>
+<style id="CBP_AUTH_LAYER_V1">
+/* Cell Bench Pro access control */
+#cbpAuthGate{position:fixed;inset:0;z-index:99999;background:rgba(5,10,18,.96);display:flex;align-items:center;justify-content:center;padding:22px;font-family:inherit}
+#cbpAuthCard{width:min(520px,100%);background:var(--pn,#111827);border:1px solid rgba(255,255,255,.12);border-radius:20px;box-shadow:0 24px 80px rgba(0,0,0,.45);padding:28px}
+#cbpAuthCard h2{margin:0 0 8px;font-size:25px}
+#cbpAuthCard p{color:var(--muted,#9ca3af);line-height:1.5}
+.cbpAuthBtn{width:100%;border:0;border-radius:11px;padding:12px 15px;margin-top:10px;font-weight:700;cursor:pointer;background:#2563eb;color:#fff}
+.cbpAuthBtn.secondary{background:transparent;border:1px solid rgba(255,255,255,.15)}
+#cbpAuthEmail{width:100%;box-sizing:border-box;padding:12px;border-radius:10px;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.04);color:inherit;margin-top:10px}
+#cbpAuthStatus{margin-top:14px;padding:11px 12px;border-radius:10px;background:rgba(255,255,255,.05);font-size:13px}
+.cbpUserPill{display:inline-flex;align-items:center;gap:8px;padding:7px 10px;border-radius:999px;background:rgba(37,99,235,.12);border:1px solid rgba(37,99,235,.25);font-size:12px}
+#cbpAdminPanel{display:none;position:fixed;z-index:99998;right:20px;top:70px;width:min(680px,calc(100vw - 40px));max-height:78vh;overflow:auto;background:var(--pn,#111827);border:1px solid rgba(255,255,255,.14);border-radius:16px;padding:20px;box-shadow:0 24px 80px rgba(0,0,0,.45)}
+.cbpReq{display:grid;grid-template-columns:1fr auto auto;gap:9px;align-items:center;padding:11px 0;border-bottom:1px solid rgba(255,255,255,.08)}
+.cbpReq button{border:0;border-radius:8px;padding:8px 11px;cursor:pointer;font-weight:700}
+.cbpApprove{background:#16a34a;color:#fff}.cbpReject{background:#dc2626;color:#fff}
+#cbpAuthControls{position:fixed;z-index:99990;right:16px;top:14px;display:flex;gap:8px;align-items:center}
+@media(max-width:700px){#cbpAuthControls{right:10px;top:10px}.cbpReq{grid-template-columns:1fr}.cbpReq button{width:100%}}
+</style>
+
+</head>
+<div id="cbpAuthGate" aria-modal="true" role="dialog">
+  <div id="cbpAuthCard">
+    <h2>Cell Bench Pro Access</h2>
+    <p id="cbpAuthLead">Sign in to use the engineering simulator. New users require administrator approval.</p>
+    <button class="cbpAuthBtn" id="cbpGoogleBtn">Continue with Google</button>
+    <div style="text-align:center;margin:12px 0;color:var(--muted,#9ca3af);font-size:12px">or use your email</div>
+    <input id="cbpAuthEmail" type="email" autocomplete="email" placeholder="name@example.com">
+    <button class="cbpAuthBtn secondary" id="cbpEmailBtn">Request / Check Access</button>
+    <button class="cbpAuthBtn secondary" id="cbpSignOutBtn" style="display:none">Sign out</button>
+    <div id="cbpAuthStatus">Connecting to secure authentication…</div>
+    <div style="margin-top:14px;font-size:11px;color:var(--muted,#9ca3af)">
+      Administrator: mugambwadennistt@gmail.com
+    </div>
+  </div>
+</div>
+<div id="cbpAuthControls">
+  <span class="cbpUserPill" id="cbpUserPill" style="display:none"></span>
+  <button class="cbpAuthBtn secondary" id="cbpAdminBtn" style="display:none;width:auto;margin:0">Admin approvals</button>
+  <button class="cbpAuthBtn secondary" id="cbpLogoutTop" style="display:none;width:auto;margin:0">Sign out</button>
+</div>
+<div id="cbpAdminPanel">
+  <div style="display:flex;justify-content:space-between;align-items:center;gap:12px">
+    <div><h3 style="margin:0">Access approvals</h3><p style="margin:4px 0 0;color:var(--muted,#9ca3af);font-size:12px">Approve or reject requests for Cell Bench Pro.</p></div>
+    <button class="cbpAuthBtn secondary" id="cbpAdminClose" style="width:auto;margin:0">Close</button>
+  </div>
+  <div id="cbpRequests" style="margin-top:15px">Loading requests…</div>
+</div>
+
+<body>
 <header><h1>Cell Bench Pro<small>Wiring tracer · physics simulator · expert curriculum for battery engineers</small></h1><nav id="nv"><button class="b" aria-pressed="true" data-t="wire">Wiring tracer</button><button class="b" aria-pressed="false" data-t="p3">3D pack</button><button class="b" aria-pressed="false" data-t="bms">BMS &amp; IoT</button><button class="b" aria-pressed="false" data-t="sim">Simulator</button><button class="b" aria-pressed="false" data-t="learn">Learn</button><button class="b" id="th">Theme</button></nav></header>
 <main>
 <section id="wire"><div class="pn" style="margin-bottom:10px"><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px"><div class="f">Chemistry<select id="wc"><option value="3.2">LFP 3.2 V</option><option value="3.65">NMC 3.65 V</option><option value="2.3">LTO 2.3 V</option></select></div><div class="f">Series groups (S)<select id="wS"></select></div><div class="f">Parallel cells (P)<select id="wP"></select></div><div class="f">Cell format<select id="wf"><option value="cyl">Cylindrical</option><option value="prism">Prismatic</option><option value="pouch">Pouch</option></select></div><div class="f">Port topology<select id="wp"><option value="common">Common port (P+/P−)</option><option value="split">Split port (C and P)</option></select></div><div class="f"><label>Pack current<b id="wiv">40 A</b></label><input type="range" id="wI" min="5" max="300" value="40"></div></div>
@@ -675,6 +724,140 @@ function ensureExtras(){
 window.addEventListener("load",ensureExtras,{once:true});
 setTimeout(ensureExtras,80);
 })();
+</script>
+
+
+<script type="module" id="CBP_AUTH_LAYER_V1">
+/*
+ * Cell Bench Pro approval access layer.
+ * Before deployment, replace the Firebase configuration below with your own
+ * Firebase Web App configuration. The administrator account is fixed to
+ * mugambwadennistt@gmail.com and must also be enforced by Firestore Security Rules.
+ */
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+import {
+  getAuth, GoogleAuthProvider, signInWithPopup, signOut,
+  onAuthStateChanged, signInWithEmailLink, sendSignInLinkToEmail
+} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
+import {
+  getFirestore, doc, getDoc, setDoc, collection, query, orderBy,
+  onSnapshot, updateDoc, serverTimestamp
+} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
+
+const CBP_ADMIN_EMAIL = "mugambwadennistt@gmail.com";
+
+/* Replace these values with Firebase Console > Project settings > Your apps > Web app. */
+const firebaseConfig = window.CBP_FIREBASE_CONFIG || {
+  apiKey: "PASTE_FIREBASE_API_KEY",
+  authDomain: "PASTE_FIREBASE_AUTH_DOMAIN",
+  projectId: "PASTE_FIREBASE_PROJECT_ID",
+  storageBucket: "PASTE_FIREBASE_STORAGE_BUCKET",
+  messagingSenderId: "PASTE_FIREBASE_MESSAGING_SENDER_ID",
+  appId: "PASTE_FIREBASE_APP_ID"
+};
+
+const gate = document.getElementById("cbpAuthGate");
+const status = document.getElementById("cbpAuthStatus");
+const emailBox = document.getElementById("cbpAuthEmail");
+const googleBtn = document.getElementById("cbpGoogleBtn");
+const emailBtn = document.getElementById("cbpEmailBtn");
+const signOutBtn = document.getElementById("cbpSignOutBtn");
+const pill = document.getElementById("cbpUserPill");
+const adminBtn = document.getElementById("cbpAdminBtn");
+const logoutTop = document.getElementById("cbpLogoutTop");
+const adminPanel = document.getElementById("cbpAdminPanel");
+const adminClose = document.getElementById("cbpAdminClose");
+const requests = document.getElementById("cbpRequests");
+
+function msg(text, ok=false){ status.textContent=text; status.style.border=ok?"1px solid rgba(34,197,94,.35)":"1px solid rgba(255,255,255,.08)"; }
+function validConfig(){
+  return firebaseConfig.apiKey && !String(firebaseConfig.apiKey).startsWith("PASTE_") &&
+         firebaseConfig.projectId && !String(firebaseConfig.projectId).startsWith("PASTE_");
+}
+function setLocked(v){ gate.style.display=v?"flex":"none"; document.body.style.overflow=v?"hidden":""; }
+
+if(!validConfig()){
+  msg("Firebase is not configured yet. Add your Firebase Web App configuration to enable secure sign-in and approvals.");
+  googleBtn.disabled=true; emailBtn.disabled=true;
+  setLocked(true);
+}else{
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+
+  async function ensureRequest(user){
+    const ref=doc(db,"users",user.uid);
+    const snap=await getDoc(ref);
+    if(!snap.exists()){
+      await setDoc(ref,{email:(user.email||"").toLowerCase(),status:user.email?.toLowerCase()===CBP_ADMIN_EMAIL?"approved":"pending",role:user.email?.toLowerCase()===CBP_ADMIN_EMAIL?"admin":"user",createdAt:serverTimestamp(),lastLoginAt:serverTimestamp()});
+      return user.email?.toLowerCase()===CBP_ADMIN_EMAIL?"approved":"pending";
+    }
+    await updateDoc(ref,{lastLoginAt:serverTimestamp()}).catch(()=>{});
+    return snap.data().status || "pending";
+  }
+
+  async function handleUser(user){
+    if(!user){ setLocked(true); pill.style.display="none"; adminBtn.style.display="none"; logoutTop.style.display="none"; return; }
+    const st=await ensureRequest(user);
+    const isAdmin=(user.email||"").toLowerCase()===CBP_ADMIN_EMAIL;
+    if(st!=="approved" && !isAdmin){
+      setLocked(true); signOutBtn.style.display="block";
+      msg("Access request submitted. Please wait for administrator approval.");
+      return;
+    }
+    setLocked(false);
+    pill.textContent=(isAdmin?"Admin: ":"")+user.email;
+    pill.style.display="inline-flex"; logoutTop.style.display="block";
+    adminBtn.style.display=isAdmin?"block":"none";
+    signOutBtn.style.display="block";
+    if(isAdmin) watchRequests();
+  }
+
+  googleBtn.onclick=async()=>{ try{ await signInWithPopup(auth,new GoogleAuthProvider()); }catch(e){ msg(e.message||"Google sign-in failed."); } };
+  emailBtn.onclick=async()=>{
+    const email=(emailBox.value||"").trim().toLowerCase();
+    if(!email){msg("Enter your email address first.");return;}
+    const actionCodeSettings={url:location.href,handleCodeInApp:true};
+    try{
+      await sendSignInLinkToEmail(auth,email,actionCodeSettings);
+      localStorage.setItem("cbpEmailForSignIn",email);
+      msg("A secure sign-in link has been sent to your email. Open it on this device to continue.");
+    }catch(e){ msg(e.message||"Could not send sign-in link."); }
+  };
+  if(location.href.includes("oobCode=") && localStorage.getItem("cbpEmailForSignIn")){
+    signInWithEmailLink(auth,localStorage.getItem("cbpEmailForSignIn"),location.href).catch(e=>msg(e.message||"Email sign-in failed."));
+  }
+  signOutBtn.onclick=()=>signOut(auth); logoutTop.onclick=()=>signOut(auth);
+  adminBtn.onclick=()=>{adminPanel.style.display="block"}; adminClose.onclick=()=>{adminPanel.style.display="none"};
+
+  function watchRequests(){
+    const q=query(collection(db,"users"),orderBy("createdAt","desc"));
+    onSnapshot(q,snap=>{
+      requests.innerHTML="";
+      if(snap.empty){requests.textContent="No access requests yet.";return;}
+      snap.forEach(s=>{
+        const d=s.data(), row=document.createElement("div"); row.className="cbpReq";
+        const info=document.createElement("div");
+        info.innerHTML=`<strong>${d.email||"(no email)"}</strong><div style="font-size:11px;color:var(--muted,#9ca3af)">${d.status||"pending"} · ${d.role||"user"}</div>`;
+        row.appendChild(info);
+        if((d.status||"pending")==="pending"){
+          const a=document.createElement("button");a.className="cbpApprove";a.textContent="Approve";
+          const r=document.createElement("button");r.className="cbpReject";r.textContent="Reject";
+          a.onclick=()=>updateDoc(doc(db,"users",s.id),{status:"approved",approvedAt:serverTimestamp()});
+          r.onclick=()=>updateDoc(doc(db,"users",s.id),{status:"rejected",rejectedAt:serverTimestamp()});
+          row.append(a,r);
+        }else{
+          const b=document.createElement("button");b.className="cbpAuthBtn secondary";b.style.margin="0";b.textContent="Set pending";
+          b.onclick=()=>updateDoc(doc(db,"users",s.id),{status:"pending"});
+          row.appendChild(b);
+        }
+        requests.appendChild(row);
+      });
+    },err=>{requests.textContent="Could not load approval requests: "+err.message;});
+  }
+
+  onAuthStateChanged(auth,handleUser);
+}
 </script>
 
 </body></html>
