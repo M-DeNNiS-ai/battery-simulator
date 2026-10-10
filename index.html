@@ -138,16 +138,16 @@ const F=[['chem','Chemistry','s',['LFP','NMC','LTO'],'LFP','Sets OCV curve, resi
 $('ctl').innerHTML=F.map(([id,l,t,o,d,h])=>`<div class="f"><label for="${id}">${l}<b id="o_${id}">${d}</b></label>${t=='s'?`<select id="${id}">${(Array.isArray(o)?o.map(k=>[k,k]):Object.entries(o)).map(([k,v])=>`<option value="${k}"${k==d?' selected':''}>${v}</option>`).join('')}</select>`:`<input type="range" id="${id}" min="${o[0]}" max="${o[1]}" step="${o[2]}" value="${d}">`}<small>${h}</small></div>`).join('')+''; 
 const gP=()=>{const p={};F.forEach(([id,,t])=>{const e=$(id);p[id]=t=='s'?e.value:+e.value;$('o_'+id).textContent=e.value});return p}; 
 const setP=o=>F.forEach(([id,,,,d])=>{$(id).value=o&&id in o?o[id]:d}); 
-function sim(p){const c=CH[p.chem],S=p.S,Q=p.Ah*p.P,Ea=30000,arr=T=>Math.exp(Ea/8.314*(1/(T+273.15)-1/298.15)),mass=c.m*Q*S/1000,Cth=mass*1000,hA=p.hc*6*Math.pow(mass*400,2/3)*1e-4*.6,Rx=(p.rj+.3)/1000,Inom=p.C*Q,dt=p.dur>120?2:1,n=Math.floor(p.dur*60/dt),e1=Math.exp(-dt/40); 
-let s=p.soc/100,v1=0,T=p.Tamb,x=cl(s+p.err/100,0,1),cc=x,P=.01,v1m=0,Wh=0,Hc=0,Hw=0,pk=T,why='Duration reached',sd=1;const rn=()=>{sd=(sd*16807)%2147483647;return sd/2147483647},o={t:[],s:[],cc:[],ek:[],V:[],T:[],I:[],Tm:[],Te:[]},ev={};const M=7,cm=c.m*p.Ah/1000,Cc=cm*1000,Ac=6*Math.pow(cm*400,2/3)*1e-4*.6,hc1=p.hc*Ac,kn=({touch:1.5,air:.4,aero:.03})[p.sp]*Math.sqrt(Ac*1e4/25),TC=Array(M).fill(p.Tamb),ex=k=>k==0||k==M-1?.6:.25; 
+function sim(p){const c0=CH[p.chem],c=Object.assign({},c0,{r:c0.r*OV().rs,du:c0.du*OV().es,lo:c0.lo+OV().dlo,hi:c0.hi+OV().dhi}),S=p.S,Q=p.Ah*p.P,Ea=OV().Ea,arr=T=>Math.exp(Ea/8.314*(1/(T+273.15)-1/298.15)),mass=c.m*Q*S/1000,Cth=mass*1000*OV().ms,hA=p.hc*6*Math.pow(mass*400,2/3)*1e-4*.6,Rx=(p.rj+.3)/1000,Inom=p.C*Q,dt=p.dur>120?2:1,n=Math.floor(p.dur*60/dt),e1=Math.exp(-dt/40); 
+let s=p.soc/100,v1=0,T=p.Tamb+OV().dT0,x=cl(s+p.err/100,0,1),cc=x,P=.01,v1m=0,Wh=0,Hc=0,Hw=0,pk=T,why='Duration reached',sd=1;const rn=()=>{sd=(sd*16807)%2147483647;return sd/2147483647},o={t:[],s:[],cc:[],ek:[],V:[],T:[],I:[],Tm:[],Te:[],P:[],Q:[],R:[],V1:[],OC:[],K:[[],[],[],[],[],[],[]]},ev={};const M=7,cm=c.m*p.Ah/1000,Cc=cm*1000*OV().ms,Ac=6*Math.pow(cm*400,2/3)*1e-4*.6,hc1=p.hc*Ac,kn=({touch:1.5,air:.4,aero:.03})[p.sp]*Math.sqrt(Ac*1e4/25)*OV().kc,TC=Array(M).fill(p.Tamb+OV().dT0),ex=k=>k==0||k==M-1?.6:.25; 
 for(let t=0;t<n;t++){const R0=c.r/1000/Q*arr(T),R1=.5*R0;let I; 
  if(p.load=='chg'){let lim=Inom;if(T<0){lim=Math.min(lim,.05*Inom);ev['Charge cut to 0.05C below 0 °C (plating protection)']=1}else if(T<10){lim=Math.min(lim,.3*Inom);ev['Charge cut to 0.3C below 10 °C']=1}lim=Math.min(lim,Math.max(0,(c.hi-ocv(c,s)+v1)/(R0+Rx/S)));I=-lim;if(lim<.05*Inom&&t>5){why='Charge complete (CV taper below C/20)';break}}else I=p.load=='pulse'?(t*dt%60<30?Inom:0):p.load=='drive'?Inom*Math.max(-.5,.55+.45*Math.sin(t*dt/15.4)+.35*Math.sin(t*dt/3.7)):Inom; 
- if(Math.max(T,...TC)>60){why='Over-temperature trip (60 °C)';break} 
+ if(Math.max(T,...TC)>OV().Tcut){why='Over-temperature trip (60 °C)';break} 
  const Vg=ocv(c,s)-v1-I*R0;if(I>0&&Vg<c.lo){why='Under-voltage cutoff';break}if(s<=0&&I>0){why='Cell empty';break} 
  const Vp=S*Vg-I*Rx,qc=S*(I*I*R0+v1*v1/R1-I*(T+273.15)*c.du),qw=I*I*Rx;Wh+=Vp*I*dt/3600;Hc+=qc*dt/3600;Hw+=qw*dt/3600; 
- s=cl(s-(I>0?I:.998*I)*dt/3600/Q,0,1.02);v1=v1*e1+R1*(1-e1)*I;T+=(qc+qw-hA*(T-p.Tamb))*dt/Cth;{const Tn=TC.slice(),qk=qc/(S*P);for(let k=0;k<M;k++){const d=(k>0?Tn[k-1]-Tn[k]:0)+(k<M-1?Tn[k+1]-Tn[k]:0);TC[k]=Tn[k]+((k==3?qk*p.fx:qk)-hc1*ex(k)*(Tn[k]-p.Tamb)+kn*d)*dt/Cc}}pk=Math.max(pk,T,...TC); 
- const Im=I*1.01+p.bias/100*Q+.002*Q*(rn()-.5),dq=Im*dt/3600/Q;cc-=dq;x-=dq;v1m=v1m*e1+R1*(1-e1)*Im;P+=2e-9*dt;const H=docv(c,x),Sv=H*H*P+1e-5,K=P*H/Sv,inn=(Vp/S+.001*(rn()-.5))-(ocv(c,x)-v1m-Im*R0-Im*Rx/S);x=cl(x+K*inn,0,1);P*=1-K*H; 
- if(t%Math.max(1,Math.floor(n/200))==0){o.t.push(t*dt/60);o.s.push(s*100);o.cc.push(cc*100);o.ek.push(x*100);o.V.push(Vp);o.T.push(T);o.I.push(I);o.Tm.push(TC[3]);o.Te.push(TC[0])}} 
+ s=cl(s-(I>0?I:OV().ce*I)*dt/3600/(Q*OV().ca),0,1.02);v1=v1*e1+R1*(1-e1)*I;T+=(qc+qw-hA*(T-p.Tamb))*dt/Cth;{const Tn=TC.slice(),qk=qc/(S*p.P);for(let k=0;k<M;k++){const d=(k>0?Tn[k-1]-Tn[k]:0)+(k<M-1?Tn[k+1]-Tn[k]:0);TC[k]=Tn[k]+((k==3?qk*p.fx:qk)-hc1*ex(k)*(Tn[k]-p.Tamb)+kn*d)*dt/Cc}}pk=Math.max(pk,T,...TC); 
+ const Im=I*(1+OV().gain/100)+p.bias/100*Q+OV().noise*Q*(rn()-.5),dq=Im*dt/3600/Q;cc-=dq;x-=dq;v1m=v1m*e1+R1*(1-e1)*Im;P+=2e-9*Math.pow(10,OV().qe)*dt;const H=docv(c,x),Sv=H*H*P+1e-5*Math.pow(10,OV().re),K=P*H/Sv,inn=(Vp/S+.001*(rn()-.5))-(ocv(c,x)-v1m-Im*R0-Im*Rx/S);x=cl(x+K*inn,0,1);P*=1-K*H; 
+ if(t%Math.max(1,Math.floor(n/200))==0){o.t.push(t*dt/60);o.s.push(s*100);o.cc.push(cc*100);o.ek.push(x*100);o.V.push(Vp);o.T.push(T);o.I.push(I);o.Tm.push(TC[3]);o.Te.push(TC[0]);o.P.push(Vp*I);o.Q.push(qc+qw);o.R.push((S*R0+Rx)*1000);o.V1.push(v1*1000);o.OC.push(S*ocv(c,s));TC.forEach((z,k)=>o.K[k].push(z))}} 
 if(!o.t.length)['t','s','cc','ek','V','T','I','Tm','Te'].forEach(k=>o[k].push(0));const l=o.t.length-1;return{o,c,TC,why,Wh,Hc,Hw,pk,ev,ecc:o.cc[l]-o.s[l],eek:o.ek[l]-o.s[l],hA,Rx,Q}} 
 function plot(id,xs,ser,fmt){const cv=$(id),d=devicePixelRatio||1,w=cv.clientWidth,h=cv.clientHeight;cv.width=w*d;cv.height=h*d;const g=cv.getContext('2d');g.setTransform(d,0,0,d,0,0);let lo=1e9,hi=-1e9;ser.forEach(s=>s.y.forEach(y=>{lo=Math.min(lo,y);hi=Math.max(hi,y)}));if(hi-lo<1e-6){hi++;lo--}const pd=(hi-lo)*.08;lo-=pd;hi+=pd;const L=44,x0=xs[0],T=(xs[xs.length-1]-x0)||1,W=w-L-6,H=h-22,X=x=>L+(x-x0)/T*W,Y=y=>6+H-(y-lo)/(hi-lo)*H;g.font='11px system-ui';for(let i=0;i<=4;i++){const y=lo+(hi-lo)*i/4;g.strokeStyle=css('--ln');g.beginPath();g.moveTo(L,Y(y));g.lineTo(L+W,Y(y));g.stroke();g.fillStyle=css('--mu');g.textAlign='right';g.fillText(fmt(y),L-4,Y(y)+4)}g.textAlign='center';for(let i=0;i<=4;i++)g.fillText((x0+T*i/4).toFixed(0)+' min',L+W*i/4,h-4);ser.forEach(s=>{g.strokeStyle=css(s.c);g.lineWidth=1.8;g.beginPath();s.y.forEach((y,i)=>i?g.lineTo(X(xs[i]),Y(y)):g.moveTo(X(xs[i]),Y(y)));g.stroke()})} 
 const CHS=[['c1','SOC: true (ink), coulomb (amber), EKF (teal)'],['c2','Pack voltage'],['c3','Pack temperature (ambient grey)'],['c4','SOC error vs true: coulomb (amber), EKF (teal)'],['c5','Middle cell (red) vs edge cell (amber) temperature']];$('chs').innerHTML=CHS.map(c=>`<div class="pn"><h3>${c[1]}</h3><canvas id="${c[0]}"></canvas></div>`).join(''); 
@@ -374,7 +374,7 @@ if(typeof originalLearn==="function"){
 setTimeout(mountAcademy,0); 
  
 /* ---------- Engineering chart suite: readable + interactive ---------- */ 
-const CHART_SETS={ 
+const CHART_SETS=window.__CS={full:[["Terminal voltage vs OCV","Time (min)","Pack voltage (V)","f-v"],["Pack current","Time (min)","Current (A, + = discharge)","f-i"],["Electrical power","Time (min)","Power (W)","f-p"],["Heat generation","Time (min)","Heat (W)","f-q"],["Pack resistance","Time (min)","R (mOhm)","f-r"],["Polarisation voltage","Time (min)","V1 per cell (mV)","f-v1"],["Cell temperatures","Time (min)","Temperature (C)","f-k"],["Middle minus edge dT","Time (min)","dT (K)","f-dt"],["Cumulative energy and heat","Time (min)","Wh","f-wh"],["Voltage efficiency","Time (min)","%","f-eff"],["SOC / estimator","Time (min)","SOC (%)","actual-soc"],["SOC estimation error","Time (min)","Error (pp)","error"],["Temperature","Time (min)","Temperature (C)","temp"],["Parameter sweep","Parameter","Metric","f-sw"]], 
  electrical:[ 
   ["SOC / estimator","Time (min)","SOC (%)","actual-soc"], 
   ["Pack voltage","Time (min)","Voltage (V)","voltage"], 
@@ -409,7 +409,7 @@ const CHART_SETS={
  ] 
 }; 
  
-const CHART_NAMES={ 
+const CHART_NAMES=window.__CN={"Terminal voltage vs OCV":["Terminal","OCV"],"Pack current":["Current"],"Heat generation":["Heat"],"Pack resistance":["R pack"],"Polarisation voltage":["V1"],"Cell temperatures":["Cell 1 (edge)","Cell 2","Cell 3","Cell 4 (middle)","Cell 5","Cell 6","Cell 7 (edge)"],"Middle minus edge dT":["dT"],"Cumulative energy and heat":["Net energy out","Heat"],"Voltage efficiency":["Efficiency"],"Parameter sweep":["Sweep metric"], 
  "SOC / estimator":["True SOC","Coulomb","EKF"], 
  "Pack voltage":["Pack voltage"], 
  "Current":["Pack current"], 
@@ -443,7 +443,7 @@ const chartShared={
  states:{} 
 }; 
  
-function chartBaseData(kind){ 
+function chartBaseData(kind){const __z=window.__CBX&&window.__CBX(kind);if(__z)return __z; 
  const r=window.__CBP_LAST; 
  if(r&&r.o){ 
   const o=r.o,t=o.t; 
@@ -534,7 +534,7 @@ function engineeringChartDraw(cv,title,xlabel,ylabel,kind){
  g.fillStyle=panel;g.fillRect(0,0,w,h); 
  g.fillStyle=ink;g.font="700 13px system-ui";g.fillText(title,10,19); 
  g.font="11px system-ui";g.fillStyle=muted;g.fillText(`${xlabel}  →  ${ylabel}`,10,37);
- if(!["actual-soc","voltage","current","temp","power","error","soc-est","soc-bias-error"].includes(kind)){g.fillStyle=css("--h");g.font="700 10px system-ui";g.textAlign="right";g.fillText("ILLUSTRATIVE SHAPE - not simulator output",w-10,19);g.textAlign="left"} 
+ if(!/^f-/.test(kind)&&!["actual-soc","voltage","current","temp","power","error","soc-est","soc-bias-error"].includes(kind)){g.fillStyle=css("--h");g.font="700 10px system-ui";g.textAlign="right";g.fillText("ILLUSTRATIVE SHAPE - not simulator output",w-10,19);g.textAlign="left"} 
  g.strokeStyle=ln;g.lineWidth=1;g.strokeRect(p.l,p.t,pw,ph); 
  if(/error|residual/i.test(title)){const zy=Y(0);if(zy>=p.t&&zy<=p.t+ph){g.strokeStyle=css("--r")||"#c0392b";g.globalAlpha=.7;g.setLineDash([6,4]);g.beginPath();g.moveTo(p.l,zy);g.lineTo(p.l+pw,zy);g.stroke();g.setLineDash([]);g.globalAlpha=1;g.fillStyle=css("--r")||"#c0392b";g.font="700 9px system-ui";g.fillText("0 reference",p.l+5,Math.max(p.t+10,zy-4));}} 
  
@@ -614,7 +614,7 @@ function mountCharts(){
  sec.innerHTML= 
   '<div class="v10Head"><div><h2>Engineering Chart Suite</h2><div class="info">Every plot is independently zoomable and pannable, while the cursor is synchronized across the whole chart set. Hover for exact values, inspect min/max markers, isolate traces, and export the visible engineering data.</div></div></div>'+ 
   '<div class="v10ChartControls">'+ 
-   '<label class="f" style="margin:0">Chart set<select id="v10ChartSet"><option value="electrical">Electrical + thermal</option><option value="bms">BMS + estimation</option><option value="design">Pack design + losses</option><option value="age">Ageing + reliability</option></select></label>'+ 
+   '<label class="f" style="margin:0">Chart set<select id="v10ChartSet"><option value="full">Full simulator (all outputs)</option><option value="electrical">Electrical + thermal</option><option value="bms">BMS + estimation</option><option value="design">Pack design + losses</option><option value="age">Ageing + reliability</option></select></label>'+ 
    '<label class="v10Live">Current scale <b id="v10CurVal">1.00×</b><input id="v10Cur" type="range" min=".5" max="2" step=".05" value="1"></label>'+ 
    '<label class="v10Live">Thermal scale <b id="v10ThermVal">1.00×</b><input id="v10Therm" type="range" min=".5" max="2" step=".05" value="1"></label>'+ 
    '<label class="v10Live">Estimator bias <b id="v10BiasVal">0.0 pt</b><input id="v10Bias" type="range" min="-10" max="10" step=".5" value="0"></label>'+ 
@@ -853,6 +853,75 @@ sec.innerHTML=`<div class="pHero"><h2>Expert Path: from amateur to battery engin
 sec.addEventListener("change",e=>{const c=e.target.closest("[data-p]");if(!c)return;dn[c.dataset.p]=c.checked;try{localStorage.setItem("cbp_path",JSON.stringify(dn))}catch(x){}sec.querySelector("#pCnt").textContent=cnt()+"/"+P.length+" understood"});
 h.prepend(sec)}
 const l0=window.learn;window.learn=function(){l0.apply(this,arguments);mount()};
+})();
+</script>
+<script id="sim-upgrade">
+(function(){
+const q=id=>document.getElementById(id);
+const ADV=[
+['Ea','Activation energy (J/mol)',10000,60000,1000,30000,'How strongly resistance rises when cold.'],
+['rs','Resistance scale (x)',.5,3,.05,1,'Ageing or a high-resistance batch.'],
+['ms','Thermal mass scale (x)',.3,3,.05,1,'Cell heat capacity.'],
+['es','Entropic heat scale (x)',0,3,.1,1,'Reversible heat term.'],
+['kc','Cell-to-cell conduction (x)',.1,5,.1,1,'Multiplies the spacing conduction.'],
+['dT0','Initial temperature offset (C)',-30,30,1,0,'Start warmer or colder than ambient.'],
+['Tcut','Over-temperature trip (C)',40,80,1,60,'Run stops when any cell exceeds this.'],
+['dlo','Discharge cutoff offset (V/cell)',-.3,.3,.01,0,'Shifts the chemistry default.'],
+['dhi','Charge limit offset (V/cell)',-.3,.2,.01,0,'Shifts the chemistry default.'],
+['ca','Actual / nameplate capacity',.6,1.1,.01,1,'Estimators still assume nameplate.'],
+['ce','Coulombic efficiency',.95,1,.001,.998,'Charge accepted per charge supplied.'],
+['gain','Current sensor gain error (%)',-5,5,.1,1,'Scales every measured current.'],
+['noise','Current noise (fraction of Ah)',0,.02,.0005,.002,'Random sensor noise.'],
+['qe','EKF process noise (log10 x)',-2,2,.5,0,'Higher trusts the model less.'],
+['re','EKF measurement noise (log10 x)',-2,2,.5,0,'Higher trusts voltage less.']];
+window.__OVV={};ADV.forEach(a=>__OVV[a[0]]=a[5]);window.OV=()=>window.__OVV;
+
+const pan=document.createElement('div');
+pan.innerHTML='<h3 style="margin:12px 0 0">Advanced physics parameters</h3>'+ADV.map(a=>`<div class="f"><label for="adv_${a[0]}">${a[1]}<b id="advo_${a[0]}">${a[5]}</b></label><input type="range" id="adv_${a[0]}" min="${a[2]}" max="${a[3]}" step="${a[4]}" value="${a[5]}"><small>${a[6]}</small></div>`).join('')+'<div class="nb"><button class="b" id="advReset">Reset advanced</button></div>';
+q('ctl').appendChild(pan);
+pan.addEventListener('input',e=>{const a=ADV.find(x=>'adv_'+x[0]==e.target.id);if(a){OV()[a[0]]=+e.target.value;q('advo_'+a[0]).textContent=e.target.value}});
+q('advReset').onclick=()=>{ADV.forEach(a=>{OV()[a[0]]=a[5];q('adv_'+a[0]).value=a[5];q('advo_'+a[0]).textContent=a[5]});run()};
+
+window.__CBX=function(k){
+ if(!/^f-/.test(k))return null;
+ if(k=='f-sw'){const s=window.__SW;return s&&s.x.length?[s.x,s.y]:[[0,1],[0,0]]}
+ const r=window.__CBP_LAST,o=r&&r.o;
+ if(!o||!o.P||!o.t.length||o.P.length!=o.t.length)return [[0,1],[0,0]];
+ const t=o.t;
+ switch(k){
+  case 'f-v':return [t,o.V,o.OC];
+  case 'f-i':return [t,o.I];
+  case 'f-p':return [t,o.P];
+  case 'f-q':return [t,o.Q];
+  case 'f-r':return [t,o.R];
+  case 'f-v1':return [t,o.V1];
+  case 'f-k':return [t,...o.K];
+  case 'f-dt':return [t,o.Tm.map((v,i)=>v-o.Te[i])];
+  case 'f-wh':{let a=0,b=0;const W=[],H=[];t.forEach((x,i)=>{const d=i?(x-t[i-1])/60:0;a+=o.P[i]*d;b+=o.Q[i]*d;W.push(a);H.push(b)});return [t,W,H]}
+  case 'f-eff':return [t,o.V.map((v,i)=>o.I[i]>0?v/o.OC[i]*100:o.I[i]<0?o.OC[i]/v*100:100)];
+ }
+ return null};
+
+const PAR=[...F.filter(f=>f[2]=='r').map(f=>({id:f[0],l:f[1],lo:f[3][0],hi:f[3][1],st:f[3][2],adv:0})),...ADV.map(a=>({id:a[0],l:a[1],lo:a[2],hi:a[3],st:a[4],adv:1}))];
+const MET=[['Peak temperature (C)',r=>r.pk],['Net energy out (Wh)',r=>r.Wh],['Middle minus edge dT (K)',r=>r.TC[3]-r.TC[0]],['EKF SOC error (pp)',r=>r.eek],['Coulomb SOC error (pp)',r=>r.ecc],['Minimum pack voltage (V)',r=>Math.min(...r.o.V)],['Wiring heat (Wh)',r=>r.Hw],['Cell heat (Wh)',r=>r.Hc],['Run length (min)',r=>r.o.t[r.o.t.length-1]],['Final true SOC (%)',r=>r.o.s[r.o.s.length-1]]];
+const sec=document.createElement('section');sec.className='pn';sec.style.marginTop='10px';
+sec.innerHTML='<h2 style="margin-top:0">Parameter sweep</h2><p class="f">Vary any one parameter across its full range with everything else as set above, and plot any result. The curve appears in the interactive chart set below (Full simulator, last card): zoom, pan, hover, isolate, export.</p><div class="r3"><div class="f">Parameter<select id="swP">'+PAR.map((p,i)=>`<option value="${i}">${p.l}</option>`).join('')+'</select></div><div class="f">Result<select id="swM">'+MET.map((m,i)=>`<option value="${i}">${m[0]}</option>`).join('')+'</select></div><div class="f">Points<input type="number" id="swN" min="5" max="60" value="25"></div></div><div class="nb"><button class="b" id="swGo">Run sweep</button><span class="f" id="swMsg"></span></div>';
+q('sim').appendChild(sec);
+q('swGo').onclick=()=>{
+ const pr=PAR[+q('swP').value],m=MET[+q('swM').value],n=Math.max(5,Math.min(60,+q('swN').value||25)),base=gP(),keep=pr.adv?OV()[pr.id]:null,xs=[],ys=[];
+ for(let i=0;i<n;i++){
+  let v=pr.lo+(pr.hi-pr.lo)*i/(n-1);v=+(Math.round(v/pr.st)*pr.st).toFixed(6);
+  if(xs.length&&xs[xs.length-1]==v)continue;
+  const p=Object.assign({},base);if(pr.adv)OV()[pr.id]=v;else p[pr.id]=v;
+  try{const y=m[1](sim(p));if(Number.isFinite(y)){xs.push(v);ys.push(y)}}catch(e){}
+ }
+ if(pr.adv)OV()[pr.id]=keep;
+ window.__SW={x:xs,y:ys};__CN['Parameter sweep']=[m[0]];
+ const e=__CS.full.find(s=>s[3]=='f-sw');e[1]=pr.l;e[2]=m[0];
+ q('swMsg').textContent=xs.length+' points simulated. See the "Parameter sweep" chart below.';
+ run();
+ const c=q('v10ChartGrid');if(c&&c.lastElementChild)c.lastElementChild.scrollIntoView({behavior:'smooth',block:'center'});
+};
 })();
 </script>
 </body></html>
