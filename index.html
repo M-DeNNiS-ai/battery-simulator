@@ -1241,4 +1241,144 @@ if(cv._hx!=null){const u=cl((cv._hx-L)/W,0,1),xv=x0+u*T;let bi=0,bd=1e9;xs.forEa
 window.plot=function(id,xs,ser,fmt){const cv=$(id);cv._pl={xs,ser,fmt};drawPlot(cv);if(!cv._pb){cv._pb=1;cv.addEventListener("pointermove",e=>{const r=cv.getBoundingClientRect();cv._hx=e.clientX-r.left;drawPlot(cv);const{xs,ser,fmt}=cv._pl,i=cv._hi,t=pTip();t.innerHTML=`<b>${xs[i].toFixed(1)} min</b>`+ser.map(s=>`<div><span style="display:inline-block;width:9px;height:9px;border-radius:50%;background:${C(s.c)};margin-right:6px"></span>${fmt(s.y[i])}</div>`).join("");t.style.display="block";t.style.left=Math.min(innerWidth-170,e.clientX+14)+"px";t.style.top=(e.clientY+14)+"px"});cv.addEventListener("pointerleave",()=>{cv._hx=null;drawPlot(cv);pTip().style.display="none"})}};
 })();
 </script>
+
+<!-- ===== Engineering depth companion: additive upgrade; original layout and modules retained ===== -->
+<style id="engineering-depth-style">
+#cbpDepth{margin-top:12px;border:1px solid var(--ln);border-radius:12px;background:var(--pn);overflow:hidden}
+#cbpDepth .ed-head{padding:14px 16px;background:linear-gradient(120deg,color-mix(in srgb,var(--a) 12%,var(--pn)),var(--pn));border-bottom:1px solid var(--ln)}
+#cbpDepth .ed-kicker{font-size:10px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--a)}
+#cbpDepth h2{font-size:18px;margin:2px 0 4px}
+#cbpDepth .ed-intro{margin:0;color:var(--mu);font-size:13px;max-width:85ch}
+#cbpDepth .ed-tools{display:flex;gap:7px;flex-wrap:wrap;align-items:center;margin-top:10px}
+#cbpDepth .ed-tools input{flex:1;min-width:180px;padding:8px 10px;border:1px solid var(--ln);border-radius:7px;background:var(--bg);color:var(--ink)}
+#cbpDepth .ed-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;padding:12px}
+#cbpDepth .ed-card{border:1px solid var(--ln);border-radius:9px;padding:11px;min-width:0;background:var(--pn)}
+#cbpDepth .ed-card h3{font-size:14px;margin:0 0 5px}
+#cbpDepth .ed-card p,#cbpDepth .ed-card li{font-size:12px;line-height:1.6}
+#cbpDepth .ed-card p{margin:5px 0}
+#cbpDepth .ed-card ul,#cbpDepth .ed-card ol{padding-left:19px;margin:6px 0}
+#cbpDepth .ed-equation{font-family:ui-monospace,Consolas,monospace;background:var(--bg);border-left:3px solid var(--a);border-radius:5px;padding:7px 9px;margin:7px 0;font-size:12px;overflow-wrap:anywhere}
+#cbpDepth .ed-note{padding:8px 10px;border-radius:7px;background:color-mix(in srgb,var(--h) 12%,transparent);border-left:3px solid var(--h);font-size:12px;margin-top:7px}
+#cbpDepth .ed-tag{display:inline-block;font-size:10px;font-weight:700;color:var(--a);border:1px solid color-mix(in srgb,var(--a) 45%,var(--ln));border-radius:99px;padding:2px 7px;margin-bottom:5px}
+#cbpDepth .ed-empty{padding:14px;color:var(--mu);font-size:13px}
+#cbpDepth details{border-top:1px solid var(--ln);padding:9px 12px}
+#cbpDepth summary{font-size:12px;font-weight:700;cursor:pointer}
+#cbpDepth details p{font-size:12px;line-height:1.6;color:var(--mu);margin:7px 0}
+@media(max-width:680px){#cbpDepth .ed-grid{grid-template-columns:1fr;padding:8px}#cbpDepth .ed-head{padding:12px}#cbpDepth .ed-tools input{min-width:100%}}
+@media print{header nav,#cbpDepth .ed-tools{display:none!important}#cbpDepth{break-inside:avoid}#cbpDepth .ed-grid{grid-template-columns:1fr 1fr}}
+</style>
+<script id="engineering-depth-companion">
+(function(){
+"use strict";
+const $=id=>document.getElementById(id);
+const topics={
+wire:{
+title:"Wiring tracer: electrical path, sensing and failure analysis",
+intro:"Use the selected conductor to reason from the cell node to the pack interface. The drawing is a teaching topology, not a production wiring release; verify every path against the exact battery schematic and manufacturer limits.",
+cards:[
+["Read the topology before touching the pack","A series group adds voltage; parallel cells share the same two electrical nodes. In an S×P arrangement, the nominal pack voltage is approximately S times the cell/group voltage, while amp-hour capacity is approximately P times one cell's capacity—provided the cells are matched and current sharing is sound. Total energy is roughly nominal voltage × amp-hours, but usable energy depends on cut-offs, temperature, load and ageing.","S × P is a connection description, not a guarantee of capacity or safety."],
+["Series jumpers and current concentration","Every series jumper carries the full pack current. A small increase in joint resistance can create a hot spot even while average pack temperature looks normal. At 100 A, a 0.1 mΩ joint dissipates 1 W; at 200 A it dissipates 4 W. Heating rises with current squared, so a joint that appears acceptable at low current may fail under acceleration or fast charging.","Pjoint = I²R; measure joint resistance with a suitable four-wire method where the design permits."],
+["Cell taps are measurement circuits","A cell voltage is the difference between two adjacent sense nodes, not the voltage of a single wire. An open, swapped, pinched or resistive tap can produce a false high/low cell reading and may expose the analogue front end (AFE) to an invalid voltage. Sense wiring should be routed, protected and keyed according to the manufacturer design, with source-side current limiting where specified.","Never probe or rearrange live cell-tap connectors by trial and error."],
+["Fuse, contactor and MOSFET are different layers","A fuse interrupts high fault current according to its DC interrupt rating and time-current curve. A contactor provides a mechanical isolation path and may need pre-charge and welded-contact feedback. MOSFETs switch electronically and quickly, but their failure mode can be short-circuit. These components are complementary; one should not be treated as a substitute for the others.","Check DC voltage rating, prospective fault current, coordination and manufacturer specifications—not current rating alone."],
+["Common-port vs split-port logic","In a common-port design, charger and load share the designated positive/negative port. A split-port design provides separate charge and discharge paths so the BMS can inhibit one direction while allowing the other, if the exact circuit supports it. The body diodes and switch orientation determine what current can still flow when a MOSFET is off.","Confirm the real circuit diagram; labels alone do not establish safe isolation."]
+],
+steps:["Identify pack chemistry, series count, connector pinout and safe work procedure.","Confirm the pack is isolated and stored energy has been controlled before inspection.","Follow the chosen conductor end-to-end; inspect crimp/weld/bolt, strain relief and insulation.","Compare expected node voltage with approved measurements and instrument category/rating.","Record the symptom, evidence, repair, post-repair test and independent release decision."],
+example:"A 72 V-class pack with 20 series groups at 3.2 V nominal is about 64 V nominal (20 × 3.2 V); the exact maximum depends on the cell's approved charge limit and the pack design. Do not infer the safe working voltage or fuse rating from the marketing class."
+},
+p3:{
+title:"3D pack: physical layout, thermal gradients and maintainability",
+intro:"The model helps explain spatial relationships among cells, collectors, jumpers, taps, NTCs and BMS. Its geometry and colour map are illustrative; they are not a CAD model, thermal finite-element analysis or manufacturing drawing.",
+cards:[
+["Why the middle can run hotter","Cells near a cooled wall may lose heat through the enclosure more readily than cells buried in the middle. The core can therefore reach a higher temperature under the same electrical load. Actual gradients depend on cell geometry, contact pressure, thermal interface materials, airflow, coolant distribution and the enclosure.","Compare measured sensor positions and transient trends; do not assume the model's temperatures match a real pack."],
+["Busbar routing and isolation","High-current conductors need adequate cross-section, joint area, mechanical support, insulation spacing and protection from vibration. Keep sense wiring away from switching nodes where the design requires it, and avoid sharp edges that can abrade insulation. Crossings, creepage and clearance must be checked against the actual voltage, contamination and environmental requirements.","A visually separated line in a 3D view does not prove regulatory clearance."],
+["Sensor placement is part of the measurement","An NTC measures the temperature at its own thermal contact point, not the hottest cell everywhere in the pack. Adhesive, sensor location, contact pressure, response time and wire routing affect readings. A sensor detached from the cell can lag or report a misleading temperature.","Compare NTC trends with a calibrated external probe during controlled validation."],
+["Compression, swelling and enclosure","Prismatic and pouch formats may require specified compression, expansion allowance or end-plate support. Cylindrical cells need stable holders and protection against vibration. Too much pressure, insufficient clearance or a sharp edge can damage cells or insulation.","Use the cell maker's mechanical specification; do not generalise compression values across formats."],
+["Serviceability and evidence","A layout that is electrically valid can still be difficult to repair safely. Design reviews should consider connector access, tool clearance, replaceable fuses, test points, lifting points, liquid ingress, fire propagation paths and the ability to inspect hidden joints.","Document the as-built arrangement and any approved deviation."]
+],
+steps:["Select the cell format and series/parallel arrangement used by the actual pack.","Toggle layers to inspect one conductor family at a time.","Check that each series link reaches the intended adjacent group and that sense nodes are in order.","Review sensor locations, cable strain relief, enclosure boundaries and service access.","Validate the drawing against a controlled CAD/BOM revision before manufacture or repair."],
+example:"If a middle sensor is 8 °C hotter than an edge sensor at the same time point, treat it as a clue rather than a verdict. Check load current, sensor attachment, cooling obstruction, cell-to-cell resistance and whether the difference grows with time."
+},
+bms:{
+title:"BMS & IoT: protection hierarchy, state logic and fleet telemetry",
+intro:"A battery-management system combines measurement, estimation, protection and communications. Thresholds, delays and recovery rules below are educational examples; the approved BMS specification and cell supplier limits take precedence.",
+cards:[
+["Protection is layered by response time","Fast hardware comparators may react to short-circuit or severe over-current events without waiting for application firmware. The AFE measures cell voltages and often provides local protection. The MCU applies state logic, limits and diagnostics. A fuse provides backup interruption for certain high-energy faults. These layers need coordinated thresholds and fault-injection validation.","A firmware log can explain a trip, but it does not prove the hardware protection path works."],
+["SOC, SOH and SOP answer different questions","State of charge (SOC) estimates remaining charge; state of health (SOH) describes retained capacity and/or power capability relative to a defined baseline; state of power (SOP) estimates permissible charge/discharge power under current constraints. They are related but not interchangeable. Voltage-only SOC is particularly uncertain on flat-voltage chemistries such as LFP.","Always document each metric's definition, reference condition and estimation method."],
+["Cell-level limits govern the pack","The pack average can look normal while one cell reaches a limit first. Charging is commonly constrained by the highest cell voltage and discharging by the lowest cell voltage, alongside temperature and current limits. Pack-voltage sum checks can detect plausibility problems but cannot identify every wiring fault by themselves.","Trend min, max and delta with current, temperature, SOC and rest time."],
+["CAN and IoT are not the safety loop","CAN can convey allowable voltage/current, state and fault information between BMS, charger and vehicle controller. Telemetry can support monitoring and RCA, but cloud connectivity may be delayed or absent. Local protection must remain safe when the gateway, mobile network or cloud is unavailable.","Do not rely on a remote dashboard as the only over-current or over-voltage safeguard."],
+["OTA updates require controlled release","A robust OTA process verifies device identity and firmware signature, checks compatibility, validates preconditions, preserves power during update, records the version/result and provides a recovery or rollback strategy. A successful download is not the same as a successful activation or validated operation.","Track before/after firmware, battery ID, timestamp, operator, result and post-upgrade health checks."],
+["Fault handling must be explicit","For every fault, define detection source, threshold, debounce/delay, action, latch policy, recovery condition, event record and test method. Distinguish a temporary self-clearing event from a fault requiring inspection. Repeated resets without a root-cause check can conceal a deteriorating component.","Do not repeatedly clear a protection fault simply to return a pack to service."]
+],
+steps:["Capture battery identity, firmware, operating state, charger/vehicle, ambient temperature and fault timestamp.","Compare individual cell voltages, pack voltage, current, NTCs and AFE communication quality.","Check whether the event was hardware-latched, firmware-reported or inferred from missing telemetry.","Verify recovery preconditions and confirm the original trigger is no longer present.","Run the approved post-repair checks, then document evidence and sign-off separately from repair completion."],
+example:"A pack showing 3.35 V maximum and 3.10 V minimum has a 250 mV spread. That number alone does not prove a bad cell: check chemistry, SOC, current, rest time, measurement accuracy and whether the same cell remains the outlier across repeated measurements."
+},
+sim:{
+title:"Physics simulator: read the model, not just the curves",
+intro:"This is a teaching-grade model that makes cause-and-effect visible. Its outputs are estimates from assumed parameters, not a substitute for instrumented testing, validated electrochemical models or a safety approval.",
+cards:[
+["Terminal voltage under load","A useful first approximation is terminal voltage = open-circuit voltage − current × effective resistance during discharge, with sign convention dependent on the model. Polarisation adds transient voltage response; the RC branch represents one simplified time scale. Real cells exhibit multiple time constants, hysteresis and SOC-dependent impedance.","Vterminal ≈ OCV − I·R − Vpolarisation (discharge convention)."],
+["Heat generation and thermal response","Resistive heat scales as I²R. Entropic heat can add or subtract heat depending on chemistry, SOC and current direction. A lumped thermal node approximates heat capacity and heat rejection, while neighbouring cells exchange heat. Real pack hotspots also depend on contact resistance, cooling paths and geometry.","Doubling current can create roughly four times the resistive heat if resistance remains constant."],
+["Capacity and coulomb counting","Coulomb counting integrates measured current over time. Sensor offset creates accumulated error; capacity fade makes the true Ah capacity differ from nameplate. An estimator such as an EKF combines a model with measurements, but its performance depends on model quality, sensor accuracy and observability.","SOC change ≈ −∫I dt / usable capacity, adjusted for sign convention and efficiency."],
+["Parameter sensitivity and uncertainty","Parameter sweeps show how a result changes when one input is varied while other assumptions are held fixed. This is useful for ranking sensitivities, not proof of causation. Correlated factors—such as ageing, resistance, temperature and capacity—can change together in real packs.","Run low/base/high cases and compare trends with measured data before making a design decision."],
+["Read the full run context","Peak temperature, minimum voltage, delivered energy, cell-to-cell temperature difference and estimator error describe different failure modes. A single favourable metric can hide a trade-off: higher power may increase heat, and a model may fit voltage while SOC estimate drifts.","Record chemistry, S/P, capacity, load profile, ambient temperature, duration and all non-default parameter overrides with every exported result."],
+["Validation checklist","Compare simulated terminal voltage against measured voltage over several SOC levels, temperatures and current profiles. Tune one parameter family at a time, keep a hold-out dataset, quantify error and state the operating envelope. Validate edge cases such as cold charge, high current and sensor bias separately.","Never use this simulator alone to author production cut-offs or certify a battery."]
+],
+steps:["Set chemistry, series/parallel count, capacity, load profile and ambient temperature to match the test case.","Write down a prediction before running: voltage, heat, SOC error or delivered energy.","Change one variable at a time; note units, baseline and direction of change.","Compare predicted and measured data using the same time base and sign convention.","Export or record assumptions, then label conclusions as simulated, measured or inferred."],
+example:"If current doubles while effective resistance stays constant, I²R heating increases by approximately 4×. If the simulated heat does not follow that trend, check whether current limits, resistance variation, cooling, or other heat terms changed too."
+},
+learn:{
+title:"Learning academy: turn equations into repeatable engineering practice",
+intro:"Use each lesson as a short investigation: predict, calculate, run, compare and explain. The aim is not only to choose the right answer, but to defend the reasoning and identify the assumptions.",
+cards:[
+["A reliable problem-solving loop","1) Define the symptom and operating conditions. 2) State a hypothesis and the evidence that would disprove it. 3) Select a safe, discriminating measurement. 4) Compare against a baseline or known-good unit. 5) Isolate the cause. 6) Verify the corrective action and monitor for recurrence. This prevents replacing parts based on symptoms alone.","Separate observation, hypothesis, root cause, corrective action and verification."],
+["Dimensional analysis catches mistakes","Before using a formula, check units. Current (A) × time (h) gives charge (Ah); voltage (V) × charge (Ah) gives energy (Wh); current squared (A²) × resistance (Ω) gives power (W). Convert mΩ to Ω and minutes to hours before calculating.","100 A × 0.5 h = 50 Ah; 100² × 0.001 Ω = 10 W."],
+["Use uncertainty honestly","Every measurement has resolution, calibration error, contact error and timing effects. Compare like with like: same current, similar temperature and SOC, comparable rest time and the same measurement points. If a difference is close to instrument uncertainty, repeat it with an improved method before declaring a failure.","A precise-looking number is not necessarily an accurate measurement."],
+["Build a useful RCA","A good RCA records what failed, when and under what conditions; the evidence; the mechanism that explains the evidence; why existing controls did not catch it; the corrective/preventive action; and proof that the action worked. Avoid treating a symptom such as low SOC or a voltage jump as the root cause by itself.","Close the loop with recurrence monitoring and an owner/date for each action."],
+["Know when to stop","Stop testing if there is swelling, leakage, smoke, unusual heat, damaged insulation, unexplained voltage collapse, repeated protection trips or suspected internal short. Follow the site emergency procedure and manufacturer guidance. Do not continue charging a suspect pack merely to reproduce a fault.","Safety and isolation come before diagnostic completeness."]
+],
+steps:["Choose one lesson and write a one-sentence prediction.","Calculate the expected value with units before using the simulator.","Run the interactive view and note which assumptions control the outcome.","Explain why the result differs from the prediction, including model limits.","Save a short conclusion that another engineer can reproduce."],
+example:"Instead of writing “battery failed charging,” record the charger and firmware, battery ID, initial SOC and temperatures, pack and cell voltages, current profile, fault timestamp, repeatability and the exact acceptance criterion that was not met."
+},
+sci:{
+title:"Cell science: connect electrochemistry to field behaviour",
+intro:"The science view provides conceptual models for materials, ageing, transport and thermal hazards. Real cell behaviour depends on formulation, manufacturing process, operating history and test conditions; nominal chemistry labels are not complete specifications.",
+cards:[
+["Voltage is a chemical-potential signal","Cell voltage reflects the difference in electrochemical potential between electrodes. The open-circuit voltage curve depends on chemistry and lithiation state. Under current, ohmic drop and concentration/charge-transfer polarisation shift terminal voltage away from equilibrium, so voltage-based SOC is most informative after suitable rest and under a chemistry-specific calibration.","Do not compare cell voltages from different chemistries using one universal threshold."],
+["Ageing has multiple mechanisms","Capacity loss and resistance growth can arise from SEI growth, loss of active lithium, active-material damage, particle cracking, electrolyte degradation, corrosion and lithium plating. Temperature, time at high SOC, depth of discharge and charge rate affect these mechanisms differently. A single SOH number can hide different failure modes.","Separate capacity fade from power fade; a pack can retain capacity but fail a high-current requirement."],
+["Lithium plating and cold charging","At low temperature or high charge rate, the graphite anode may not accept lithium quickly enough; metallic lithium can deposit on its surface. This can consume cyclable lithium and, in severe cases, create safety risks. Charging limits must come from the cell supplier and validated pack controls—not a generic temperature rule.","Never use an educational plot as permission to charge below the manufacturer's minimum temperature."],
+["Thermal runaway is a propagation problem","A failing cell may release heat and flammable gases through exothermic reactions. Neighbouring cells can be heated by conduction, radiation and hot ejecta. Prevention, detection, vent paths, barriers, spacing, cooling and system-level containment all influence whether a local event propagates.","Treat swelling, venting, hissing, smoke or abnormal heat as a safety event; follow emergency procedures."],
+["Material metrics need context","Theoretical specific capacity in mAh/g is not the same as practical cell-level Wh/kg. Full-cell energy depends on both electrodes, voltage, inactive materials, electrolyte, packaging, current collectors, safety margins and usable SOC window. Lab coin-cell data should not be directly compared with production packs.","Compare like-for-like metrics and state whether values are theoretical, electrode-level, cell-level or pack-level."],
+["Standards and compliance are versioned","Transport, cell safety, battery-system and vehicle standards cover different scopes. Applicability depends on product category, destination, installation and jurisdiction. A list of standards is a starting point, not a declaration of compliance.","Check current editions, amendments, certification scope and local regulatory requirements."]
+],
+steps:["Select a chemistry and identify its nominal voltage, permitted limits and voltage-curve shape.","Relate operating conditions to likely mechanisms: cold charge, high SOC storage, high current or deep cycling.","Separate a plausible mechanism from evidence that proves it occurred in the battery under investigation.","Use manufacturer data and controlled tests to validate the hypothesis.","Document the boundary between conceptual explanation and verified product-specific fact."],
+example:"A flat LFP voltage curve can make mid-SOC estimation uncertain from voltage alone. A voltage snapshot should therefore be interpreted with current history, rest time, coulomb count and trusted full/empty anchors—not treated as a precise SOC measurement."
+}
+};
+function esc(s){return String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]))}
+let current="wire";
+function render(tab){
+current=topics[tab]?tab:(tab==="sci"?"sci":"wire");
+const d=$("cbpDepth");if(!d)return;
+const t=topics[current];
+d.innerHTML=`<div class="ed-head"><div class="ed-kicker">Engineering companion · expanded explanations</div><h2>${t.title}</h2><p class="ed-intro">${t.intro}</p><div class="ed-tools"><input id="edSearch" type="search" placeholder="Filter these explanations…" aria-label="Filter engineering explanations"><button class="b" id="edPrint" type="button">Print / save guide</button><span class="f" id="edCount">${t.cards.length} topics</span></div></div><div class="ed-grid" id="edGrid">${t.cards.map((c,i)=>`<article class="ed-card" data-ed-card><span class="ed-tag">Topic ${String(i+1).padStart(2,"0")}</span><h3>${c[0]}</h3><p>${c[1]}</p><div class="ed-equation">${c[2]}</div></article>`).join("")}</div><details><summary>Practical workflow for this module</summary><ol>${t.steps.map(x=>`<li>${x}</li>`).join("")}</ol></details><details><summary>Worked example and engineering interpretation</summary><p>${t.example}</p></details><details><summary>Important boundary: model, measurement and approval</summary><p>Use this companion for training and structured reasoning. Confirm actual limits, wiring, test methods, PPE, isolation steps and release criteria from the controlled product documentation and site procedures. Record whether each conclusion is measured, calculated, simulated or inferred. When a result conflicts with approved specifications, stop and escalate rather than adjusting the specification to fit the result.</p></details>`;
+const search=$("edSearch");search.addEventListener("input",()=>{const q=search.value.trim().toLowerCase();let n=0;d.querySelectorAll("[data-ed-card]").forEach(card=>{const on=card.textContent.toLowerCase().includes(q);card.hidden=!on;if(on)n++});$("edCount").textContent=`${n} of ${t.cards.length} topics`});
+$("edPrint").addEventListener("click",()=>window.print());
+}
+function mount(){
+const main=document.querySelector("main");if(!main||$("cbpDepth"))return;
+const d=document.createElement("section");d.id="cbpDepth";d.setAttribute("aria-live","polite");d.setAttribute("aria-label","Expanded engineering explanations");
+const sci=$("sci");if(sci&&sci.parentNode===main)main.insertBefore(d,sci.nextSibling);else main.appendChild(d);
+render("wire");
+}
+if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",mount,{once:true});else mount();
+const original=window.tab;
+if(typeof original==="function"){
+window.tab=function(t){const r=original.apply(this,arguments);if($("cbpDepth"))render(t);return r};
+}
+const nav=$("nv");
+if(nav)nav.addEventListener("click",e=>{const b=e.target.closest("[data-t]");if(!b)return;setTimeout(()=>render(b.dataset.t),0)});
+const sciNav=document.addEventListener("click",e=>{const b=e.target.closest("#sciNav [data-s]");if(b)setTimeout(()=>render("sci"),0)});
+})();
+</script>
+
 </body></html>
